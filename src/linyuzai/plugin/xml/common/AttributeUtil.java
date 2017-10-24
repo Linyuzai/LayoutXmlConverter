@@ -32,7 +32,8 @@ public class AttributeUtil {
                 xmlName.equals(XmlAttrName.LAYOUT_TO_LEFT_OF) ||
                 xmlName.equals(XmlAttrName.LAYOUT_TO_RIGHT_OF) ||
                 xmlName.equals(XmlAttrName.LAYOUT_ABOVE) ||
-                xmlName.equals(XmlAttrName.LAYOUT_BELOW);
+                xmlName.equals(XmlAttrName.LAYOUT_BELOW) ||
+                xmlName.equals(XmlAttrName.LAYOUT_ALIGN_BASELINE);
     }
 
     public static int countOfElement(Element root) {
@@ -178,6 +179,7 @@ public class AttributeUtil {
             return "Color.parseColor(\"" + xmlColor + "\")";
     }
 
+    @NotNull
     public static String getString(String xmlString) {
         if (xmlString.contains("@string/"))
             return "resources.getString(R.string." + xmlString.substring(8) + ")";
@@ -187,6 +189,30 @@ public class AttributeUtil {
             return "\"\"";
         else
             return "\"" + xmlString + "\"";
+    }
+
+    public static String getBoolean(String xmlBoolean) {
+        if (xmlBoolean.contains("@bool/"))
+            return "resources.getBoolean(R.bool." + xmlBoolean.substring(6) + ")";
+        else if (xmlBoolean.contains("@android:bool/"))
+            return "resources.getBoolean(android.R.bool." + xmlBoolean.substring(14) + ")";
+        else if (TextUtils.isEmpty(xmlBoolean))
+            return XmlAttrValue.FALSE;
+        else
+            return xmlBoolean + StringUtil.VALUE_NOT_SUPPORT;
+    }
+
+    public static String getInteger(String xmlInteger) {
+        if (xmlInteger.contains("@integer/"))
+            return "resources.getInteger(R.integer." + xmlInteger.substring(9) + ")";
+        else if (xmlInteger.contains("@android:integer/"))
+            return "resources.getInteger(android.R.integer." + xmlInteger.substring(17) + ")";
+        else if (TextUtils.isEmpty(xmlInteger))
+            return "0";
+        else if (StringUtil.isInteger(xmlInteger))
+            return Integer.valueOf(xmlInteger).toString();
+        else
+            return xmlInteger + StringUtil.VALUE_NOT_SUPPORT;
     }
 
     public static String getOrientation(String xmlOrientation) {

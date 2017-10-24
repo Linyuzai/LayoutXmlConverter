@@ -50,6 +50,7 @@ public class ViewAttrName {
     public static final String ALIGN_BOTTOM = "sameBottom";
     public static final String ALIGN_LEFT = "sameLeft";
     public static final String ALIGN_RIGHT = "sameRight";
+    public static final String ALIGN_BASELINE = "baselineOf";
 
     public static final String TEXT = "text";
     public static final String TEXT_SIZE = "textSize";
@@ -58,4 +59,7 @@ public class ViewAttrName {
 
     public static final String IMAGE_RESOURCE = "imageResource";
     public static final String SCALE_TYPE = "scaleType";
+
+    public static final String SINGLE_LINE = "singleLine";
+    public static final String MAX_LINES = "maxLines";
 }

@@ -52,6 +52,7 @@ public class XmlAttrName {
     public static final String LAYOUT_ALIGN_BOTTOM = "android:layout_alignBottom";
     public static final String LAYOUT_ALIGN_LEFT = "android:layout_alignLeft";
     public static final String LAYOUT_ALIGN_RIGHT = "android:layout_alignRight";
+    public static final String LAYOUT_ALIGN_BASELINE = "android:layout_alignBaseline";
 
     //text view
     public static final String TEXT = "android:text";
@@ -62,4 +63,11 @@ public class XmlAttrName {
     //image view
     public static final String SRC = "android:src";
     public static final String SCALE_TYPE = "android:scaleType";
+
+    //edit text
+    public static final String SINGLE_LINE = "android:singleLine";
+    public static final String MAX_LINES = "android:maxLines";
+    //inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+    //hint = "请输入密码"
+    //hintTextColor = Color.parseColor("#B3B3B3")
 }

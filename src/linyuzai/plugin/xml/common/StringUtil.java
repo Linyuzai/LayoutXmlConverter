@@ -12,6 +12,15 @@ public class StringUtil {
         }
     }
 
+    public static boolean isInteger(String integer) {
+        try {
+            Integer.valueOf(integer);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public static boolean isImage(String image) {
         return image.contains("@mipmap/") || image.contains("@drawable/") ||
                 image.contains("@android:mipmap/") || image.contains("@android:drawable/");

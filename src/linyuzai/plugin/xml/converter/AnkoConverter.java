@@ -88,12 +88,12 @@ public class AnkoConverter {
         codeBuilder.append("\t}\n");
     }
 
-    private void writeViewHeader(String viewName, int deep) {
+    private void writeViewStart(String viewName, int deep) {
         writeTab(deep);
         codeBuilder.append(ConvertUtil.convertViewName(viewName)).append(" {\n");
     }
 
-    private void writeViewFooter(int deep) {
+    private void writeViewEnd(int deep) {
         writeTab(deep);
         codeBuilder.append("}");
     }
@@ -156,7 +156,7 @@ public class AnkoConverter {
                         name = ViewAttrName.MARGIN_LEFT;
                         value = AttributeUtil.getDimension(attributeValue);
                         break;
-                    /*case XmlAttrName.LAYOUT_MARGIN_START:
+                    case XmlAttrName.LAYOUT_MARGIN_START:
                         name = ViewAttrName.MARGIN_START;
                         value = AttributeUtil.getDimension(attributeValue);
                         break;
@@ -171,7 +171,7 @@ public class AnkoConverter {
                     case XmlAttrName.LAYOUT_MARGIN_HORIZONTAL:
                         name = ViewAttrName.MARGIN_HORIZONTAL;
                         value = AttributeUtil.getDimension(attributeValue);
-                        break;*/
+                        break;
                     default:
                         isNotSupportAttribute = true;
                         break;
@@ -335,6 +335,11 @@ public class AnkoConverter {
                         }
                         isEqualsOperator = false;
                         break;
+                    case XmlAttrName.LAYOUT_ALIGN_BASELINE:
+                        name = ViewAttrName.ALIGN_BASELINE;
+                        value = AttributeUtil.getId(attributeValue);
+                        isEqualsOperator = false;
+                        break;
                     default:
                         isNotSupportAttribute = true;
                         break;
@@ -362,14 +367,14 @@ public class AnkoConverter {
                     name = ViewAttrName.PADDING_LEFT;
                     value = AttributeUtil.getDimension(attributeValue);
                     break;
-                /*case XmlAttrName.LAYOUT_PADDING_VERTICAL:
+                case XmlAttrName.LAYOUT_PADDING_VERTICAL:
                     name = ViewAttrName.PADDING_VERTICAL;
                     value = AttributeUtil.getDimension(attributeValue);
                     break;
                 case XmlAttrName.LAYOUT_PADDING_HORIZONTAL:
                     name = ViewAttrName.PADDING_HORIZONTAL;
                     value = AttributeUtil.getDimension(attributeValue);
-                    break;*/
+                    break;
                 default:
                     isNotSupportAttribute = true;
                     break;
@@ -417,6 +422,10 @@ public class AnkoConverter {
                     name = ViewAttrName.ID;
                     value = AttributeUtil.getId(attributeValue);
                     break;
+                case XmlAttrName.MAX_LINES:
+                    name = ViewAttrName.MAX_LINES;
+                    value = AttributeUtil.getInteger(attributeValue);
+                    break;
                 case XmlAttrName.ORIENTATION:
                     name = ViewAttrName.ORIENTATION;
                     value = AttributeUtil.getOrientation(attributeValue);
@@ -430,6 +439,10 @@ public class AnkoConverter {
                     name = ViewAttrName.SCALE_TYPE;
                     value = AttributeUtil.getScaleType(attributeValue);
                     ImportUtil.add(ImportUtil.IMAGE_VIEW);
+                    break;
+                case XmlAttrName.SINGLE_LINE:
+                    name = ViewAttrName.SINGLE_LINE;
+                    value = AttributeUtil.getBoolean(attributeValue);
                     break;
                 default:
                     isNotSupportAttribute = true;
@@ -455,7 +468,7 @@ public class AnkoConverter {
     private void writeView(Element root, int deep) {
         if (callback != null)
             callback.onUpdate(progress++);
-        writeViewHeader(root.getName(), deep);
+        writeViewStart(root.getName(), deep);
         List<List<UAttribute>> attributes = AttributeUtil.splitAttributes(root.attributes());
         for (UAttribute attribute : attributes.get(0)) {
             writeAttribute(attribute.getName(), attribute.getValue(), deep + 1);
@@ -463,7 +476,7 @@ public class AnkoConverter {
         for (Element element : root.elements()) {
             writeView(element, deep + 1);
         }
-        writeViewFooter(deep);
+        writeViewEnd(deep);
         writeLayoutParams(attributes.get(1), attributes.get(2), deep);
         if (callback != null)
             callback.onUpdate(progress++);

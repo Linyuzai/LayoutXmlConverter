@@ -181,8 +181,8 @@ public class AttributeUtil {
             return getParseColor(xmlColor);
     }
 
-    @Contract(pure = true)
     @NotNull
+    @Contract(pure = true)
     public static String getSystemColor(String systemColor) {
         switch (systemColor) {
             case "transparent":
@@ -198,6 +198,8 @@ public class AttributeUtil {
         }
     }
 
+    @NotNull
+    @Contract(pure = true)
     public static String getParseColor(String parseColor) {
         switch (parseColor) {
             case "#000000":

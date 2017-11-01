@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>linyuzai.plugin.xml</id>
     <name>Kotlin Anko Converter For Xml</name>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <vendor email="120718461@qq.com" url="https://github.com/Linyuzai">Personal</vendor>
 
     <description><![CDATA[
@@ -9,11 +9,16 @@
       Java 8 at least.<br>
       Select or open a layout xml under res/layout.<br>
       Open the Code Menu.<br>
-      chose the last option.<br>
+      Chose the last option.<br>
     ]]></description>
 
     <change-notes><![CDATA[
-      The First Version 1.0.0.<br>
+      Support multi gravity via "|"<br>
+      Add some attributes of EditText<br>
+      Support sample color transform<br>
+      To do list:<br>
+      1.Support views in Android support library<br>
+      2.Support textStyle and inputType<br>
     ]]>
     </change-notes>
 
@@ -22,9 +27,8 @@
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
          on how to target different products -->
-    <!-- uncomment to enable plugin in all products
-    <depends>com.intellij.modules.lang</depends>
-    -->
+
+    <depends>com.intellij.modules.java</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->

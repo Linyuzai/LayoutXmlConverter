@@ -180,7 +180,7 @@ public class AnkoConverter {
                 switch (attributeName) {
                     case XmlAttrName.LAYOUT_GRAVITY:
                         name = ViewAttrName.GRAVITY;
-                        value = AttributeUtil.getGravity(attributeValue);
+                        value = AttributeUtil.getMultiGravity(attributeValue);
                         ImportUtil.add(ImportUtil.GRAVITY);
                         break;
                     case XmlAttrName.LAYOUT_ABOVE:
@@ -393,6 +393,10 @@ public class AnkoConverter {
                     name = ViewAttrName.TEXT_COLOR;
                     value = AttributeUtil.getColor(attributeValue);
                     break;
+                case XmlAttrName.TEXT_COLOR_HINT:
+                    name = ViewAttrName.HINT_TEXT_COLOR;
+                    value = AttributeUtil.getColor(attributeValue);
+                    break;
                 default:
                     isNotSupportAttribute = true;
                     break;
@@ -415,7 +419,7 @@ public class AnkoConverter {
                     break;
                 case XmlAttrName.GRAVITY:
                     name = ViewAttrName.GRAVITY;
-                    value = AttributeUtil.getGravity(attributeValue);
+                    value = AttributeUtil.getMultiGravity(attributeValue);
                     ImportUtil.add(ImportUtil.GRAVITY);
                     break;
                 case XmlAttrName.ID:
@@ -443,6 +447,10 @@ public class AnkoConverter {
                 case XmlAttrName.SINGLE_LINE:
                     name = ViewAttrName.SINGLE_LINE;
                     value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.HINT:
+                    name = ViewAttrName.HINT;
+                    value = AttributeUtil.getString(attributeValue);
                     break;
                 default:
                     isNotSupportAttribute = true;

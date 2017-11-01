@@ -62,4 +62,6 @@ public class ViewAttrName {
 
     public static final String SINGLE_LINE = "singleLine";
     public static final String MAX_LINES = "maxLines";
+    public static final String HINT = "hint";
+    public static final String HINT_TEXT_COLOR = "hintTextColor";
 }

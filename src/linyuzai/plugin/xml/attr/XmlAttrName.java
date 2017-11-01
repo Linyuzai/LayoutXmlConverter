@@ -67,7 +67,7 @@ public class XmlAttrName {
     //edit text
     public static final String SINGLE_LINE = "android:singleLine";
     public static final String MAX_LINES = "android:maxLines";
+    public static final String HINT = "android:hint";
+    public static final String TEXT_COLOR_HINT = "android:textColorHint";
     //inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-    //hint = "请输入密码"
-    //hintTextColor = Color.parseColor("#B3B3B3")
 }

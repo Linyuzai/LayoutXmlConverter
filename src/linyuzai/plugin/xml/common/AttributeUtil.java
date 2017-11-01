@@ -3,9 +3,11 @@ package linyuzai.plugin.xml.common;
 import linyuzai.plugin.xml.attr.*;
 import org.apache.http.util.TextUtils;
 import org.dom4j.*;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -172,11 +174,57 @@ public class AttributeUtil {
         if (xmlColor.contains("@color/"))
             return "resources.getColor(R.color." + xmlColor.substring(7) + ")";
         else if (xmlColor.contains("@android:color/"))
-            return "resources.getColor(android.R.color." + xmlColor.substring(15) + ")";
+            return getSystemColor(xmlColor.substring(15));
         else if (TextUtils.isEmpty(xmlColor))
             return "0";
         else
-            return "Color.parseColor(\"" + xmlColor + "\")";
+            return getParseColor(xmlColor);
+    }
+
+    @Contract(pure = true)
+    @NotNull
+    public static String getSystemColor(String systemColor) {
+        switch (systemColor) {
+            case "transparent":
+                return "Color.TRANSPARENT";
+            case "white":
+                return "Color.WHITE";
+            case "black":
+                return "Color.BLACK";
+            case "red":
+                return "Color.RED";
+            default:
+                return "resources.getColor(android.R.color." + systemColor + ")";
+        }
+    }
+
+    public static String getParseColor(String parseColor) {
+        switch (parseColor) {
+            case "#000000":
+                return "Color.BLACK";
+            case "#444444":
+                return "Color.DKGRAY";
+            case "#888888":
+                return "Color.GRAY";
+            case "#CCCCCC":
+                return "Color.LTGRAY";
+            case "#FFFFFF":
+                return "Color.WHITE";
+            case "#FF0000":
+                return "Color.RED";
+            case "#00FF00":
+                return "Color.GREEN";
+            case "#0000FF":
+                return "Color.BLUE";
+            case "#FFFF00":
+                return "Color.YELLOW";
+            case "#00FFFF":
+                return "Color.CYAN";
+            case "#FF00FF":
+                return "Color.MAGENTA";
+            default:
+                return "Color.parseColor(\"" + parseColor + "\")";
+        }
     }
 
     @NotNull
@@ -202,6 +250,7 @@ public class AttributeUtil {
             return xmlBoolean + StringUtil.VALUE_NOT_SUPPORT;
     }
 
+    @NotNull
     public static String getInteger(String xmlInteger) {
         if (xmlInteger.contains("@integer/"))
             return "resources.getInteger(R.integer." + xmlInteger.substring(9) + ")";
@@ -227,6 +276,13 @@ public class AttributeUtil {
                 else
                     return xmlOrientation + StringUtil.VALUE_NOT_SUPPORT;
         }
+    }
+
+    public static String getMultiGravity(String xmlMultiGravity) {
+        String[] xmlGravityArray = xmlMultiGravity.replaceAll("\\s*", "").split("\\|");
+        List<String> viewGravityList = new ArrayList<>();
+        Arrays.stream(xmlGravityArray).forEach(it -> viewGravityList.add(getGravity(it)));
+        return String.join(" or ", viewGravityList);
     }
 
     public static String getGravity(String xmlGravity) {

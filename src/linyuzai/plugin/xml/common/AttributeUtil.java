@@ -141,10 +141,18 @@ public class AttributeUtil {
     @NotNull
     public static String getDimension(String xmlDimension, boolean toFloat) {
         if (xmlDimension.contains("dp")) {
-            if (toFloat)
-                return "dip(" + xmlDimension.split("dp")[0] + ").toFloat()";
-            else
-                return "dip(" + xmlDimension.split("dp")[0] + ")";
+            String dpValue = xmlDimension.split("dp")[0];
+            if (dpValue.equals("0")) {
+                if (toFloat)
+                    return "0f";
+                else
+                    return "0";
+            } else {
+                if (toFloat)
+                    return "dip(" + xmlDimension.split("dp")[0] + ").toFloat()";
+                else
+                    return "dip(" + xmlDimension.split("dp")[0] + ")";
+            }
         } else if (xmlDimension.contains("in")) {
             if (toFloat)
                 return xmlDimension.split("in")[0] + "f //in";

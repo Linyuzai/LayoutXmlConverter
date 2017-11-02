@@ -15,6 +15,7 @@
     <change-notes><![CDATA[
       Support weight<br>
       Support elevation,translationZ<br>
+      Support 0dp transform to 0 or 0f<br>
       To do list:<br>
       1.Support views in Android support library<br>
       2.Support textStyle and inputType<br>

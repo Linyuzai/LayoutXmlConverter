@@ -35,6 +35,7 @@ public class XmlAttrName {
 
     //linear layout
     public static final String ORIENTATION = "android:orientation";
+    public static final String LAYOUT_WEIGHT = "android:layout_weight";
 
     //relative layout
     public static final String LAYOUT_ABOVE = "android:layout_above";

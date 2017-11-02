@@ -20,6 +20,7 @@ public class AttributeUtil {
     public static boolean isLayoutAttr(String xmlName) {
         return xmlName.startsWith(XmlAttrName.LAYOUT_MARGIN) ||
                 xmlName.equals(XmlAttrName.LAYOUT_GRAVITY) ||
+                xmlName.equals(XmlAttrName.LAYOUT_WEIGHT) ||
                 xmlName.equals(XmlAttrName.LAYOUT_ALIGN_PARENT_TOP) ||
                 xmlName.equals(XmlAttrName.LAYOUT_ALIGN_PARENT_BOTTOM) ||
                 xmlName.equals(XmlAttrName.LAYOUT_ALIGN_PARENT_LEFT) ||
@@ -127,6 +128,13 @@ public class AttributeUtil {
             return ViewAttrValue.WRAP_CONTENT;
         else
             return value;
+
+    }
+
+    public static String getWeight(String xmlWeight) {
+        if (StringUtil.isInteger(xmlWeight))
+            return xmlWeight + "f";
+        else return xmlWeight + StringUtil.VALUE_NOT_SUPPORT;
 
     }
 

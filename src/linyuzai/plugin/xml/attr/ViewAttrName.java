@@ -34,6 +34,7 @@ public class ViewAttrName {
     public static final String PADDING_HORIZONTAL = "horizontalPadding";
 
     public static final String ORIENTATION = "orientation";
+    public static final String WEIGHT = "weight";
 
     public static final String ABOVE = "above";
     public static final String BELOW = "below";

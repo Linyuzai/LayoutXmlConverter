@@ -62,7 +62,7 @@ public class AnkoConverter {
         noteBuilder.append("/**\n");
         noteBuilder.append(" * Generate with Plugin\n");
         noteBuilder.append(" * @plugin Kotlin Anko Converter For Xml\n");
-        noteBuilder.append(" * @version 1.0.0\n");
+        noteBuilder.append(" * @version 1.1.1\n");
         noteBuilder.append(" */\n");
     }
 
@@ -182,6 +182,10 @@ public class AnkoConverter {
                         name = ViewAttrName.GRAVITY;
                         value = AttributeUtil.getMultiGravity(attributeValue);
                         ImportUtil.add(ImportUtil.GRAVITY);
+                        break;
+                    case XmlAttrName.LAYOUT_WEIGHT:
+                        name = ViewAttrName.WEIGHT;
+                        value = AttributeUtil.getWeight(attributeValue);
                         break;
                     case XmlAttrName.LAYOUT_ABOVE:
                         name = ViewAttrName.ABOVE;

@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>linyuzai.plugin.xml</id>
     <name>Kotlin Anko Converter For Xml</name>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
     <vendor email="120718461@qq.com" url="https://github.com/Linyuzai">Personal</vendor>
 
     <description><![CDATA[
@@ -13,9 +13,7 @@
     ]]></description>
 
     <change-notes><![CDATA[
-      Support multi gravity via "|"<br>
-      Add some attributes of EditText<br>
-      Support sample color transform<br>
+      Support weight<br>
       To do list:<br>
       1.Support views in Android support library<br>
       2.Support textStyle and inputType<br>

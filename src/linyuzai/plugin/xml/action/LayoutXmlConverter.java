@@ -1,18 +1,15 @@
 package linyuzai.plugin.xml.action;
 
-import com.intellij.ide.MacOSApplicationProvider;
 import com.intellij.ide.highlighter.XmlFileType;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
-import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
 import com.intellij.openapi.project.*;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.vfs.VirtualFileManager;
-import com.intellij.openapi.vfs.VirtualFileSystem;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiFile;
 import linyuzai.plugin.xml.attr.UApplication;
@@ -22,7 +19,6 @@ import linyuzai.plugin.xml.common.FileUtil;
 import linyuzai.plugin.xml.common.ImportUtil;
 import linyuzai.plugin.xml.converter.AnkoConverter;
 import linyuzai.plugin.xml.ui.ProgressDialog;
-import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;

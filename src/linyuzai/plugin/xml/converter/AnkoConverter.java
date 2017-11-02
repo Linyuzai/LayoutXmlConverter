@@ -138,39 +138,39 @@ public class AnkoConverter {
                 switch (attributeName) {
                     case XmlAttrName.LAYOUT_MARGIN:
                         name = ViewAttrName.MARGIN;
-                        value = AttributeUtil.getDimension(attributeValue);
+                        value = AttributeUtil.getDimension(attributeValue, false);
                         break;
                     case XmlAttrName.LAYOUT_MARGIN_TOP:
                         name = ViewAttrName.MARGIN_TOP;
-                        value = AttributeUtil.getDimension(attributeValue);
+                        value = AttributeUtil.getDimension(attributeValue, false);
                         break;
                     case XmlAttrName.LAYOUT_MARGIN_RIGHT:
                         name = ViewAttrName.MARGIN_RIGHT;
-                        value = AttributeUtil.getDimension(attributeValue);
+                        value = AttributeUtil.getDimension(attributeValue, false);
                         break;
                     case XmlAttrName.LAYOUT_MARGIN_BOTTOM:
                         name = ViewAttrName.MARGIN_BOTTOM;
-                        value = AttributeUtil.getDimension(attributeValue);
+                        value = AttributeUtil.getDimension(attributeValue, false);
                         break;
                     case XmlAttrName.LAYOUT_MARGIN_LEFT:
                         name = ViewAttrName.MARGIN_LEFT;
-                        value = AttributeUtil.getDimension(attributeValue);
+                        value = AttributeUtil.getDimension(attributeValue, false);
                         break;
                     case XmlAttrName.LAYOUT_MARGIN_START:
                         name = ViewAttrName.MARGIN_START;
-                        value = AttributeUtil.getDimension(attributeValue);
+                        value = AttributeUtil.getDimension(attributeValue, false);
                         break;
                     case XmlAttrName.LAYOUT_MARGIN_END:
                         name = ViewAttrName.MARGIN_END;
-                        value = AttributeUtil.getDimension(attributeValue);
+                        value = AttributeUtil.getDimension(attributeValue, false);
                         break;
                     case XmlAttrName.LAYOUT_MARGIN_VERTICAL:
                         name = ViewAttrName.MARGIN_VERTICAL;
-                        value = AttributeUtil.getDimension(attributeValue);
+                        value = AttributeUtil.getDimension(attributeValue, false);
                         break;
                     case XmlAttrName.LAYOUT_MARGIN_HORIZONTAL:
                         name = ViewAttrName.MARGIN_HORIZONTAL;
-                        value = AttributeUtil.getDimension(attributeValue);
+                        value = AttributeUtil.getDimension(attributeValue, false);
                         break;
                     default:
                         isNotSupportAttribute = true;
@@ -353,31 +353,31 @@ public class AnkoConverter {
             switch (attributeName) {
                 case XmlAttrName.LAYOUT_PADDING:
                     name = ViewAttrName.PADDING;
-                    value = AttributeUtil.getDimension(attributeValue);
+                    value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.LAYOUT_PADDING_TOP:
                     name = ViewAttrName.PADDING_TOP;
-                    value = AttributeUtil.getDimension(attributeValue);
+                    value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.LAYOUT_PADDING_RIGHT:
                     name = ViewAttrName.PADDING_RIGHT;
-                    value = AttributeUtil.getDimension(attributeValue);
+                    value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.LAYOUT_PADDING_BOTTOM:
                     name = ViewAttrName.PADDING_BOTTOM;
-                    value = AttributeUtil.getDimension(attributeValue);
+                    value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.LAYOUT_PADDING_LEFT:
                     name = ViewAttrName.PADDING_LEFT;
-                    value = AttributeUtil.getDimension(attributeValue);
+                    value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.LAYOUT_PADDING_VERTICAL:
                     name = ViewAttrName.PADDING_VERTICAL;
-                    value = AttributeUtil.getDimension(attributeValue);
+                    value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.LAYOUT_PADDING_HORIZONTAL:
                     name = ViewAttrName.PADDING_HORIZONTAL;
-                    value = AttributeUtil.getDimension(attributeValue);
+                    value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 default:
                     isNotSupportAttribute = true;
@@ -391,7 +391,7 @@ public class AnkoConverter {
                     break;
                 case XmlAttrName.TEXT_SIZE:
                     name = ViewAttrName.TEXT_SIZE;
-                    value = AttributeUtil.getDimension(attributeValue);
+                    value = AttributeUtil.getDimension(attributeValue, true);
                     break;
                 case XmlAttrName.TEXT_COLOR:
                     name = ViewAttrName.TEXT_COLOR;
@@ -420,6 +420,14 @@ public class AnkoConverter {
                         value = AttributeUtil.getColor(attributeValue);
                         ImportUtil.add(ImportUtil.COLOR);
                     }
+                    break;
+                case XmlAttrName.ELEVATION:
+                    name = ViewAttrName.ELEVATION;
+                    value = AttributeUtil.getDimension(attributeValue, true);
+                    break;
+                case XmlAttrName.TRANSLATION_Z:
+                    name = ViewAttrName.TRANSLATION_Z;
+                    value = AttributeUtil.getDimension(attributeValue, true);
                     break;
                 case XmlAttrName.GRAVITY:
                     name = ViewAttrName.GRAVITY;

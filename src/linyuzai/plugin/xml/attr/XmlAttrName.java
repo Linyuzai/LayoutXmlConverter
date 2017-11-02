@@ -7,6 +7,9 @@ public class XmlAttrName {
 
     public static final String ID = "android:id";
 
+    public static final String ELEVATION = "android:elevation";
+    public static final String TRANSLATION_Z = "android:translationZ";
+
     public static final String GRAVITY = "android:gravity";
     public static final String LAYOUT_GRAVITY = "android:layout_gravity";
 

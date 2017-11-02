@@ -139,26 +139,53 @@ public class AttributeUtil {
     }
 
     @NotNull
-    public static String getDimension(String xmlDimension) {
-        if (xmlDimension.contains("dp"))
-            return "dip(" + xmlDimension.split("dp")[0] + ")";
-        else if (xmlDimension.contains("in"))
-            return xmlDimension.split("in")[0] + " //in";
-        else if (xmlDimension.contains("mm"))
-            return xmlDimension.split("mm")[0] + " //mm";
-        else if (xmlDimension.contains("pt"))
-            return xmlDimension.split("pt")[0] + " //pt";
-        else if (xmlDimension.contains("px"))
-            return xmlDimension.split("px")[0] + " //px";
-        else if (xmlDimension.contains("sp"))
-            return xmlDimension.split("sp")[0] + "f //sp";
-        else if (xmlDimension.contains("@dimen/"))
-            return "dimen(R.dimen." + xmlDimension.substring(7) + ")";
-        else if (xmlDimension.contains("@android:dimen/"))
-            return "dimen(android.R.dimen." + xmlDimension.substring(15) + ")";
-        else if (TextUtils.isEmpty(xmlDimension))
-            return "0";
-        else return xmlDimension + StringUtil.VALUE_NOT_SUPPORT;
+    public static String getDimension(String xmlDimension, boolean toFloat) {
+        if (xmlDimension.contains("dp")) {
+            if (toFloat)
+                return "dip(" + xmlDimension.split("dp")[0] + ").toFloat()";
+            else
+                return "dip(" + xmlDimension.split("dp")[0] + ")";
+        } else if (xmlDimension.contains("in")) {
+            if (toFloat)
+                return xmlDimension.split("in")[0] + "f //in";
+            else
+                return xmlDimension.split("in")[0] + " //in";
+        } else if (xmlDimension.contains("mm")) {
+            if (toFloat)
+                return xmlDimension.split("mm")[0] + "f //mm";
+            else
+                return xmlDimension.split("mm")[0] + " //mm";
+        } else if (xmlDimension.contains("pt")) {
+            if (toFloat)
+                return xmlDimension.split("pt")[0] + "f //pt";
+            else
+                return xmlDimension.split("pt")[0] + " //pt";
+        } else if (xmlDimension.contains("px")) {
+            if (toFloat)
+                return xmlDimension.split("px")[0] + "f //px";
+            else
+                return xmlDimension.split("px")[0] + " //px";
+        } else if (xmlDimension.contains("sp")) {
+            if (toFloat)
+                return xmlDimension.split("sp")[0] + "f //sp";
+            else
+                return xmlDimension.split("sp")[0] + " //sp";
+        } else if (xmlDimension.contains("@dimen/")) {
+            if (toFloat)
+                return "dimen(R.dimen." + xmlDimension.substring(7) + ").toFloat()";
+            else
+                return "dimen(R.dimen." + xmlDimension.substring(7) + ")";
+        } else if (xmlDimension.contains("@android:dimen/")) {
+            if (toFloat)
+                return "dimen(android.R.dimen." + xmlDimension.substring(15) + ").toFloat()";
+            else
+                return "dimen(android.R.dimen." + xmlDimension.substring(15) + ")";
+        } else if (TextUtils.isEmpty(xmlDimension)) {
+            if (toFloat)
+                return "0f";
+            else
+                return "0";
+        } else return xmlDimension + StringUtil.VALUE_NOT_SUPPORT;
     }
 
     @NotNull

@@ -63,7 +63,7 @@ public class AnkoConverter {
         noteBuilder.append("/**\n");
         noteBuilder.append(" * Generate with Plugin\n");
         noteBuilder.append(" * @plugin Kotlin Anko Converter For Xml\n");
-        noteBuilder.append(" * @version 1.1.1\n");
+        noteBuilder.append(" * @version 1.2.0\n");
         noteBuilder.append(" */\n");
     }
 
@@ -427,6 +427,34 @@ public class AnkoConverter {
                         ImportUtil.add(ImportUtil.COLOR);
                     }
                     break;
+                case XmlAttrName.ROTATION:
+                    name = ViewAttrName.ROTATION;
+                    value = AttributeUtil.getFloat(attributeValue);
+                    break;
+                case XmlAttrName.ROTATION_X:
+                    name = ViewAttrName.ROTATION_X;
+                    value = AttributeUtil.getFloat(attributeValue);
+                    break;
+                case XmlAttrName.ROTATION_Y:
+                    name = ViewAttrName.ROTATION_Y;
+                    value = AttributeUtil.getFloat(attributeValue);
+                    break;
+                case XmlAttrName.SCALE_X:
+                    name = ViewAttrName.SCALE_X;
+                    value = AttributeUtil.getFloat(attributeValue);
+                    break;
+                case XmlAttrName.SCALE_Y:
+                    name = ViewAttrName.SCALE_Y;
+                    value = AttributeUtil.getFloat(attributeValue);
+                    break;
+                case XmlAttrName.TRANSLATION_X:
+                    name = ViewAttrName.TRANSLATION_X;
+                    value = AttributeUtil.getDimension(attributeValue, true);
+                    break;
+                case XmlAttrName.TRANSLATION_Y:
+                    name = ViewAttrName.TRANSLATION_Y;
+                    value = AttributeUtil.getDimension(attributeValue, true);
+                    break;
                 case XmlAttrName.ELEVATION:
                     name = ViewAttrName.ELEVATION;
                     value = AttributeUtil.getDimension(attributeValue, true);
@@ -446,7 +474,7 @@ public class AnkoConverter {
                     break;
                 case XmlAttrName.MAX_LINES:
                     name = ViewAttrName.MAX_LINES;
-                    value = AttributeUtil.getInteger(attributeValue);
+                    value = AttributeUtil.getInteger(attributeValue, false);
                     break;
                 case XmlAttrName.ORIENTATION:
                     name = ViewAttrName.ORIENTATION;

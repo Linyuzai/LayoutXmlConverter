@@ -7,6 +7,16 @@ public class XmlAttrName {
 
     public static final String ID = "android:id";
 
+    public static final String ROTATION = "android:rotation";
+    public static final String ROTATION_X = "android:rotationX";
+    public static final String ROTATION_Y = "android:rotationY";
+
+    public static final String SCALE_X = "android:scaleX";
+    public static final String SCALE_Y = "android:scaleY";
+
+    public static final String TRANSLATION_X = "android:translationX";
+    public static final String TRANSLATION_Y = "android:translationY";
+
     public static final String ELEVATION = "android:elevation";
     public static final String TRANSLATION_Z = "android:translationZ";
 

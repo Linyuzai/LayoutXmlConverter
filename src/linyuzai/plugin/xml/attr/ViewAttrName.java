@@ -6,6 +6,16 @@ public class ViewAttrName {
     public static final String BACKGROUND_RESOURCE = "backgroundResource";
     public static final String BACKGROUND_COLOR = "backgroundColor";
 
+    public static final String ROTATION = "rotation";
+    public static final String ROTATION_X = "rotationX";
+    public static final String ROTATION_Y = "rotationY";
+
+    public static final String SCALE_X = "scaleX";
+    public static final String SCALE_Y = "scaleY";
+
+    public static final String TRANSLATION_X = "translationX";
+    public static final String TRANSLATION_Y = "translationY";
+
     public static final String ELEVATION = "elevation";
     public static final String TRANSLATION_Z = "translationZ";
 

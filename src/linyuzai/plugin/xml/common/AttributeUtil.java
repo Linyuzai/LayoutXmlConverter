@@ -91,16 +91,12 @@ public class AttributeUtil {
 
     @NotNull
     public static String getAlpha(String xmlAlpha) {
-        if (xmlAlpha.contains("@dimen/"))
-            return "resources.getDimension(R.dimen." + xmlAlpha.substring(7) + ")";
-        else if (xmlAlpha.contains("@android:dimen/"))
-            return "resources.getDimension(R.dimen." + xmlAlpha.substring(15) + ")";
+        if (StringUtil.isAlpha(xmlAlpha))
+            return xmlAlpha + "f";
         else if (TextUtils.isEmpty(xmlAlpha))
             return "0f";
-        else if (StringUtil.isAlpha(xmlAlpha))
-            return xmlAlpha + "f";
         else
-            return xmlAlpha + StringUtil.VALUE_NOT_SUPPORT;
+            return getInteger(xmlAlpha, true);
     }
 
     @NotNull
@@ -296,17 +292,36 @@ public class AttributeUtil {
     }
 
     @NotNull
-    public static String getInteger(String xmlInteger) {
-        if (xmlInteger.contains("@integer/"))
-            return "resources.getInteger(R.integer." + xmlInteger.substring(9) + ")";
-        else if (xmlInteger.contains("@android:integer/"))
-            return "resources.getInteger(android.R.integer." + xmlInteger.substring(17) + ")";
-        else if (TextUtils.isEmpty(xmlInteger))
-            return "0";
-        else if (StringUtil.isInteger(xmlInteger))
-            return Integer.valueOf(xmlInteger).toString();
-        else
+    public static String getInteger(String xmlInteger, boolean toFloat) {
+        if (xmlInteger.contains("@integer/")) {
+            if (toFloat)
+                return "resources.getInteger(R.integer." + xmlInteger.substring(9) + ").toFloat()";
+            else
+                return "resources.getInteger(R.integer." + xmlInteger.substring(9) + ")";
+        } else if (xmlInteger.contains("@android:integer/")) {
+            if (toFloat)
+                return "resources.getInteger(android.R.integer." + xmlInteger.substring(17) + ").toFloat()";
+            else
+                return "resources.getInteger(android.R.integer." + xmlInteger.substring(17) + ")";
+        } else if (TextUtils.isEmpty(xmlInteger)) {
+            if (toFloat)
+                return "0f";
+            else
+                return "0";
+        } else if (StringUtil.isInteger(xmlInteger)) {
+            if (toFloat)
+                return Integer.valueOf(xmlInteger).toString() + "f";
+            else
+                return Integer.valueOf(xmlInteger).toString();
+        } else
             return xmlInteger + StringUtil.VALUE_NOT_SUPPORT;
+    }
+
+    public static String getFloat(String xmlFloat) {
+        if (StringUtil.isFloat(xmlFloat))
+            return Float.valueOf(xmlFloat).toString() + "f";
+        else
+            return getInteger(xmlFloat, true);
     }
 
     public static String getOrientation(String xmlOrientation) {

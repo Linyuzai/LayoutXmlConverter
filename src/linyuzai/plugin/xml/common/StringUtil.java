@@ -21,6 +21,15 @@ public class StringUtil {
         }
     }
 
+    public static boolean isFloat(String f) {
+        try {
+            Float.valueOf(f);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public static boolean isImage(String image) {
         return image.contains("@mipmap/") || image.contains("@drawable/") ||
                 image.contains("@android:mipmap/") || image.contains("@android:drawable/");

@@ -9,7 +9,7 @@
       Java 8 at least.<br>
       Select or open a layout xml under res/layout.<br>
       Open the Code Menu.<br>
-      Chose the last option.<br>
+      Chose the last option "Convert Layout Xml to Kotlin Anko".<br>
     ]]></description>
 
     <change-notes><![CDATA[

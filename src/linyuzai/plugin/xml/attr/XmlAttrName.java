@@ -83,5 +83,6 @@ public class XmlAttrName {
     public static final String MAX_LINES = "android:maxLines";
     public static final String HINT = "android:hint";
     public static final String TEXT_COLOR_HINT = "android:textColorHint";
+    public static final String INPUT_TYPE = "android:inputType";
     //inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
 }

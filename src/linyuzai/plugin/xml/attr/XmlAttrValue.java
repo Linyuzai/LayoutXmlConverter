@@ -31,4 +31,41 @@ public class XmlAttrValue {
     public static final String SCALE_TYPE_FIT_END = "fitEnd";
     public static final String SCALE_TYPE_FIT_XY = "fitXY";
     public static final String SCALE_TYPE_MATRIX = "matrix";
+
+    public static final String TEXT_STYLE_NORMAL = "normal";
+    public static final String TEXT_STYLE_BOLD = "bold";
+    public static final String TEXT_STYLE_ITALIC = "italic";
+
+    public static final String INPUT_TYPE_NONE = "none";
+    public static final String INPUT_TYPE_TEXT = "text";
+    public static final String INPUT_TYPE_TEXT_CAP_CHARACTERS = "textCapCharacters";
+    public static final String INPUT_TYPE_TEXT_CAP_WORDS = "textCapWords";
+    public static final String INPUT_TYPE_TEXT_CAP_SENTENCES = "textCapSentences";
+    public static final String INPUT_TYPE_TEXT_AUTO_CORRECT = "textAutoCorrect";
+    public static final String INPUT_TYPE_TEXT_AUTO_COMPLETE = "textAutoComplete";
+    public static final String INPUT_TYPE_TEXT_MULTI_LINE = "textMultiLine";
+    public static final String INPUT_TYPE_TEXT_IME_MULTI_LINE = "textImeMultiLine";
+    public static final String INPUT_TYPE_TEXT_NO_SUGGESTIONS = "textNoSuggestions";
+    public static final String INPUT_TYPE_TEXT_URI = "textUri";
+    public static final String INPUT_TYPE_TEXT_EMAIL_ADDRESS = "textEmailAddress";
+    public static final String INPUT_TYPE_TEXT_EMAIL_SUBJECT = "textEmailSubject";
+    public static final String INPUT_TYPE_TEXT_SHORT_MESSAGE = "textShortMessage";
+    public static final String INPUT_TYPE_TEXT_LONG_MESSAGE = "textLongMessage";
+    public static final String INPUT_TYPE_TEXT_PERSON_NAME = "textPersonName";
+    public static final String INPUT_TYPE_TEXT_POSTAL_ADDRESS = "textPostalAddress";
+    public static final String INPUT_TYPE_TEXT_PASSWORD = "textPassword";
+    public static final String INPUT_TYPE_TEXT_VISIBLE_PASSWORD = "textVisiblePassword";
+    public static final String INPUT_TYPE_TEXT_WEB_EDIT_TEXT = "textWebEditText";
+    public static final String INPUT_TYPE_TEXT_FILTER = "textFilter";
+    public static final String INPUT_TYPE_TEXT_PHONETIC = "textPhonetic";
+    public static final String INPUT_TYPE_TEXT_WEB_EMAIL_ADDRESS = "textWebEmailAddress";
+    public static final String INPUT_TYPE_TEXT_WEB_PASSWORD = "textWebPassword";
+    public static final String INPUT_TYPE_NUMBER = "number";
+    public static final String INPUT_TYPE_NUMBER_SIGNED = "numberSigned";
+    public static final String INPUT_TYPE_NUMBER_DECIMAL = "numberDecimal";
+    public static final String INPUT_TYPE_NUMBER_PASSWORD = "numberPassword";
+    public static final String INPUT_TYPE_PHONE = "phone";
+    public static final String INPUT_TYPE_DATETIME = "datetime";
+    public static final String INPUT_TYPE_DATE = "date";
+    public static final String INPUT_TYPE_TIME = "time";
 }

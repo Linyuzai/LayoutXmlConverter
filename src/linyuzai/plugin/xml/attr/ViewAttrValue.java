@@ -30,4 +30,42 @@ public class ViewAttrValue {
     public static final String SCALE_TYPE_FIT_END = "ImageView.ScaleType.FIT_END";
     public static final String SCALE_TYPE_FIT_XY = "ImageView.ScaleType.FIT_XY";
     public static final String SCALE_TYPE_MATRIX = "ImageView.ScaleType.MATRIX";
+
+    public static final String TEXT_STYLE_NORMAL = "Typeface.NORMAL";
+    public static final String TEXT_STYLE_BOLD = "Typeface.BOLD";
+    public static final String TEXT_STYLE_ITALIC = "Typeface.ITALIC";
+    public static final String TEXT_STYLE_BOLD_ITALIC = "Typeface.BOLD_ITALIC";
+
+    public static final String INPUT_TYPE_NONE = "InputType.TYPE_NULL";
+    public static final String INPUT_TYPE_TEXT = "InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_NORMAL";
+    public static final String INPUT_TYPE_TEXT_CAP_CHARACTERS = "InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS";
+    public static final String INPUT_TYPE_TEXT_CAP_WORDS = "InputType.TYPE_TEXT_FLAG_CAP_WORDS";
+    public static final String INPUT_TYPE_TEXT_CAP_SENTENCES = "InputType.TYPE_TEXT_FLAG_CAP_SENTENCES";
+    public static final String INPUT_TYPE_TEXT_AUTO_CORRECT = "InputType.TYPE_TEXT_FLAG_AUTO_CORRECT";
+    public static final String INPUT_TYPE_TEXT_AUTO_COMPLETE = "InputType.TYPE_TEXT_FLAG_AUTO_COMPLETE";
+    public static final String INPUT_TYPE_TEXT_MULTI_LINE = "InputType.TYPE_TEXT_FLAG_MULTI_LINE";
+    public static final String INPUT_TYPE_TEXT_IME_MULTI_LINE = "InputType.TYPE_TEXT_FLAG_IME_MULTI_LINE";
+    public static final String INPUT_TYPE_TEXT_NO_SUGGESTIONS = "InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS";
+    public static final String INPUT_TYPE_TEXT_URI = "InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI";
+    public static final String INPUT_TYPE_TEXT_EMAIL_ADDRESS = "InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS";
+    public static final String INPUT_TYPE_TEXT_EMAIL_SUBJECT = "InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_EMAIL_SUBJECT";
+    public static final String INPUT_TYPE_TEXT_SHORT_MESSAGE = "InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_SHORT_MESSAGE";
+    public static final String INPUT_TYPE_TEXT_LONG_MESSAGE = "InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_LONG_MESSAGE";
+    public static final String INPUT_TYPE_TEXT_PERSON_NAME = "InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PERSON_NAME";
+    public static final String INPUT_TYPE_TEXT_POSTAL_ADDRESS = "InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_POSTAL_ADDRESS";
+    public static final String INPUT_TYPE_TEXT_PASSWORD = "InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD";
+    public static final String INPUT_TYPE_TEXT_VISIBLE_PASSWORD = "InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD";
+    public static final String INPUT_TYPE_TEXT_WEB_EDIT_TEXT = "InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_WEB_EDIT_TEXT";
+    public static final String INPUT_TYPE_TEXT_FILTER = "InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_FILTER";
+    public static final String INPUT_TYPE_TEXT_PHONETIC = "InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PHONETIC";
+    public static final String INPUT_TYPE_TEXT_WEB_EMAIL_ADDRESS = "InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS";
+    public static final String INPUT_TYPE_TEXT_WEB_PASSWORD = "InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD";
+    public static final String INPUT_TYPE_NUMBER = "InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_NORMAL";
+    public static final String INPUT_TYPE_NUMBER_SIGNED = "InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED";
+    public static final String INPUT_TYPE_NUMBER_DECIMAL = "InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL";
+    public static final String INPUT_TYPE_NUMBER_PASSWORD = "InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD";
+    public static final String INPUT_TYPE_PHONE = "InputType.TYPE_CLASS_PHONE";
+    public static final String INPUT_TYPE_DATETIME = "InputType.TYPE_CLASS_DATETIME or InputType.TYPE_DATETIME_VARIATION_NORMAL";
+    public static final String INPUT_TYPE_DATE = "InputType.TYPE_CLASS_DATETIME or InputType.TYPE_DATETIME_VARIATION_DATE";
+    public static final String INPUT_TYPE_TIME = "InputType.TYPE_CLASS_DATETIME or InputType.TYPE_DATETIME_VARIATION_TIME";
 }

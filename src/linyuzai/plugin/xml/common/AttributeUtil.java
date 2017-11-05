@@ -408,4 +408,95 @@ public class AttributeUtil {
                     return xmlScaleType + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
+
+    public static String getTextStyle(String xmlTextStyle) {
+        boolean isBold = false;
+        boolean isItalic = false;
+        String[] textStyles = xmlTextStyle.split("\\|");
+        for (String textStyle : textStyles) {
+            if (textStyle.equals(XmlAttrValue.TEXT_STYLE_BOLD))
+                isBold = true;
+            else if (textStyle.equals(XmlAttrValue.TEXT_STYLE_ITALIC))
+                isItalic = true;
+        }
+        if (isBold && isItalic)
+            return ViewAttrValue.TEXT_STYLE_BOLD_ITALIC;
+        else if (isBold)
+            return ViewAttrValue.TEXT_STYLE_BOLD;
+        else if (isItalic)
+            return ViewAttrValue.TEXT_STYLE_ITALIC;
+        else
+            return ViewAttrValue.TEXT_STYLE_NORMAL;
+    }
+
+    public static String getInputType(String xmlInputType) {
+        switch (xmlInputType) {
+            case XmlAttrValue.INPUT_TYPE_NONE:
+                return ViewAttrValue.INPUT_TYPE_NONE;
+            case XmlAttrValue.INPUT_TYPE_TEXT:
+                return ViewAttrValue.INPUT_TYPE_TEXT;
+            case XmlAttrValue.INPUT_TYPE_TEXT_CAP_CHARACTERS:
+                return ViewAttrValue.INPUT_TYPE_TEXT_CAP_CHARACTERS;
+            case XmlAttrValue.INPUT_TYPE_TEXT_CAP_WORDS:
+                return ViewAttrValue.INPUT_TYPE_TEXT_CAP_WORDS;
+            case XmlAttrValue.INPUT_TYPE_TEXT_CAP_SENTENCES:
+                return ViewAttrValue.INPUT_TYPE_TEXT_CAP_SENTENCES;
+            case XmlAttrValue.INPUT_TYPE_TEXT_AUTO_CORRECT:
+                return ViewAttrValue.INPUT_TYPE_TEXT_AUTO_CORRECT;
+            case XmlAttrValue.INPUT_TYPE_TEXT_AUTO_COMPLETE:
+                return ViewAttrValue.INPUT_TYPE_TEXT_AUTO_COMPLETE;
+            case XmlAttrValue.INPUT_TYPE_TEXT_MULTI_LINE:
+                return ViewAttrValue.INPUT_TYPE_TEXT_MULTI_LINE;
+            case XmlAttrValue.INPUT_TYPE_TEXT_IME_MULTI_LINE:
+                return ViewAttrValue.INPUT_TYPE_TEXT_IME_MULTI_LINE;
+            case XmlAttrValue.INPUT_TYPE_TEXT_NO_SUGGESTIONS:
+                return ViewAttrValue.INPUT_TYPE_TEXT_NO_SUGGESTIONS;
+            case XmlAttrValue.INPUT_TYPE_TEXT_URI:
+                return ViewAttrValue.INPUT_TYPE_TEXT_URI;
+            case XmlAttrValue.INPUT_TYPE_TEXT_EMAIL_ADDRESS:
+                return ViewAttrValue.INPUT_TYPE_TEXT_EMAIL_ADDRESS;
+            case XmlAttrValue.INPUT_TYPE_TEXT_EMAIL_SUBJECT:
+                return ViewAttrValue.INPUT_TYPE_TEXT_EMAIL_SUBJECT;
+            case XmlAttrValue.INPUT_TYPE_TEXT_SHORT_MESSAGE:
+                return ViewAttrValue.INPUT_TYPE_TEXT_SHORT_MESSAGE;
+            case XmlAttrValue.INPUT_TYPE_TEXT_LONG_MESSAGE:
+                return ViewAttrValue.INPUT_TYPE_TEXT_LONG_MESSAGE;
+            case XmlAttrValue.INPUT_TYPE_TEXT_PERSON_NAME:
+                return ViewAttrValue.INPUT_TYPE_TEXT_PERSON_NAME;
+            case XmlAttrValue.INPUT_TYPE_TEXT_POSTAL_ADDRESS:
+                return ViewAttrValue.INPUT_TYPE_TEXT_POSTAL_ADDRESS;
+            case XmlAttrValue.INPUT_TYPE_TEXT_PASSWORD:
+                return ViewAttrValue.INPUT_TYPE_TEXT_PASSWORD;
+            case XmlAttrValue.INPUT_TYPE_TEXT_VISIBLE_PASSWORD:
+                return ViewAttrValue.INPUT_TYPE_TEXT_VISIBLE_PASSWORD;
+            case XmlAttrValue.INPUT_TYPE_TEXT_WEB_EDIT_TEXT:
+                return ViewAttrValue.INPUT_TYPE_TEXT_WEB_EDIT_TEXT;
+            case XmlAttrValue.INPUT_TYPE_TEXT_FILTER:
+                return ViewAttrValue.INPUT_TYPE_TEXT_FILTER;
+            case XmlAttrValue.INPUT_TYPE_TEXT_PHONETIC:
+                return ViewAttrValue.INPUT_TYPE_TEXT_PHONETIC;
+            case XmlAttrValue.INPUT_TYPE_TEXT_WEB_EMAIL_ADDRESS:
+                return ViewAttrValue.INPUT_TYPE_TEXT_WEB_EMAIL_ADDRESS;
+            case XmlAttrValue.INPUT_TYPE_TEXT_WEB_PASSWORD:
+                return ViewAttrValue.INPUT_TYPE_TEXT_WEB_PASSWORD;
+            case XmlAttrValue.INPUT_TYPE_NUMBER:
+                return ViewAttrValue.INPUT_TYPE_NUMBER;
+            case XmlAttrValue.INPUT_TYPE_NUMBER_SIGNED:
+                return ViewAttrValue.INPUT_TYPE_NUMBER_SIGNED;
+            case XmlAttrValue.INPUT_TYPE_NUMBER_DECIMAL:
+                return ViewAttrValue.INPUT_TYPE_NUMBER_DECIMAL;
+            case XmlAttrValue.INPUT_TYPE_NUMBER_PASSWORD:
+                return ViewAttrValue.INPUT_TYPE_NUMBER_PASSWORD;
+            case XmlAttrValue.INPUT_TYPE_PHONE:
+                return ViewAttrValue.INPUT_TYPE_PHONE;
+            case XmlAttrValue.INPUT_TYPE_DATETIME:
+                return ViewAttrValue.INPUT_TYPE_DATETIME;
+            case XmlAttrValue.INPUT_TYPE_DATE:
+                return ViewAttrValue.INPUT_TYPE_DATE;
+            case XmlAttrValue.INPUT_TYPE_TIME:
+                return ViewAttrValue.INPUT_TYPE_TIME;
+            default:
+                return ViewAttrValue.INPUT_TYPE_TEXT;
+        }
+    }
 }

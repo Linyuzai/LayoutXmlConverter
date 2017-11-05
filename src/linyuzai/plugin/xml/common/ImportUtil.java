@@ -13,7 +13,9 @@ public class ImportUtil {
     public static final String V7 = "org.jetbrains.anko.appcompat.v7";
 
     public static final String COLOR = "android.graphics.Color";
+    public static final String TYPEFACE = "android.graphics.Typeface";
     public static final String GRAVITY = "android.view.Gravity";
+    public static final String INPUT_TYPE = "android.text.InputType";
 
     public static final String LINEAR_LAYOUT = "android.widget.LinearLayout";
     public static final String IMAGE_VIEW = "android.widget.ImageView";

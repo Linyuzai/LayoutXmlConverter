@@ -407,6 +407,12 @@ public class AnkoConverter {
                     name = ViewAttrName.HINT_TEXT_COLOR;
                     value = AttributeUtil.getColor(attributeValue);
                     break;
+                case XmlAttrName.TEXT_STYLE:
+                    name = ViewAttrName.TEXT_STYLE;
+                    value = "typeface, " + AttributeUtil.getTextStyle(attributeValue);
+                    isEqualsOperator = false;
+                    ImportUtil.add(ImportUtil.TYPEFACE);
+                    break;
                 default:
                     isNotSupportAttribute = true;
                     break;
@@ -497,6 +503,11 @@ public class AnkoConverter {
                 case XmlAttrName.HINT:
                     name = ViewAttrName.HINT;
                     value = AttributeUtil.getString(attributeValue);
+                    break;
+                case XmlAttrName.INPUT_TYPE:
+                    name = ViewAttrName.INPUT_TYPE;
+                    value = AttributeUtil.getInputType(attributeValue);
+                    ImportUtil.add(ImportUtil.INPUT_TYPE);
                     break;
                 default:
                     isNotSupportAttribute = true;

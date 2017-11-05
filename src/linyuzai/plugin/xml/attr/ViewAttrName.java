@@ -69,7 +69,7 @@ public class ViewAttrName {
     public static final String TEXT = "text";
     public static final String TEXT_SIZE = "textSize";
     public static final String TEXT_COLOR = "textColor";
-    public static final String TEXT_STYLE = "android:textStyle";
+    public static final String TEXT_STYLE = "setTypeface";
 
     public static final String IMAGE_RESOURCE = "imageResource";
     public static final String SCALE_TYPE = "scaleType";
@@ -78,4 +78,5 @@ public class ViewAttrName {
     public static final String MAX_LINES = "maxLines";
     public static final String HINT = "hint";
     public static final String HINT_TEXT_COLOR = "hintTextColor";
+    public static final String INPUT_TYPE = "inputType";
 }

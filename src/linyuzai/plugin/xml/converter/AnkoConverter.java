@@ -54,6 +54,7 @@ public class AnkoConverter {
         ImportUtil.importClass(importBuilder, ImportUtil.BUNDLE);
         ImportUtil.importFromSet(importBuilder);
         ImportUtil.importMultiClass(importBuilder, ImportUtil.ANKO);
+        ImportUtil.importSupport(importBuilder);
         ImportUtil.importR(importBuilder, application.getPackageName());
         ImportUtil.clearImport();
     }
@@ -90,7 +91,12 @@ public class AnkoConverter {
 
     private void writeViewStart(String viewName, int deep) {
         writeTab(deep);
-        codeBuilder.append(ConvertUtil.convertViewName(viewName)).append(" {\n");
+        codeBuilder.append(ConvertUtil.convertViewName(viewName, it -> {
+            if (it.equals("android.support.v4.widget"))
+                ImportUtil.importV4();
+            if (it.equals("android.support.v7.widget"))
+                ImportUtil.importV7();
+        })).append(" {\n");
     }
 
     private void writeViewEnd(int deep) {

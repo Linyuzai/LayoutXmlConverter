@@ -281,6 +281,10 @@ public class AttributeUtil {
     }
 
     public static String getBoolean(String xmlBoolean) {
+        if (xmlBoolean.equals(XmlAttrValue.TRUE))
+            return XmlAttrValue.TRUE;
+        else if (xmlBoolean.equals(XmlAttrValue.FALSE))
+            return XmlAttrValue.FALSE;
         if (xmlBoolean.contains("@bool/"))
             return "resources.getBoolean(R.bool." + xmlBoolean.substring(6) + ")";
         else if (xmlBoolean.contains("@android:bool/"))

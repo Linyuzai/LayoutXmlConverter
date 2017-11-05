@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>linyuzai.plugin.xml</id>
     <name>Kotlin Anko Converter For Xml</name>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <vendor email="120718461@qq.com" url="https://github.com/Linyuzai">Personal</vendor>
 
     <description><![CDATA[
@@ -17,6 +17,7 @@
       Support elevation,translationZ,rotation,rotationX,rotationY,scaleX,scaleY,translationX,translationY<br>
       Support 0dp transform to 0 or 0f<br>
       Support v4,v7 views exclude attributes
+      Fix boolean attribute bug
       To do list:<br>
       1.Support textStyle and inputType<br>
     ]]>

@@ -63,7 +63,7 @@ public class AnkoConverter {
         noteBuilder.append("/**\n");
         noteBuilder.append(" * Generate with Plugin\n");
         noteBuilder.append(" * @plugin Kotlin Anko Converter For Xml\n");
-        noteBuilder.append(" * @version 1.2.0\n");
+        noteBuilder.append(" * @version 1.2.1\n");
         noteBuilder.append(" */\n");
     }
 

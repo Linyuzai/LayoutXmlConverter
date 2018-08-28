@@ -13,6 +13,8 @@ public class XmlAttrValue {
     public static final String GRAVITY_CENTER = "center";
     public static final String GRAVITY_CENTER_VERTICAL = "center_vertical";
     public static final String GRAVITY_CENTER_HORIZONTAL = "center_horizontal";
+    public static final String GRAVITY_START = "start";
+    public static final String GRAVITY_END = "end";
     public static final String GRAVITY_TOP = "top";
     public static final String GRAVITY_BOTTOM = "bottom";
     public static final String GRAVITY_LEFT = "left";
@@ -68,4 +70,10 @@ public class XmlAttrValue {
     public static final String INPUT_TYPE_DATETIME = "datetime";
     public static final String INPUT_TYPE_DATE = "date";
     public static final String INPUT_TYPE_TIME = "time";
+
+    public static final String SCROLL_FLAG_SCROLL = "scroll";
+    public static final String SCROLL_FLAG_EXIT_UNTIL_COLLAPSED = "exitUntilCollapsed";
+    public static final String SCROLL_FLAG_ENTER_ALWAYS = "enterAlways";
+    public static final String SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED = "enterAlwaysCollapsed";
+    public static final String SCROLL_FLAG_SNAP = "snap";
 }

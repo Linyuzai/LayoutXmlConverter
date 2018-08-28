@@ -12,6 +12,8 @@ public class ViewAttrValue {
     public static final String GRAVITY_CENTER = "Gravity.CENTER";
     public static final String GRAVITY_CENTER_VERTICAL = "Gravity.CENTER_VERTICAL";
     public static final String GRAVITY_CENTER_HORIZONTAL = "Gravity.CENTER_HORIZONTAL";
+    public static final String GRAVITY_START = "Gravity.START";
+    public static final String GRAVITY_END = "Gravity.END";
     public static final String GRAVITY_TOP = "Gravity.TOP";
     public static final String GRAVITY_BOTTOM = "Gravity.BOTTOM";
     public static final String GRAVITY_LEFT = "Gravity.LEFT";
@@ -68,4 +70,10 @@ public class ViewAttrValue {
     public static final String INPUT_TYPE_DATETIME = "InputType.TYPE_CLASS_DATETIME or InputType.TYPE_DATETIME_VARIATION_NORMAL";
     public static final String INPUT_TYPE_DATE = "InputType.TYPE_CLASS_DATETIME or InputType.TYPE_DATETIME_VARIATION_DATE";
     public static final String INPUT_TYPE_TIME = "InputType.TYPE_CLASS_DATETIME or InputType.TYPE_DATETIME_VARIATION_TIME";
+
+    public static final String SCROLL_FLAG_SCROLL = "AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL";
+    public static final String SCROLL_FLAG_EXIT_UNTIL_COLLAPSED = "AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED";
+    public static final String SCROLL_FLAG_ENTER_ALWAYS = "AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS";
+    public static final String SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED = "AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED";
+    public static final String SCROLL_FLAG_SNAP = "AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP";
 }

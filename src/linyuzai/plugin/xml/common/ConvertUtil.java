@@ -39,14 +39,18 @@ public class ConvertUtil {
     }
 
     @NotNull
-    public static String convertViewName(String viewName, ViewNameConvertCallback callback) {
+    public static String convertViewName(String viewName, boolean theme, ViewNameConvertCallback callback) {
+        String finalName = viewName;
         if (viewName.contains(".")) {
             int index = viewName.lastIndexOf(".");
             if (callback != null)
                 callback.onViewNameConvert(viewName.substring(0, index));
-            viewName = viewName.substring(index + 1);
+            finalName = viewName.substring(index + 1);
         }
-        return viewName.substring(0, 1).toLowerCase() + viewName.substring(1);
+        if (theme)
+            return "themed" + finalName;
+        else
+            return finalName.substring(0, 1).toLowerCase() + finalName.substring(1);
     }
 
     public static UApplication convertManifest(InputStream is) {

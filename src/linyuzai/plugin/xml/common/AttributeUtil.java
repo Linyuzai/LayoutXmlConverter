@@ -6,10 +6,7 @@ import org.dom4j.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class AttributeUtil {
 
@@ -36,7 +33,9 @@ public class AttributeUtil {
                 xmlName.equals(XmlAttrName.LAYOUT_TO_RIGHT_OF) ||
                 xmlName.equals(XmlAttrName.LAYOUT_ABOVE) ||
                 xmlName.equals(XmlAttrName.LAYOUT_BELOW) ||
-                xmlName.equals(XmlAttrName.LAYOUT_ALIGN_BASELINE);
+                xmlName.equals(XmlAttrName.LAYOUT_ALIGN_BASELINE) ||
+                xmlName.contains(XmlAttrName.LAYOUT_SCROLL_FLAGS) ||
+                xmlName.contains(XmlAttrName.LAYOUT_BEHAVIOR);
     }
 
     public static int countOfElement(Element root) {
@@ -89,6 +88,18 @@ public class AttributeUtil {
         return splitAttrs;
     }
 
+    public static UAttribute filterTheme(List<UAttribute> uAttributes) {
+        Iterator<UAttribute> ui = uAttributes.iterator();
+        while (ui.hasNext()) {
+            UAttribute ua = ui.next();
+            if (ua.getName().contains("android:theme")) {
+                ui.remove();
+                return ua;
+            }
+        }
+        return null;
+    }
+
     @NotNull
     public static String getAlpha(String xmlAlpha) {
         if (StringUtil.isAlpha(xmlAlpha))
@@ -97,6 +108,21 @@ public class AttributeUtil {
             return "0f";
         else
             return getInteger(xmlAlpha, true);
+    }
+
+    public static String getTheme(String xmlTheme) {
+        if (xmlTheme.startsWith("?attr/")) {
+            return "R.attr." + xmlTheme.substring(6).replaceAll("\\.", "_");
+        } else if (xmlTheme.startsWith("?android:attr/")) {
+            return "android.R.attr." + xmlTheme.substring(14).replaceAll("\\.", "_");
+        } else if (xmlTheme.startsWith("@style/"))
+            return "R.style." + xmlTheme.substring(7).replaceAll("\\.", "_");
+        else if (xmlTheme.startsWith("@android:style/"))
+            return "android.R.style." + xmlTheme.substring(15).replaceAll("\\.", "_");
+        else if (TextUtils.isEmpty(xmlTheme))
+            return "0";
+        else
+            return xmlTheme + StringUtil.VALUE_NOT_SUPPORT;
     }
 
     @NotNull
@@ -118,12 +144,8 @@ public class AttributeUtil {
             return ViewAttrValue.MATCH_PARENT;
         else if (value.equals(XmlAttrValue.WRAP_CONTENT))
             return ViewAttrValue.WRAP_CONTENT;
-        else if (value.contains("dp"))
-            return "dip(" + value.split("dp")[0] + ")";
-        else if (TextUtils.isEmpty(value))
-            return ViewAttrValue.WRAP_CONTENT;
         else
-            return value;
+            return getDimension(value, false);
 
     }
 
@@ -136,7 +158,17 @@ public class AttributeUtil {
 
     @NotNull
     public static String getDimension(String xmlDimension, boolean toFloat) {
-        if (xmlDimension.contains("dp")) {
+        if (xmlDimension.startsWith("?attr/")) {
+            if (toFloat)
+                return "dimenAttr(R.attr." + xmlDimension.substring(6) + ").toFloat()";
+            else
+                return "dimenAttr(R.attr." + xmlDimension.substring(6) + ")";
+        } else if (xmlDimension.startsWith("?android:attr/")) {
+            if (toFloat)
+                return "dimenAttr(android.R.attr." + xmlDimension.substring(14) + ").toFloat()";
+            else
+                return "dimenAttr(android.R.attr." + xmlDimension.substring(14) + ")";
+        } else if (xmlDimension.contains("dp")) {
             String dpValue = xmlDimension.split("dp")[0];
             if (dpValue.equals("0")) {
                 if (toFloat)
@@ -174,12 +206,12 @@ public class AttributeUtil {
                 return xmlDimension.split("sp")[0] + "f //sp";
             else
                 return xmlDimension.split("sp")[0] + " //sp";
-        } else if (xmlDimension.contains("@dimen/")) {
+        } else if (xmlDimension.startsWith("@dimen/")) {
             if (toFloat)
                 return "dimen(R.dimen." + xmlDimension.substring(7) + ").toFloat()";
             else
                 return "dimen(R.dimen." + xmlDimension.substring(7) + ")";
-        } else if (xmlDimension.contains("@android:dimen/")) {
+        } else if (xmlDimension.startsWith("@android:dimen/")) {
             if (toFloat)
                 return "dimen(android.R.dimen." + xmlDimension.substring(15) + ").toFloat()";
             else
@@ -194,13 +226,13 @@ public class AttributeUtil {
 
     @NotNull
     public static String getImage(String xmlImage) {
-        if (xmlImage.contains("@mipmap/"))
+        if (xmlImage.startsWith("@mipmap/"))
             return "R.mipmap." + xmlImage.substring(8);
-        else if (xmlImage.contains("@drawable/"))
+        else if (xmlImage.startsWith("@drawable/"))
             return "R.drawable." + xmlImage.substring(10);
-        else if (xmlImage.contains("@android:mipmap/"))
+        else if (xmlImage.startsWith("@android:mipmap/"))
             return "android.R.mipmap." + xmlImage.substring(16);
-        else if (xmlImage.contains("@android:drawable/"))
+        else if (xmlImage.startsWith("@android:drawable/"))
             return "android.R.drawable." + xmlImage.substring(18);
         else if (TextUtils.isEmpty(xmlImage))
             return "0";
@@ -210,9 +242,13 @@ public class AttributeUtil {
 
     @NotNull
     public static String getColor(String xmlColor) {
-        if (xmlColor.contains("@color/"))
+        if (xmlColor.startsWith("?attr/"))
+            return "colorAttr(R.attr." + xmlColor.substring(6) + ")";
+        else if (xmlColor.startsWith("?android:attr/"))
+            return "colorAttr(android.R.attr." + xmlColor.substring(14) + ")";
+        else if (xmlColor.startsWith("@color/"))
             return "resources.getColor(R.color." + xmlColor.substring(7) + ")";
-        else if (xmlColor.contains("@android:color/"))
+        else if (xmlColor.startsWith("@android:color/"))
             return getSystemColor(xmlColor.substring(15));
         else if (TextUtils.isEmpty(xmlColor))
             return "0";
@@ -270,9 +306,9 @@ public class AttributeUtil {
 
     @NotNull
     public static String getString(String xmlString) {
-        if (xmlString.contains("@string/"))
+        if (xmlString.startsWith("@string/"))
             return "resources.getString(R.string." + xmlString.substring(8) + ")";
-        else if (xmlString.contains("@android:string/"))
+        else if (xmlString.startsWith("@android:string/"))
             return "resources.getString(android.R.string." + xmlString.substring(16) + ")";
         else if (TextUtils.isEmpty(xmlString))
             return "\"\"";
@@ -285,9 +321,9 @@ public class AttributeUtil {
             return XmlAttrValue.TRUE;
         else if (xmlBoolean.equals(XmlAttrValue.FALSE))
             return XmlAttrValue.FALSE;
-        if (xmlBoolean.contains("@bool/"))
+        if (xmlBoolean.startsWith("@bool/"))
             return "resources.getBoolean(R.bool." + xmlBoolean.substring(6) + ")";
-        else if (xmlBoolean.contains("@android:bool/"))
+        else if (xmlBoolean.startsWith("@android:bool/"))
             return "resources.getBoolean(android.R.bool." + xmlBoolean.substring(14) + ")";
         else if (TextUtils.isEmpty(xmlBoolean))
             return XmlAttrValue.FALSE;
@@ -297,12 +333,12 @@ public class AttributeUtil {
 
     @NotNull
     public static String getInteger(String xmlInteger, boolean toFloat) {
-        if (xmlInteger.contains("@integer/")) {
+        if (xmlInteger.startsWith("@integer/")) {
             if (toFloat)
                 return "resources.getInteger(R.integer." + xmlInteger.substring(9) + ").toFloat()";
             else
                 return "resources.getInteger(R.integer." + xmlInteger.substring(9) + ")";
-        } else if (xmlInteger.contains("@android:integer/")) {
+        } else if (xmlInteger.startsWith("@android:integer/")) {
             if (toFloat)
                 return "resources.getInteger(android.R.integer." + xmlInteger.substring(17) + ").toFloat()";
             else
@@ -357,6 +393,10 @@ public class AttributeUtil {
                 return ViewAttrValue.GRAVITY_CENTER_VERTICAL;
             case XmlAttrValue.GRAVITY_CENTER_HORIZONTAL:
                 return ViewAttrValue.GRAVITY_CENTER_HORIZONTAL;
+            case XmlAttrValue.GRAVITY_START:
+                return ViewAttrValue.GRAVITY_START;
+            case XmlAttrValue.GRAVITY_END:
+                return ViewAttrValue.GRAVITY_END;
             case XmlAttrValue.GRAVITY_TOP:
                 return ViewAttrValue.GRAVITY_TOP;
             case XmlAttrValue.GRAVITY_BOTTOM:
@@ -498,5 +538,39 @@ public class AttributeUtil {
             default:
                 return ViewAttrValue.INPUT_TYPE_TEXT;
         }
+    }
+
+    public static String getMultiScrollFlags(String xmlMultiScrollFlags) {
+        String[] xmlScrollFlagsArray = xmlMultiScrollFlags.replaceAll("\\s*", "").split("\\|");
+        List<String> viewScrollFlagsList = new ArrayList<>();
+        Arrays.stream(xmlScrollFlagsArray).forEach(it -> viewScrollFlagsList.add(getScrollFlags(it)));
+        return String.join(" or ", viewScrollFlagsList);
+    }
+
+    public static String getScrollFlags(String attributeValue) {
+        switch (attributeValue) {
+            case XmlAttrValue.SCROLL_FLAG_ENTER_ALWAYS:
+                return ViewAttrValue.SCROLL_FLAG_ENTER_ALWAYS;
+            case XmlAttrValue.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED:
+                return ViewAttrValue.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED;
+            case XmlAttrValue.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED:
+                return ViewAttrValue.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED;
+            case XmlAttrValue.SCROLL_FLAG_SCROLL:
+                return ViewAttrValue.SCROLL_FLAG_SCROLL;
+            case XmlAttrValue.SCROLL_FLAG_SNAP:
+                return ViewAttrValue.SCROLL_FLAG_SNAP;
+            default:
+                if (TextUtils.isEmpty(attributeValue))
+                    return XmlAttrValue.SCROLL_FLAG_SCROLL;
+                else
+                    return attributeValue + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    public static String getBehavior(String attributeValue) {
+        if (TextUtils.isEmpty(attributeValue))
+            return "null";
+        else
+            return attributeValue.replaceAll("\\$", ".") + "()";
     }
 }

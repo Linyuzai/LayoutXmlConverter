@@ -63,7 +63,7 @@ public class AnkoConverter {
         noteBuilder.append("/**\n");
         noteBuilder.append(" * Generate with Plugin\n");
         noteBuilder.append(" * @plugin Kotlin Anko Converter For Xml\n");
-        noteBuilder.append(" * @version 1.2.1\n");
+        noteBuilder.append(" * @version 1.2.3\n");
         noteBuilder.append(" */\n");
     }
 
@@ -89,14 +89,26 @@ public class AnkoConverter {
         codeBuilder.append("\t}\n");
     }
 
-    private void writeViewStart(String viewName, int deep) {
+    private void writeViewStart(String viewName, UAttribute theme, int deep) {
         writeTab(deep);
-        codeBuilder.append(ConvertUtil.convertViewName(viewName, it -> {
+        if (viewName.equals("android.support.v7.widget.RecyclerView")) {
+            ImportUtil.importRecyclerView();
+        }
+        if (viewName.equals("android.support.v7.widget.Toolbar")) {
+            ImportUtil.add("org.jetbrains.anko.appcompat.v7.toolbar");
+        }
+        codeBuilder.append(ConvertUtil.convertViewName(viewName, theme != null, it -> {
             if (it.equals("android.support.v4.widget"))
                 ImportUtil.importV4();
             if (it.equals("android.support.v7.widget"))
                 ImportUtil.importV7();
-        })).append(" {\n");
+            if (it.equals("android.support.design.widget"))
+                ImportUtil.importDesign();
+        }));
+        if (theme != null) {
+            codeBuilder.append("(").append(AttributeUtil.getTheme(theme.getValue())).append(")");
+        }
+        codeBuilder.append(" {\n");
     }
 
     private void writeViewEnd(int deep) {
@@ -417,6 +429,18 @@ public class AnkoConverter {
                     isNotSupportAttribute = true;
                     break;
             }
+        } else if (attributeName.contains(XmlAttrName.POPUP_THEME)) {
+            name = ViewAttrName.POPUP_THEME;
+            value = AttributeUtil.getTheme(attributeValue);
+        } else if (attributeName.contains(XmlAttrName.LAYOUT_SCROLL_FLAGS)) {
+            name = ViewAttrName.SCROLL_FLAGS;
+            value = AttributeUtil.getMultiScrollFlags(attributeValue);
+        } else if (attributeName.contains(XmlAttrName.LAYOUT_BEHAVIOR)) {
+            name = ViewAttrName.BEHAVIOR;
+            if (attributeValue.contains("@"))
+                value = "Class.forName(" + AttributeUtil.getString(attributeValue) + ").newInstance() as CoordinatorLayout.Behavior<*>?";
+            else
+                value = AttributeUtil.getBehavior(attributeValue);
         } else {
             switch (attributeName) {
                 case XmlAttrName.ALPHA:
@@ -533,8 +557,9 @@ public class AnkoConverter {
     private void writeView(Element root, int deep) {
         if (callback != null)
             callback.onUpdate(progress++);
-        writeViewStart(root.getName(), deep);
         List<List<UAttribute>> attributes = AttributeUtil.splitAttributes(root.attributes());
+        UAttribute themeAttr = AttributeUtil.filterTheme(attributes.get(0));
+        writeViewStart(root.getName(), themeAttr, deep);
         for (UAttribute attribute : attributes.get(0)) {
             writeAttribute(attribute.getName(), attribute.getValue(), deep + 1);
         }

@@ -68,6 +68,13 @@ public class XmlAttrName {
     public static final String LAYOUT_ALIGN_RIGHT = "android:layout_alignRight";
     public static final String LAYOUT_ALIGN_BASELINE = "android:layout_alignBaseline";
 
+    //CoordinatorLayout AppBarLayout
+    public static final String LAYOUT_SCROLL_FLAGS = ":layout_scrollFlags";
+    public static final String LAYOUT_BEHAVIOR = ":layout_behavior";
+
+    //toolbar
+    public static final String POPUP_THEME = ":popupTheme";
+
     //text view
     public static final String TEXT = "android:text";
     public static final String TEXT_SIZE = "android:textSize";

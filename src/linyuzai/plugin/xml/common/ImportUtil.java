@@ -11,6 +11,9 @@ public class ImportUtil {
 
     public static final String V4 = "org.jetbrains.anko.support.v4";
     public static final String V7 = "org.jetbrains.anko.appcompat.v7";
+    public static final String DESIGN = "org.jetbrains.anko.design";
+    public static final String DESIGN_WIDGET = "android.support.design.widget";
+    public static final String RECYCLER_VIEW = "org.jetbrains.anko.recyclerview.v7";
 
     public static final String COLOR = "android.graphics.Color";
     public static final String TYPEFACE = "android.graphics.Typeface";
@@ -24,6 +27,8 @@ public class ImportUtil {
 
     private static boolean importV4 = false;
     private static boolean importV7 = false;
+    private static boolean importDesign = false;
+    private static boolean importRecyclerView = false;
 
     public static void importClass(StringBuilder builder, String classTag) {
         builder.append(IMPORT).append(classTag).append("\n");
@@ -45,6 +50,14 @@ public class ImportUtil {
         importV7 = true;
     }
 
+    public static void importDesign() {
+        importDesign = true;
+    }
+
+    public static void importRecyclerView() {
+        importRecyclerView = true;
+    }
+
     public static void add(String importClass) {
         importSet.add(importClass);
     }
@@ -58,6 +71,12 @@ public class ImportUtil {
             importMultiClass(builder, V4);
         if (importV7)
             importMultiClass(builder, V7);
+        if (importDesign) {
+            importMultiClass(builder, DESIGN);
+            importMultiClass(builder, DESIGN_WIDGET);
+        }
+        if (importRecyclerView)
+            importMultiClass(builder, RECYCLER_VIEW);
     }
 
     public static void clearImport() {

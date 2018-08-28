@@ -79,4 +79,9 @@ public class ViewAttrName {
     public static final String HINT = "hint";
     public static final String HINT_TEXT_COLOR = "hintTextColor";
     public static final String INPUT_TYPE = "inputType";
+
+    public static final String SCROLL_FLAGS = "scrollFlags";
+    public static final String BEHAVIOR = "behavior";
+
+    public static final String POPUP_THEME = "popupTheme";
 }

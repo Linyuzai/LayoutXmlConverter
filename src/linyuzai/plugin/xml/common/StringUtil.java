@@ -31,7 +31,21 @@ public class StringUtil {
     }
 
     public static boolean isImage(String image) {
-        return image.contains("@mipmap/") || image.contains("@drawable/") ||
-                image.contains("@android:mipmap/") || image.contains("@android:drawable/");
+        return image.startsWith("@mipmap/") || image.startsWith("@drawable/") ||
+                image.startsWith("@android:mipmap/") || image.startsWith("@android:drawable/");
+    }
+
+    public static boolean isId(String id) {
+        return id.startsWith("@+id/") || id.startsWith("@id/") || id.startsWith("@android:id/");
+    }
+
+    public static boolean isColorRes(String colorRes) {
+        return colorRes.startsWith("@color/") || colorRes.startsWith("@android:color/");
+    }
+
+    public static boolean isAttr(String attr) {
+        return attr.startsWith("?attr/") || attr.startsWith("?android:attr/") ||
+                attr.startsWith("?attr/android:") || attr.startsWith("?android:") ||
+                attr.startsWith("?");
     }
 }

@@ -54,7 +54,6 @@ public class AnkoConverter {
         ImportUtil.importClass(importBuilder, ImportUtil.BUNDLE);
         ImportUtil.importFromSet(importBuilder);
         ImportUtil.importMultiClass(importBuilder, ImportUtil.ANKO);
-        ImportUtil.importSupport(importBuilder);
         ImportUtil.importR(importBuilder, application.getPackageName());
         ImportUtil.clearImport();
     }
@@ -89,26 +88,33 @@ public class AnkoConverter {
         codeBuilder.append("\t}\n");
     }
 
-    private void writeViewStart(String viewName, UAttribute theme, int deep) {
+    private void writeViewStart(String viewName, UAttribute theme, int deep, boolean withEnd) {
         writeTab(deep);
         if (viewName.equals("android.support.v7.widget.RecyclerView")) {
-            ImportUtil.importRecyclerView();
+            ImportUtil.supportMulti(ImportUtil.ANKO_RECYCLER_VIEW);
         }
         if (viewName.equals("android.support.v7.widget.Toolbar")) {
-            ImportUtil.add("org.jetbrains.anko.appcompat.v7.toolbar");
+            ImportUtil.support("org.jetbrains.anko.appcompat.v7.toolbar");
         }
         codeBuilder.append(ConvertUtil.convertViewName(viewName, theme != null, it -> {
             if (it.equals("android.support.v4.widget"))
-                ImportUtil.importV4();
+                ImportUtil.supportMulti(ImportUtil.ANKO_V4);
             if (it.equals("android.support.v7.widget"))
-                ImportUtil.importV7();
-            if (it.equals("android.support.design.widget"))
-                ImportUtil.importDesign();
+                ImportUtil.supportMulti(ImportUtil.ANKO_V7);
+            if (it.equals("android.support.design.widget")) {
+                ImportUtil.supportMulti(ImportUtil.DESIGN);
+                ImportUtil.supportMulti(ImportUtil.ANKO_DESIGN);
+            }
         }));
         if (theme != null) {
             codeBuilder.append("(").append(AttributeUtil.getTheme(theme.getValue())).append(")");
         }
-        codeBuilder.append(" {\n");
+        if (withEnd) {
+            if (theme == null)
+                codeBuilder.append("()");
+        } else {
+            codeBuilder.append(" {\n");
+        }
     }
 
     private void writeViewEnd(int deep) {
@@ -123,12 +129,12 @@ public class AnkoConverter {
         }
         String widthValue = params.get(0).getValue();
         String heightValue = params.get(1).getValue();
-        if (widthValue.equals(XmlAttrValue.WRAP_CONTENT) && heightValue.equals(XmlAttrValue.WRAP_CONTENT)) {
+        if (widthValue.equals(XmlAttrValue.LayoutParams.WRAP_CONTENT) && heightValue.equals(XmlAttrValue.LayoutParams.WRAP_CONTENT)) {
             if (layout.size() > 0)
                 codeBuilder.append(".lparams");
-        } else if (widthValue.equals(XmlAttrValue.WRAP_CONTENT)) {
+        } else if (widthValue.equals(XmlAttrValue.LayoutParams.WRAP_CONTENT)) {
             codeBuilder.append(".lparams(height = ").append(AttributeUtil.getWidthOrHeight(heightValue)).append(")");
-        } else if (heightValue.equals(XmlAttrValue.WRAP_CONTENT)) {
+        } else if (heightValue.equals(XmlAttrValue.LayoutParams.WRAP_CONTENT)) {
             codeBuilder.append(".lparams(width = ").append(AttributeUtil.getWidthOrHeight(widthValue)).append(")");
         } else {
             codeBuilder.append(".lparams(width = ").append(AttributeUtil.getWidthOrHeight(widthValue))
@@ -137,272 +143,463 @@ public class AnkoConverter {
         if (layout.size() > 0) {
             codeBuilder.append(" {\n");
             for (UAttribute attr : layout)
-                writeAttribute(attr.getName(), attr.getValue(), deep + 1);
+                writeAttribute(null, attr.getName(), attr.getValue(), deep + 1);
             writeTab(deep);
             codeBuilder.append("}");
         }
         codeBuilder.append("\n");
     }
 
-    private void writeAttribute(String attributeName, String attributeValue, int deep) {
+    private void writeAttribute(String className, String attributeName, String attributeValue, int deep) {
         writeTab(deep);
         String name = attributeName;
         String value = attributeValue;
         String extra = "";
         boolean isEqualsOperator = true;
         boolean isNotSupportAttribute = false;
-        if (attributeName.startsWith("android:layout_")) {
-            if (attributeName.startsWith("android:layout_margin")) {
-                switch (attributeName) {
-                    case XmlAttrName.LAYOUT_MARGIN:
-                        name = ViewAttrName.MARGIN;
-                        value = AttributeUtil.getDimension(attributeValue, false);
-                        break;
-                    case XmlAttrName.LAYOUT_MARGIN_TOP:
-                        name = ViewAttrName.MARGIN_TOP;
-                        value = AttributeUtil.getDimension(attributeValue, false);
-                        break;
-                    case XmlAttrName.LAYOUT_MARGIN_RIGHT:
-                        name = ViewAttrName.MARGIN_RIGHT;
-                        value = AttributeUtil.getDimension(attributeValue, false);
-                        break;
-                    case XmlAttrName.LAYOUT_MARGIN_BOTTOM:
-                        name = ViewAttrName.MARGIN_BOTTOM;
-                        value = AttributeUtil.getDimension(attributeValue, false);
-                        break;
-                    case XmlAttrName.LAYOUT_MARGIN_LEFT:
-                        name = ViewAttrName.MARGIN_LEFT;
-                        value = AttributeUtil.getDimension(attributeValue, false);
-                        break;
-                    case XmlAttrName.LAYOUT_MARGIN_START:
-                        name = ViewAttrName.MARGIN_START;
-                        value = AttributeUtil.getDimension(attributeValue, false);
-                        break;
-                    case XmlAttrName.LAYOUT_MARGIN_END:
-                        name = ViewAttrName.MARGIN_END;
-                        value = AttributeUtil.getDimension(attributeValue, false);
-                        break;
-                    case XmlAttrName.LAYOUT_MARGIN_VERTICAL:
-                        name = ViewAttrName.MARGIN_VERTICAL;
-                        value = AttributeUtil.getDimension(attributeValue, false);
-                        break;
-                    case XmlAttrName.LAYOUT_MARGIN_HORIZONTAL:
-                        name = ViewAttrName.MARGIN_HORIZONTAL;
-                        value = AttributeUtil.getDimension(attributeValue, false);
-                        break;
-                    default:
-                        isNotSupportAttribute = true;
-                        break;
-                }
-            } else {
-                switch (attributeName) {
-                    case XmlAttrName.LAYOUT_GRAVITY:
-                        name = ViewAttrName.GRAVITY;
-                        value = AttributeUtil.getMultiGravity(attributeValue);
-                        ImportUtil.add(ImportUtil.GRAVITY);
-                        break;
-                    case XmlAttrName.LAYOUT_WEIGHT:
-                        name = ViewAttrName.WEIGHT;
-                        value = AttributeUtil.getWeight(attributeValue);
-                        break;
-                    case XmlAttrName.LAYOUT_ABOVE:
-                        name = ViewAttrName.ABOVE;
-                        value = AttributeUtil.getId(attributeValue);
-                        isEqualsOperator = false;
-                        break;
-                    case XmlAttrName.LAYOUT_BELOW:
-                        name = ViewAttrName.BELOW;
-                        value = AttributeUtil.getId(attributeValue);
-                        isEqualsOperator = false;
-                        break;
-                    case XmlAttrName.LAYOUT_TO_LEFT_OF:
-                        name = ViewAttrName.LEFT_OF;
-                        value = AttributeUtil.getId(attributeValue);
-                        isEqualsOperator = false;
-                        break;
-                    case XmlAttrName.LAYOUT_TO_RIGHT_OF:
-                        name = ViewAttrName.RIGHT_OF;
-                        value = AttributeUtil.getId(attributeValue);
-                        isEqualsOperator = false;
-                        break;
-                    case XmlAttrName.LAYOUT_ALIGN_TOP:
-                        name = ViewAttrName.ALIGN_TOP;
-                        value = AttributeUtil.getId(attributeValue);
-                        isEqualsOperator = false;
-                        break;
-                    case XmlAttrName.LAYOUT_ALIGN_BOTTOM:
-                        name = ViewAttrName.ALIGN_BOTTOM;
-                        value = AttributeUtil.getId(attributeValue);
-                        isEqualsOperator = false;
-                        break;
-                    case XmlAttrName.LAYOUT_ALIGN_LEFT:
-                        name = ViewAttrName.ALIGN_LEFT;
-                        value = AttributeUtil.getId(attributeValue);
-                        isEqualsOperator = false;
-                        break;
-                    case XmlAttrName.LAYOUT_ALIGN_RIGHT:
-                        name = ViewAttrName.ALIGN_RIGHT;
-                        value = AttributeUtil.getId(attributeValue);
-                        isEqualsOperator = false;
-                        break;
-                    case XmlAttrName.LAYOUT_CENTER_VERTICAL:
-                        switch (attributeValue) {
-                            case XmlAttrValue.TRUE:
-                                name = ViewAttrName.CENTER_VERTICAL;
-                                value = ViewAttrValue.EMPTY;
-                                break;
-                            case XmlAttrValue.FALSE:
-                                name = "//" + ViewAttrName.CENTER_VERTICAL;
-                                break;
-                            default:
-                                name = "//" + ViewAttrName.CENTER_VERTICAL;
-                                extra = StringUtil.VALUE_NOT_SUPPORT;
-                                break;
-                        }
-                        isEqualsOperator = false;
-                        break;
-                    case XmlAttrName.LAYOUT_CENTER_HORIZONTAL:
-                        switch (attributeValue) {
-                            case XmlAttrValue.TRUE:
-                                name = ViewAttrName.CENTER_HORIZONTAL;
-                                value = ViewAttrValue.EMPTY;
-                                break;
-                            case XmlAttrValue.FALSE:
-                                name = "//" + ViewAttrName.CENTER_HORIZONTAL;
-                                break;
-                            default:
-                                name = "//" + ViewAttrName.CENTER_HORIZONTAL;
-                                extra = StringUtil.VALUE_NOT_SUPPORT;
-                                break;
-                        }
-                        isEqualsOperator = false;
-                        break;
-                    case XmlAttrName.LAYOUT_CENTER_IN_PARENT:
-                        switch (attributeValue) {
-                            case XmlAttrValue.TRUE:
-                                name = ViewAttrName.CENTER_IN_PARENT;
-                                value = ViewAttrValue.EMPTY;
-                                break;
-                            case XmlAttrValue.FALSE:
-                                name = "//" + ViewAttrName.CENTER_IN_PARENT;
-                                break;
-                            default:
-                                name = "//" + ViewAttrName.CENTER_IN_PARENT;
-                                extra = StringUtil.VALUE_NOT_SUPPORT;
-                                break;
-                        }
-                        isEqualsOperator = false;
-                        break;
-                    case XmlAttrName.LAYOUT_ALIGN_PARENT_TOP:
-                        switch (attributeValue) {
-                            case XmlAttrValue.TRUE:
-                                name = ViewAttrName.ALIGN_PARENT_TOP;
-                                value = ViewAttrValue.EMPTY;
-                                break;
-                            case XmlAttrValue.FALSE:
-                                name = "//" + ViewAttrName.ALIGN_PARENT_TOP;
-                                break;
-                            default:
-                                name = "//" + ViewAttrName.ALIGN_PARENT_TOP;
-                                extra = StringUtil.VALUE_NOT_SUPPORT;
-                                break;
-                        }
-                        isEqualsOperator = false;
-                        break;
-                    case XmlAttrName.LAYOUT_ALIGN_PARENT_BOTTOM:
-                        switch (attributeValue) {
-                            case XmlAttrValue.TRUE:
-                                name = ViewAttrName.ALIGN_PARENT_BOTTOM;
-                                value = ViewAttrValue.EMPTY;
-                                break;
-                            case XmlAttrValue.FALSE:
-                                name = "//" + ViewAttrName.ALIGN_PARENT_BOTTOM;
-                                break;
-                            default:
-                                name = "//" + ViewAttrName.ALIGN_PARENT_BOTTOM;
-                                extra = StringUtil.VALUE_NOT_SUPPORT;
-                                break;
-                        }
-                        isEqualsOperator = false;
-                        break;
-                    case XmlAttrName.LAYOUT_ALIGN_PARENT_LEFT:
-                        switch (attributeValue) {
-                            case XmlAttrValue.TRUE:
-                                name = ViewAttrName.ALIGN_PARENT_LEFT;
-                                value = ViewAttrValue.EMPTY;
-                                break;
-                            case XmlAttrValue.FALSE:
-                                name = "//" + ViewAttrName.ALIGN_PARENT_LEFT;
-                                break;
-                            default:
-                                name = "//" + ViewAttrName.ALIGN_PARENT_LEFT;
-                                extra = StringUtil.VALUE_NOT_SUPPORT;
-                                break;
-                        }
-                        isEqualsOperator = false;
-                        break;
-                    case XmlAttrName.LAYOUT_ALIGN_PARENT_RIGHT:
-                        switch (attributeValue) {
-                            case XmlAttrValue.TRUE:
-                                name = ViewAttrName.ALIGN_PARENT_RIGHT;
-                                value = ViewAttrValue.EMPTY;
-                                break;
-                            case XmlAttrValue.FALSE:
-                                name = "//" + ViewAttrName.ALIGN_PARENT_RIGHT;
-                                break;
-                            default:
-                                name = "//" + ViewAttrName.ALIGN_PARENT_RIGHT;
-                                extra = StringUtil.VALUE_NOT_SUPPORT;
-                                break;
-                        }
-                        isEqualsOperator = false;
-                        break;
-                    case XmlAttrName.LAYOUT_ALIGN_BASELINE:
-                        name = ViewAttrName.ALIGN_BASELINE;
-                        value = AttributeUtil.getId(attributeValue);
-                        isEqualsOperator = false;
-                        break;
-                    default:
-                        isNotSupportAttribute = true;
-                        break;
-                }
-            }
-        } else if (attributeName.startsWith("android:padding")) {
+        boolean isNote = false;
+        boolean isFunction = false;
+        if (AttributeUtil.isNullOrEmpty(attributeValue)) {
+            isNote = true;
+            extra = "// value is empty or null";
+        } else if (attributeName.startsWith("android:")) {
             switch (attributeName) {
-                case XmlAttrName.LAYOUT_PADDING:
-                    name = ViewAttrName.PADDING;
-                    value = AttributeUtil.getDimension(attributeValue, false);
+                /**
+                 * View Attrs Start
+                 */
+                case XmlAttrName.View.ID:
+                    name = ViewAttrName.View.ID;
+                    value = AttributeUtil.getId(attributeValue);
                     break;
-                case XmlAttrName.LAYOUT_PADDING_TOP:
-                    name = ViewAttrName.PADDING_TOP;
-                    value = AttributeUtil.getDimension(attributeValue, false);
+                case XmlAttrName.View.ACCESSIBILITY_LIVE_REGION:
+                    name = ViewAttrName.View.ACCESSIBILITY_LIVE_REGION;
+                    value = AttributeUtil.getAccessibilityLiveRegion(attributeValue);
                     break;
-                case XmlAttrName.LAYOUT_PADDING_RIGHT:
-                    name = ViewAttrName.PADDING_RIGHT;
-                    value = AttributeUtil.getDimension(attributeValue, false);
+                case XmlAttrName.View.ACCESSIBILITY_TRAVERSAL_AFTER:
+                    name = ViewAttrName.View.ACCESSIBILITY_TRAVERSAL_AFTER;
+                    value = AttributeUtil.getId(attributeValue);
                     break;
-                case XmlAttrName.LAYOUT_PADDING_BOTTOM:
-                    name = ViewAttrName.PADDING_BOTTOM;
-                    value = AttributeUtil.getDimension(attributeValue, false);
+                case XmlAttrName.View.ACCESSIBILITY_TRAVERSAL_BEFORE:
+                    name = ViewAttrName.View.ACCESSIBILITY_TRAVERSAL_BEFORE;
+                    value = AttributeUtil.getId(attributeValue);
                     break;
-                case XmlAttrName.LAYOUT_PADDING_LEFT:
-                    name = ViewAttrName.PADDING_LEFT;
-                    value = AttributeUtil.getDimension(attributeValue, false);
+                case XmlAttrName.View.ALPHA:
+                    name = ViewAttrName.View.ALPHA;
+                    value = AttributeUtil.getAlpha(attributeValue);
                     break;
-                case XmlAttrName.LAYOUT_PADDING_VERTICAL:
-                    name = ViewAttrName.PADDING_VERTICAL;
-                    value = AttributeUtil.getDimension(attributeValue, false);
+                case XmlAttrName.View.AUTOFILL_HINTS:
+                    name = ViewAttrName.View.AUTOFILL_HINTS;
+                    value = AttributeUtil.getMultiAutofillHints(attributeValue);
+                    isEqualsOperator = false;
                     break;
-                case XmlAttrName.LAYOUT_PADDING_HORIZONTAL:
-                    name = ViewAttrName.PADDING_HORIZONTAL;
-                    value = AttributeUtil.getDimension(attributeValue, false);
+                case XmlAttrName.View.BACKGROUND:
+                    if (StringUtil.isImage(attributeValue)) {
+                        name = ViewAttrName.View.BACKGROUND_RESOURCE;
+                        value = AttributeUtil.getImage(attributeValue);
+                    } else {
+                        name = ViewAttrName.View.BACKGROUND_COLOR;
+                        value = AttributeUtil.getColor(attributeValue);
+                        ImportUtil.support(ImportUtil.COLOR);
+                    }
                     break;
-                default:
+                case XmlAttrName.View.BACKGROUND_TINT:
+                    name = ViewAttrName.View.BACKGROUND_TINT;
+                    value = AttributeUtil.getColorStateList(attributeValue);
+                    break;
+                case XmlAttrName.View.BACKGROUND_TINT_MODE:
+                    name = ViewAttrName.View.BACKGROUND_TINT_MODE;
+                    value = AttributeUtil.getPorterDuffMode(attributeValue);
+                    break;
+                case XmlAttrName.View.CLICKABLE:
+                    name = ViewAttrName.View.CLICKABLE;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.View.CONTENT_DESCRIPTION:
+                    name = ViewAttrName.View.CONTENT_DESCRIPTION;
+                    value = AttributeUtil.getString(attributeValue);
+                    break;
+                case XmlAttrName.View.CONTEXT_CLICKABLE:
+                    name = ViewAttrName.View.CONTEXT_CLICKABLE;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.View.DEFAULT_FOCUS_HIGHLIGHT_ENABLED:
+                    name = ViewAttrName.View.DEFAULT_FOCUS_HIGHLIGHT_ENABLED;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.View.DRAWING_CACHE_QUALITY:
+                    name = ViewAttrName.View.DRAWING_CACHE_QUALITY;
+                    value = AttributeUtil.getDrawingCacheQuality(attributeValue);
+                    break;
+                case XmlAttrName.View.DUPLICATE_PARENT_STATE:
+                    name = ViewAttrName.View.DUPLICATE_PARENT_STATE;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.View.ELEVATION:
+                    name = ViewAttrName.View.ELEVATION;
+                    value = AttributeUtil.getDimension(attributeValue, true);
+                    break;
+                case XmlAttrName.View.FADE_SCROLLBARS:
+                    name = ViewAttrName.View.FADE_SCROLLBARS;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.View.FADING_EDGE:
+                    writeAttribute(className, XmlAttrName.View.REQUIRES_FADING_EDGE, attributeValue, 0);
+                    return;
+                case XmlAttrName.View.FADING_EDGE_LENGTH:
+                    name = ViewAttrName.View.FADING_EDGE_LENGTH;
+                    value = AttributeUtil.getDimension(attributeValue, false);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.View.FILTER_TOUCHES_WHEN_OBSCURED:
+                    name = ViewAttrName.View.FILTER_TOUCHES_WHEN_OBSCURED;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.View.FITS_SYSTEM_WINDOWS:
+                    name = ViewAttrName.View.FITS_SYSTEM_WINDOWS;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.View.FOCUSABLE:
+                    if (attributeValue.equals(XmlAttrValue.Focusable.AUTO)) {
+                        isNote = true;
+                        extra = " //Auto is default";
+                    } else {
+                        name = ViewAttrName.View.FOCUSABLE;
+                        value = AttributeUtil.getBoolean(attributeValue);
+                    }
+                    break;
+                case XmlAttrName.View.FOCUSABLE_IN_TOUCH_MODE:
+                    name = ViewAttrName.View.FOCUSABLE_IN_TOUCH_MODE;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.View.FOCUSED_BY_DEFAULT:
+                    name = ViewAttrName.View.FOCUSED_BY_DEFAULT;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.View.FORCE_HAS_OVERLAPPING_RENDERING:
+                    name = ViewAttrName.View.FORCE_HAS_OVERLAPPING_RENDERING;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.View.FOREGROUND:
+                    name = ViewAttrName.View.FOREGROUND;
+                    value = AttributeUtil.getDrawable(attributeValue);
+                    break;
+                case XmlAttrName.View.FOREGROUND_GRAVITY:
+                    name = ViewAttrName.View.FOREGROUND_GRAVITY;
+                    value = AttributeUtil.getMultiGravity(attributeValue);
+                    break;
+                case XmlAttrName.View.FOREGROUND_TINT:
+                    // TODO: 2018/8/30
                     isNotSupportAttribute = true;
                     break;
-            }
-        } else if (attributeName.startsWith("android:text")) {
-            switch (attributeName) {
+                case XmlAttrName.View.FOREGROUND_TINT_MODE:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.HAPTIC_FEEDBACK_ENABLED:
+                    name = ViewAttrName.View.HAPTIC_FEEDBACK_ENABLED;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.View.IMPORTANT_FOR_ACCESSIBILITY:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.IMPORTANT_FOR_AUTOFILL:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.IS_SCROLL_CONTAINER:
+                    name = ViewAttrName.View.IS_SCROLL_CONTAINER;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.View.KEEP_SCREEN_ON:
+                    name = ViewAttrName.View.KEEP_SCREEN_ON;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.View.KEYBOARD_NAVIGATION_CLUSTER:
+                    name = ViewAttrName.View.KEYBOARD_NAVIGATION_CLUSTER;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.View.LABEL_FOR:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.LAYER_TYPE:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.LAYOUT_DIRECTION:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.LONG_CLICKABLE:
+                    name = ViewAttrName.View.LONG_CLICKABLE;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.View.MIN_HEIGHT:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.MIN_WIDTH:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.NESTED_SCROLLING_ENABLED:
+                    name = ViewAttrName.View.NESTED_SCROLLING_ENABLED;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.View.NEXT_CLUSTER_FORWARD:
+                    name = ViewAttrName.View.NEXT_CLUSTER_FORWARD;
+                    if (StringUtil.isId(attributeValue)) {
+                        value = AttributeUtil.getId(attributeValue);
+                    } else {
+                        isNote = true;
+                        extra = AttributeUtil.VALUE_SHOULD_BE_AN_ID;
+                    }
+                    break;
+                case XmlAttrName.View.NEXT_FOCUS_DOWN:
+                    name = ViewAttrName.View.NEXT_FOCUS_DOWN;
+                    if (StringUtil.isId(attributeValue)) {
+                        value = AttributeUtil.getId(attributeValue);
+                    } else {
+                        isNote = true;
+                        extra = AttributeUtil.VALUE_SHOULD_BE_AN_ID;
+                    }
+                    break;
+                case XmlAttrName.View.NEXT_FOCUS_FORWARD:
+                    name = ViewAttrName.View.NEXT_FOCUS_FORWARD;
+                    if (StringUtil.isId(attributeValue)) {
+                        value = AttributeUtil.getId(attributeValue);
+                    } else {
+                        isNote = true;
+                        extra = AttributeUtil.VALUE_SHOULD_BE_AN_ID;
+                    }
+                    break;
+                case XmlAttrName.View.NEXT_FOCUS_LEFT:
+                    name = ViewAttrName.View.NEXT_FOCUS_LEFT;
+                    if (StringUtil.isId(attributeValue)) {
+                        value = AttributeUtil.getId(attributeValue);
+                    } else {
+                        isNote = true;
+                        extra = AttributeUtil.VALUE_SHOULD_BE_AN_ID;
+                    }
+                    break;
+                case XmlAttrName.View.NEXT_FOCUS_RIGHT:
+                    name = ViewAttrName.View.NEXT_FOCUS_RIGHT;
+                    if (StringUtil.isId(attributeValue)) {
+                        value = AttributeUtil.getId(attributeValue);
+                    } else {
+                        isNote = true;
+                        extra = AttributeUtil.VALUE_SHOULD_BE_AN_ID;
+                    }
+                    break;
+                case XmlAttrName.View.NEXT_FOCUS_UP:
+                    name = ViewAttrName.View.NEXT_FOCUS_UP;
+                    if (StringUtil.isId(attributeValue)) {
+                        value = AttributeUtil.getId(attributeValue);
+                    } else {
+                        isNote = true;
+                        extra = AttributeUtil.VALUE_SHOULD_BE_AN_ID;
+                    }
+                    break;
+                case XmlAttrName.View.ON_CLICK:
+                    isFunction = true;
+                    name = "setOnClickListener";
+                    break;
+                case XmlAttrName.View.OUTLINE_PROVIDER:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.OVER_SCROLL_MODE:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.PADDING:
+                    name = ViewAttrName.View.PADDING;
+                    value = AttributeUtil.getDimension(attributeValue, false);
+                    break;
+                case XmlAttrName.View.PADDING_BOTTOM:
+                    name = ViewAttrName.View.PADDING_BOTTOM;
+                    value = AttributeUtil.getDimension(attributeValue, false);
+                    break;
+                case XmlAttrName.View.PADDING_END:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.PADDING_HORIZONTAL:
+                    name = ViewAttrName.View.PADDING_HORIZONTAL;
+                    value = AttributeUtil.getDimension(attributeValue, false);
+                    break;
+                case XmlAttrName.View.PADDING_LEFT:
+                    name = ViewAttrName.View.PADDING_LEFT;
+                    value = AttributeUtil.getDimension(attributeValue, false);
+                    break;
+                case XmlAttrName.View.PADDING_RIGHT:
+                    name = ViewAttrName.View.PADDING_RIGHT;
+                    value = AttributeUtil.getDimension(attributeValue, false);
+                    break;
+                case XmlAttrName.View.PADDING_START:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.PADDING_TOP:
+                    name = ViewAttrName.View.PADDING_TOP;
+                    value = AttributeUtil.getDimension(attributeValue, false);
+                    break;
+                case XmlAttrName.View.PADDING_VERTICAL:
+                    name = ViewAttrName.View.PADDING_VERTICAL;
+                    value = AttributeUtil.getDimension(attributeValue, false);
+                    break;
+                case XmlAttrName.View.POINTER_ICON:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.REQUIRES_FADING_EDGE:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.ROTATION:
+                    name = ViewAttrName.View.ROTATION;
+                    value = AttributeUtil.getFloat(attributeValue);
+                    break;
+                case XmlAttrName.View.ROTATION_X:
+                    name = ViewAttrName.View.ROTATION_X;
+                    value = AttributeUtil.getFloat(attributeValue);
+                    break;
+                case XmlAttrName.View.ROTATION_Y:
+                    name = ViewAttrName.View.ROTATION_Y;
+                    value = AttributeUtil.getFloat(attributeValue);
+                    break;
+                case XmlAttrName.View.SAVE_ENABLED:
+                    name = ViewAttrName.View.SAVE_ENABLED;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.View.SCALE_X:
+                    name = ViewAttrName.View.SCALE_X;
+                    value = AttributeUtil.getFloat(attributeValue);
+                    break;
+                case XmlAttrName.View.SCALE_Y:
+                    name = ViewAttrName.View.SCALE_Y;
+                    value = AttributeUtil.getFloat(attributeValue);
+                    break;
+                case XmlAttrName.View.SCROLL_INDICATORS:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.SCROLL_X:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.SCROLL_Y:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.SCROLLBAR_ALWAYS_DRAW_HORIZONTAL_TRACK:
+                    isNote = true;
+                    extra = AttributeUtil.CAN_NOT_SET_BY_CODE;
+                    break;
+                case XmlAttrName.View.SCROLLBAR_ALWAYS_DRAW_VERTICAL_TRACK:
+                    isNote = true;
+                    extra = AttributeUtil.CAN_NOT_SET_BY_CODE;
+                    break;
+                case XmlAttrName.View.SCROLLBAR_DEFAULT_DELAY_BEFORE_FADE:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.SCROLLBAR_FADE_DURATION:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.SCROLLBAR_SIZE:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.SCROLLBAR_STYLE:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.SCROLLBAR_THUMB_HORIZONTAL:
+                    isNote = true;
+                    extra = AttributeUtil.CAN_NOT_SET_BY_CODE;
+                    break;
+                case XmlAttrName.View.SCROLLBAR_THUMB_VERTICAL:
+                    isNote = true;
+                    extra = AttributeUtil.CAN_NOT_SET_BY_CODE;
+                    break;
+                case XmlAttrName.View.SCROLLBAR_TRACK_HORIZONTAL:
+                    isNote = true;
+                    extra = AttributeUtil.CAN_NOT_SET_BY_CODE;
+                    break;
+                case XmlAttrName.View.SCROLLBAR_TRACK_VERTICAL:
+                    isNote = true;
+                    extra = AttributeUtil.CAN_NOT_SET_BY_CODE;
+                    break;
+                case XmlAttrName.View.SCROLLBARS:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.SOUND_EFFECTS_ENABLED:
+                    name = ViewAttrName.View.SOUND_EFFECTS_ENABLED;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.View.STATE_LIST_ANIMATOR:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.TAG:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.TEXT_ALIGNMENT:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.TEXT_DIRECTION:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                /*case XmlAttrName.THEME:
+                    //Not Here
+                    break;*/
+                case XmlAttrName.View.TOOLTIP_TEXT:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.TRANSFORM_PIVOT_X:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.TRANSFORM_PIVOT_Y:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.TRANSITION_NAME:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.TRANSLATION_X:
+                    name = ViewAttrName.View.TRANSLATION_X;
+                    value = AttributeUtil.getDimension(attributeValue, true);
+                    break;
+                case XmlAttrName.View.TRANSLATION_Y:
+                    name = ViewAttrName.View.TRANSLATION_Y;
+                    value = AttributeUtil.getDimension(attributeValue, true);
+                    break;
+                case XmlAttrName.View.TRANSLATION_Z:
+                    name = ViewAttrName.View.TRANSLATION_Z;
+                    value = AttributeUtil.getDimension(attributeValue, true);
+                    break;
+                case XmlAttrName.View.VERTICAL_SCROLLBAR_POSITION:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                case XmlAttrName.View.VISIBILITY:
+                    // TODO: 2018/8/30
+                    isNotSupportAttribute = true;
+                    break;
+                /**
+                 * View Attrs End
+                 */
                 case XmlAttrName.TEXT:
                     name = ViewAttrName.TEXT;
                     value = AttributeUtil.getString(attributeValue);
@@ -423,7 +620,239 @@ public class AnkoConverter {
                     name = ViewAttrName.TEXT_STYLE;
                     value = "typeface, " + AttributeUtil.getTextStyle(attributeValue);
                     isEqualsOperator = false;
-                    ImportUtil.add(ImportUtil.TYPEFACE);
+                    break;
+                case XmlAttrName.GRAVITY:
+                    name = ViewAttrName.GRAVITY;
+                    value = AttributeUtil.getMultiGravity(attributeValue);
+                    break;
+                case XmlAttrName.MAX_LINES:
+                    name = ViewAttrName.MAX_LINES;
+                    value = AttributeUtil.getInteger(attributeValue, false);
+                    break;
+                case XmlAttrName.ORIENTATION:
+                    name = ViewAttrName.ORIENTATION;
+                    value = AttributeUtil.getOrientation(attributeValue);
+                    break;
+                case XmlAttrName.SRC:
+                    name = ViewAttrName.IMAGE_RESOURCE;
+                    value = AttributeUtil.getImage(attributeValue);
+                    break;
+                case XmlAttrName.SCALE_TYPE:
+                    name = ViewAttrName.SCALE_TYPE;
+                    value = AttributeUtil.getScaleType(attributeValue);
+                    break;
+                case XmlAttrName.SINGLE_LINE:
+                    name = ViewAttrName.SINGLE_LINE;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.HINT:
+                    name = ViewAttrName.HINT;
+                    value = AttributeUtil.getString(attributeValue);
+                    break;
+                case XmlAttrName.INPUT_TYPE:
+                    name = ViewAttrName.INPUT_TYPE;
+                    value = AttributeUtil.getInputType(attributeValue);
+                    break;
+                case XmlAttrName.LAYOUT_MARGIN:
+                    name = ViewAttrName.MARGIN;
+                    value = AttributeUtil.getDimension(attributeValue, false);
+                    break;
+                case XmlAttrName.LAYOUT_MARGIN_TOP:
+                    name = ViewAttrName.MARGIN_TOP;
+                    value = AttributeUtil.getDimension(attributeValue, false);
+                    break;
+                case XmlAttrName.LAYOUT_MARGIN_RIGHT:
+                    name = ViewAttrName.MARGIN_RIGHT;
+                    value = AttributeUtil.getDimension(attributeValue, false);
+                    break;
+                case XmlAttrName.LAYOUT_MARGIN_BOTTOM:
+                    name = ViewAttrName.MARGIN_BOTTOM;
+                    value = AttributeUtil.getDimension(attributeValue, false);
+                    break;
+                case XmlAttrName.LAYOUT_MARGIN_LEFT:
+                    name = ViewAttrName.MARGIN_LEFT;
+                    value = AttributeUtil.getDimension(attributeValue, false);
+                    break;
+                case XmlAttrName.LAYOUT_MARGIN_START:
+                    name = ViewAttrName.MARGIN_START;
+                    value = AttributeUtil.getDimension(attributeValue, false);
+                    break;
+                case XmlAttrName.LAYOUT_MARGIN_END:
+                    name = ViewAttrName.MARGIN_END;
+                    value = AttributeUtil.getDimension(attributeValue, false);
+                    break;
+                case XmlAttrName.LAYOUT_MARGIN_VERTICAL:
+                    name = ViewAttrName.MARGIN_VERTICAL;
+                    value = AttributeUtil.getDimension(attributeValue, false);
+                    break;
+                case XmlAttrName.LAYOUT_MARGIN_HORIZONTAL:
+                    name = ViewAttrName.MARGIN_HORIZONTAL;
+                    value = AttributeUtil.getDimension(attributeValue, false);
+                    break;
+                case XmlAttrName.LAYOUT_GRAVITY:
+                    name = ViewAttrName.GRAVITY;
+                    value = AttributeUtil.getMultiGravity(attributeValue);
+                    break;
+                case XmlAttrName.LAYOUT_WEIGHT:
+                    name = ViewAttrName.WEIGHT;
+                    value = AttributeUtil.getWeight(attributeValue);
+                    break;
+                case XmlAttrName.LAYOUT_ABOVE:
+                    name = ViewAttrName.ABOVE;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.LAYOUT_BELOW:
+                    name = ViewAttrName.BELOW;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.LAYOUT_TO_LEFT_OF:
+                    name = ViewAttrName.LEFT_OF;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.LAYOUT_TO_RIGHT_OF:
+                    name = ViewAttrName.RIGHT_OF;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.LAYOUT_ALIGN_TOP:
+                    name = ViewAttrName.ALIGN_TOP;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.LAYOUT_ALIGN_BOTTOM:
+                    name = ViewAttrName.ALIGN_BOTTOM;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.LAYOUT_ALIGN_LEFT:
+                    name = ViewAttrName.ALIGN_LEFT;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.LAYOUT_ALIGN_RIGHT:
+                    name = ViewAttrName.ALIGN_RIGHT;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.LAYOUT_CENTER_VERTICAL:
+                    switch (attributeValue) {
+                        case XmlAttrValue.TRUE:
+                            name = ViewAttrName.CENTER_VERTICAL;
+                            value = ViewAttrValue.EMPTY;
+                            break;
+                        case XmlAttrValue.FALSE:
+                            name = "//" + ViewAttrName.CENTER_VERTICAL;
+                            break;
+                        default:
+                            name = "//" + ViewAttrName.CENTER_VERTICAL;
+                            extra = StringUtil.VALUE_NOT_SUPPORT;
+                            break;
+                    }
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.LAYOUT_CENTER_HORIZONTAL:
+                    switch (attributeValue) {
+                        case XmlAttrValue.TRUE:
+                            name = ViewAttrName.CENTER_HORIZONTAL;
+                            value = ViewAttrValue.EMPTY;
+                            break;
+                        case XmlAttrValue.FALSE:
+                            name = "//" + ViewAttrName.CENTER_HORIZONTAL;
+                            break;
+                        default:
+                            name = "//" + ViewAttrName.CENTER_HORIZONTAL;
+                            extra = StringUtil.VALUE_NOT_SUPPORT;
+                            break;
+                    }
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.LAYOUT_CENTER_IN_PARENT:
+                    switch (attributeValue) {
+                        case XmlAttrValue.TRUE:
+                            name = ViewAttrName.CENTER_IN_PARENT;
+                            value = ViewAttrValue.EMPTY;
+                            break;
+                        case XmlAttrValue.FALSE:
+                            name = "//" + ViewAttrName.CENTER_IN_PARENT;
+                            break;
+                        default:
+                            name = "//" + ViewAttrName.CENTER_IN_PARENT;
+                            extra = StringUtil.VALUE_NOT_SUPPORT;
+                            break;
+                    }
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.LAYOUT_ALIGN_PARENT_TOP:
+                    switch (attributeValue) {
+                        case XmlAttrValue.TRUE:
+                            name = ViewAttrName.ALIGN_PARENT_TOP;
+                            value = ViewAttrValue.EMPTY;
+                            break;
+                        case XmlAttrValue.FALSE:
+                            name = "//" + ViewAttrName.ALIGN_PARENT_TOP;
+                            break;
+                        default:
+                            name = "//" + ViewAttrName.ALIGN_PARENT_TOP;
+                            extra = StringUtil.VALUE_NOT_SUPPORT;
+                            break;
+                    }
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.LAYOUT_ALIGN_PARENT_BOTTOM:
+                    switch (attributeValue) {
+                        case XmlAttrValue.TRUE:
+                            name = ViewAttrName.ALIGN_PARENT_BOTTOM;
+                            value = ViewAttrValue.EMPTY;
+                            break;
+                        case XmlAttrValue.FALSE:
+                            name = "//" + ViewAttrName.ALIGN_PARENT_BOTTOM;
+                            break;
+                        default:
+                            name = "//" + ViewAttrName.ALIGN_PARENT_BOTTOM;
+                            extra = StringUtil.VALUE_NOT_SUPPORT;
+                            break;
+                    }
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.LAYOUT_ALIGN_PARENT_LEFT:
+                    switch (attributeValue) {
+                        case XmlAttrValue.TRUE:
+                            name = ViewAttrName.ALIGN_PARENT_LEFT;
+                            value = ViewAttrValue.EMPTY;
+                            break;
+                        case XmlAttrValue.FALSE:
+                            name = "//" + ViewAttrName.ALIGN_PARENT_LEFT;
+                            break;
+                        default:
+                            name = "//" + ViewAttrName.ALIGN_PARENT_LEFT;
+                            extra = StringUtil.VALUE_NOT_SUPPORT;
+                            break;
+                    }
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.LAYOUT_ALIGN_PARENT_RIGHT:
+                    switch (attributeValue) {
+                        case XmlAttrValue.TRUE:
+                            name = ViewAttrName.ALIGN_PARENT_RIGHT;
+                            value = ViewAttrValue.EMPTY;
+                            break;
+                        case XmlAttrValue.FALSE:
+                            name = "//" + ViewAttrName.ALIGN_PARENT_RIGHT;
+                            break;
+                        default:
+                            name = "//" + ViewAttrName.ALIGN_PARENT_RIGHT;
+                            extra = StringUtil.VALUE_NOT_SUPPORT;
+                            break;
+                    }
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.LAYOUT_ALIGN_BASELINE:
+                    name = ViewAttrName.ALIGN_BASELINE;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
                     break;
                 default:
                     isNotSupportAttribute = true;
@@ -437,116 +866,33 @@ public class AnkoConverter {
             value = AttributeUtil.getMultiScrollFlags(attributeValue);
         } else if (attributeName.contains(XmlAttrName.LAYOUT_BEHAVIOR)) {
             name = ViewAttrName.BEHAVIOR;
-            if (attributeValue.contains("@"))
+            if (attributeValue.contains("@")) {
                 value = "Class.forName(" + AttributeUtil.getString(attributeValue) + ").newInstance() as CoordinatorLayout.Behavior<*>?";
-            else
+            } else {
                 value = AttributeUtil.getBehavior(attributeValue);
-        } else {
-            switch (attributeName) {
-                case XmlAttrName.ALPHA:
-                    name = ViewAttrName.ALPHA;
-                    value = AttributeUtil.getAlpha(attributeValue);
-                    break;
-                case XmlAttrName.BACKGROUND:
-                    if (StringUtil.isImage(attributeValue)) {
-                        name = ViewAttrName.BACKGROUND_RESOURCE;
-                        value = AttributeUtil.getImage(attributeValue);
-                    } else {
-                        name = ViewAttrName.BACKGROUND_COLOR;
-                        value = AttributeUtil.getColor(attributeValue);
-                        ImportUtil.add(ImportUtil.COLOR);
-                    }
-                    break;
-                case XmlAttrName.ROTATION:
-                    name = ViewAttrName.ROTATION;
-                    value = AttributeUtil.getFloat(attributeValue);
-                    break;
-                case XmlAttrName.ROTATION_X:
-                    name = ViewAttrName.ROTATION_X;
-                    value = AttributeUtil.getFloat(attributeValue);
-                    break;
-                case XmlAttrName.ROTATION_Y:
-                    name = ViewAttrName.ROTATION_Y;
-                    value = AttributeUtil.getFloat(attributeValue);
-                    break;
-                case XmlAttrName.SCALE_X:
-                    name = ViewAttrName.SCALE_X;
-                    value = AttributeUtil.getFloat(attributeValue);
-                    break;
-                case XmlAttrName.SCALE_Y:
-                    name = ViewAttrName.SCALE_Y;
-                    value = AttributeUtil.getFloat(attributeValue);
-                    break;
-                case XmlAttrName.TRANSLATION_X:
-                    name = ViewAttrName.TRANSLATION_X;
-                    value = AttributeUtil.getDimension(attributeValue, true);
-                    break;
-                case XmlAttrName.TRANSLATION_Y:
-                    name = ViewAttrName.TRANSLATION_Y;
-                    value = AttributeUtil.getDimension(attributeValue, true);
-                    break;
-                case XmlAttrName.ELEVATION:
-                    name = ViewAttrName.ELEVATION;
-                    value = AttributeUtil.getDimension(attributeValue, true);
-                    break;
-                case XmlAttrName.TRANSLATION_Z:
-                    name = ViewAttrName.TRANSLATION_Z;
-                    value = AttributeUtil.getDimension(attributeValue, true);
-                    break;
-                case XmlAttrName.GRAVITY:
-                    name = ViewAttrName.GRAVITY;
-                    value = AttributeUtil.getMultiGravity(attributeValue);
-                    ImportUtil.add(ImportUtil.GRAVITY);
-                    break;
-                case XmlAttrName.ID:
-                    name = ViewAttrName.ID;
-                    value = AttributeUtil.getId(attributeValue);
-                    break;
-                case XmlAttrName.MAX_LINES:
-                    name = ViewAttrName.MAX_LINES;
-                    value = AttributeUtil.getInteger(attributeValue, false);
-                    break;
-                case XmlAttrName.ORIENTATION:
-                    name = ViewAttrName.ORIENTATION;
-                    value = AttributeUtil.getOrientation(attributeValue);
-                    ImportUtil.add(ImportUtil.LINEAR_LAYOUT);
-                    break;
-                case XmlAttrName.SRC:
-                    name = ViewAttrName.IMAGE_RESOURCE;
-                    value = AttributeUtil.getImage(attributeValue);
-                    break;
-                case XmlAttrName.SCALE_TYPE:
-                    name = ViewAttrName.SCALE_TYPE;
-                    value = AttributeUtil.getScaleType(attributeValue);
-                    ImportUtil.add(ImportUtil.IMAGE_VIEW);
-                    break;
-                case XmlAttrName.SINGLE_LINE:
-                    name = ViewAttrName.SINGLE_LINE;
-                    value = AttributeUtil.getBoolean(attributeValue);
-                    break;
-                case XmlAttrName.HINT:
-                    name = ViewAttrName.HINT;
-                    value = AttributeUtil.getString(attributeValue);
-                    break;
-                case XmlAttrName.INPUT_TYPE:
-                    name = ViewAttrName.INPUT_TYPE;
-                    value = AttributeUtil.getInputType(attributeValue);
-                    ImportUtil.add(ImportUtil.INPUT_TYPE);
-                    break;
-                default:
-                    isNotSupportAttribute = true;
-                    break;
             }
+        } else {
+            isNotSupportAttribute = true;
         }
-        if (isNotSupportAttribute)
-            codeBuilder.append("//");
-        if (isEqualsOperator)
-            codeBuilder.append(name).append(" = ").append(value);
-        else
-            codeBuilder.append(name).append("(").append(value).append(")");
-        if (isNotSupportAttribute)
-            codeBuilder.append(" //not support attribute");
-        codeBuilder.append(extra).append("\n");
+        if (isFunction) {
+            codeBuilder.append(name).append(" {\n");
+            writeTab(deep + 1);
+            codeBuilder.append("//").append(value).append("()\n");
+            writeTab(deep);
+            codeBuilder.append("}\n");
+        } else {
+            if (isNotSupportAttribute)
+                isNote = true;
+            if (isNote)
+                codeBuilder.append("//");
+            if (isEqualsOperator)
+                codeBuilder.append(name).append(" = ").append(value);
+            else
+                codeBuilder.append(name).append("(").append(value).append(")");
+            if (isNotSupportAttribute)
+                codeBuilder.append(" //not support attribute");
+            codeBuilder.append(extra).append("\n");
+        }
     }
 
     private void writeTab(int deep) {
@@ -559,14 +905,16 @@ public class AnkoConverter {
             callback.onUpdate(progress++);
         List<List<UAttribute>> attributes = AttributeUtil.splitAttributes(root.attributes());
         UAttribute themeAttr = AttributeUtil.filterTheme(attributes.get(0));
-        writeViewStart(root.getName(), themeAttr, deep);
+        int otherCount = attributes.get(0).size();
+        writeViewStart(root.getName(), themeAttr, deep, otherCount == 0 && root.elements().size() == 0);
         for (UAttribute attribute : attributes.get(0)) {
-            writeAttribute(attribute.getName(), attribute.getValue(), deep + 1);
+            writeAttribute(root.getName(), attribute.getName(), attribute.getValue(), deep + 1);
         }
         for (Element element : root.elements()) {
             writeView(element, deep + 1);
         }
-        writeViewEnd(deep);
+        if (otherCount != 0 || root.elements().size() != 0)
+            writeViewEnd(deep);
         writeLayoutParams(attributes.get(1), attributes.get(2), deep);
         if (callback != null)
             callback.onUpdate(progress++);

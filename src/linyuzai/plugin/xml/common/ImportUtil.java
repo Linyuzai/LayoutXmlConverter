@@ -5,30 +5,29 @@ import java.util.Set;
 
 public class ImportUtil {
     private static final String IMPORT = "import ";
+
     public static final String ANKO = "org.jetbrains.anko";
+    public static final String ANKO_V4 = "org.jetbrains.anko.support.v4";
+    public static final String ANKO_V7 = "org.jetbrains.anko.appcompat.v7";
+    public static final String ANKO_DESIGN = "org.jetbrains.anko.design";
+    public static final String ANKO_RECYCLER_VIEW = "org.jetbrains.anko.recyclerview.v7";
+
     public static final String ACTIVITY = "android.app.Activity";
     public static final String BUNDLE = "android.os.Bundle";
-
-    public static final String V4 = "org.jetbrains.anko.support.v4";
-    public static final String V7 = "org.jetbrains.anko.appcompat.v7";
-    public static final String DESIGN = "org.jetbrains.anko.design";
-    public static final String DESIGN_WIDGET = "android.support.design.widget";
-    public static final String RECYCLER_VIEW = "org.jetbrains.anko.recyclerview.v7";
-
+    public static final String VIEW = "android.view.View";
     public static final String COLOR = "android.graphics.Color";
     public static final String TYPEFACE = "android.graphics.Typeface";
     public static final String GRAVITY = "android.view.Gravity";
     public static final String INPUT_TYPE = "android.text.InputType";
-
     public static final String LINEAR_LAYOUT = "android.widget.LinearLayout";
     public static final String IMAGE_VIEW = "android.widget.ImageView";
+    public static final String PORTER_DUFF = "android.graphics.PorterDuff";
+    public static final String COLOR_DRAWABLE = "android.graphics.drawable.ColorDrawable";
 
-    private static final Set<String> importSet = new HashSet<>();
+    public static final String DESIGN = "android.support.design.widget";
 
-    private static boolean importV4 = false;
-    private static boolean importV7 = false;
-    private static boolean importDesign = false;
-    private static boolean importRecyclerView = false;
+    private static final Set<String> supportSet = new HashSet<>();
+    private static final Set<String> multiSupportSet = new HashSet<>();
 
     public static void importClass(StringBuilder builder, String classTag) {
         builder.append(IMPORT).append(classTag).append("\n");
@@ -42,44 +41,20 @@ public class ImportUtil {
         builder.append("\n").append(IMPORT).append(packageTag).append(".R").append("\n");
     }
 
-    public static void importV4() {
-        importV4 = true;
+    public static void support(String importClass) {
+        supportSet.add(importClass);
     }
 
-    public static void importV7() {
-        importV7 = true;
-    }
-
-    public static void importDesign() {
-        importDesign = true;
-    }
-
-    public static void importRecyclerView() {
-        importRecyclerView = true;
-    }
-
-    public static void add(String importClass) {
-        importSet.add(importClass);
+    public static void supportMulti(String importClass) {
+        multiSupportSet.add(importClass);
     }
 
     public static void importFromSet(StringBuilder builder) {
-        importSet.parallelStream().forEach(it -> importClass(builder, it));
-    }
-
-    public static void importSupport(StringBuilder builder) {
-        if (importV4)
-            importMultiClass(builder, V4);
-        if (importV7)
-            importMultiClass(builder, V7);
-        if (importDesign) {
-            importMultiClass(builder, DESIGN);
-            importMultiClass(builder, DESIGN_WIDGET);
-        }
-        if (importRecyclerView)
-            importMultiClass(builder, RECYCLER_VIEW);
+        multiSupportSet.parallelStream().forEach(it -> importMultiClass(builder, it));
+        supportSet.parallelStream().forEach(it -> importClass(builder, it));
     }
 
     public static void clearImport() {
-        importSet.clear();
+        supportSet.clear();
     }
 }

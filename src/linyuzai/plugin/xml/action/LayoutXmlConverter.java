@@ -5,7 +5,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.CommonDataKeys;
 import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.project.*;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -24,7 +24,9 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class LayoutXmlConverter extends AnAction {
 
@@ -88,7 +90,7 @@ public class LayoutXmlConverter extends AnAction {
         ProgressDialog dialog = new ProgressDialog(count * 2 + 2);//manifest+file
 
         Element root = document.getRootElement();
-        String className = ConvertUtil.convertClassName(files.getName().split(".xml")[0]);
+        String className = ConvertUtil.convertClassName(files.getName().split("\\.xml")[0]);
         File ktFile;
         Project project = e.getProject();
         if (project == null) {
@@ -111,6 +113,9 @@ public class LayoutXmlConverter extends AnAction {
         String code = new AnkoConverter(application, new ProgressCallback(dialog)).convert(className, root);
 
         try {
+            //FilenameIndex.getFilesByName()
+            //PsiFile
+            //PsiFileFactory.getInstance(e.getProject()).createFileFromText();
             File dir = FileUtil.createDir(project.getBasePath() + "/app/src/main/java/anko");
             ktFile = FileUtil.createFile(dir, className + ".kt");
         } catch (IOException io) {

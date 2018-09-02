@@ -1,27 +1,110 @@
 package linyuzai.plugin.xml.attr;
 
-public class ViewAttrName {
-    public static final String ALPHA = "alpha";
+public final class ViewAttrName {
 
-    public static final String BACKGROUND_RESOURCE = "backgroundResource";
-    public static final String BACKGROUND_COLOR = "backgroundColor";
+    public static final class View {
 
-    public static final String ROTATION = "rotation";
-    public static final String ROTATION_X = "rotationX";
-    public static final String ROTATION_Y = "rotationY";
-
-    public static final String SCALE_X = "scaleX";
-    public static final String SCALE_Y = "scaleY";
-
-    public static final String TRANSLATION_X = "translationX";
-    public static final String TRANSLATION_Y = "translationY";
-
-    public static final String ELEVATION = "elevation";
-    public static final String TRANSLATION_Z = "translationZ";
+        public static final String ID = "id";
+        public static final String ACCESSIBILITY_LIVE_REGION = "accessibilityLiveRegion";
+        public static final String ACCESSIBILITY_TRAVERSAL_AFTER = "accessibilityTraversalAfter";
+        public static final String ACCESSIBILITY_TRAVERSAL_BEFORE = "accessibilityTraversalBefore";
+        public static final String ALPHA = "alpha";
+        public static final String AUTOFILL_HINTS = "setAutofillHints";
+        public static final String BACKGROUND_RESOURCE = "backgroundResource";
+        public static final String BACKGROUND_COLOR = "backgroundColor";
+        public static final String BACKGROUND_TINT = "backgroundTintList";
+        public static final String BACKGROUND_TINT_MODE = "backgroundTintMode";
+        public static final String CLICKABLE = "isClickable";
+        public static final String CONTENT_DESCRIPTION = "contentDescription";
+        public static final String CONTEXT_CLICKABLE = "isContextClickable";
+        public static final String DEFAULT_FOCUS_HIGHLIGHT_ENABLED = "defaultFocusHighlightEnabled";
+        public static final String DRAWING_CACHE_QUALITY = "drawingCacheQuality";
+        public static final String DUPLICATE_PARENT_STATE = "isDuplicateParentStateEnabled";
+        public static final String ELEVATION = "elevation";
+        public static final String FADE_SCROLLBARS = "isScrollbarFadingEnabled";
+        public static final String FADING_EDGE = "";
+        public static final String FADING_EDGE_LENGTH = "setFadingEdgeLength";
+        public static final String FILTER_TOUCHES_WHEN_OBSCURED = "filterTouchesWhenObscured";
+        public static final String FITS_SYSTEM_WINDOWS = "fitsSystemWindows";
+        public static final String FOCUSABLE = "isFocusable";
+        public static final String FOCUSABLE_IN_TOUCH_MODE = "isFocusableInTouchMode";
+        public static final String FOCUSED_BY_DEFAULT = "isFocusedByDefault";
+        public static final String FORCE_HAS_OVERLAPPING_RENDERING = "forceHasOverlappingRendering";
+        public static final String FOREGROUND = "foreground";
+        public static final String FOREGROUND_GRAVITY = "foregroundGravity";
+        public static final String FOREGROUND_TINT = "android:foregroundTint";
+        public static final String FOREGROUND_TINT_MODE = "android:foregroundTintMode";
+        public static final String HAPTIC_FEEDBACK_ENABLED = "isHapticFeedbackEnabled";
+        public static final String IMPORTANT_FOR_ACCESSIBILITY = "android:importantForAccessibility";
+        public static final String IMPORTANT_FOR_AUTOFILL = "android:importantForAutofill";
+        public static final String IS_SCROLL_CONTAINER = "isScrollContainer";
+        public static final String KEEP_SCREEN_ON = "keepScreenOn";
+        public static final String KEYBOARD_NAVIGATION_CLUSTER = "isKeyboardNavigationCluster";
+        public static final String LABEL_FOR = "android:labelFor";
+        public static final String LAYER_TYPE = "android:layerType";
+        public static final String LAYOUT_DIRECTION = "android:layoutDirection";
+        public static final String LONG_CLICKABLE = "isLongClickable";
+        public static final String MIN_HEIGHT = "android:minHeight";
+        public static final String MIN_WIDTH = "android:minWidth";
+        public static final String NESTED_SCROLLING_ENABLED = "isNestedScrollingEnabled";
+        public static final String NEXT_CLUSTER_FORWARD = "nextClusterForwardId";
+        public static final String NEXT_FOCUS_DOWN = "nextFocusDownId";
+        public static final String NEXT_FOCUS_FORWARD = "nextFocusForwardId";
+        public static final String NEXT_FOCUS_LEFT = "nextFocusLeftId";
+        public static final String NEXT_FOCUS_RIGHT = "nextFocusRightId";
+        public static final String NEXT_FOCUS_UP = "nextFocusUpId";
+        public static final String ON_CLICK = "android:onClick";
+        public static final String OUTLINE_PROVIDER = "android:outlineProvider";
+        public static final String OVER_SCROLL_MODE = "android:overScrollMode";
+        public static final String PADDING = "padding";
+        public static final String PADDING_BOTTOM = "bottomPadding";
+        public static final String PADDING_END = "";
+        public static final String PADDING_HORIZONTAL = "horizontalPadding";
+        public static final String PADDING_LEFT = "leftPadding";
+        public static final String PADDING_RIGHT = "rightPadding";
+        public static final String PADDING_START = "";
+        public static final String PADDING_TOP = "topPadding";
+        public static final String PADDING_VERTICAL = "verticalPadding";
+        public static final String POINTER_ICON = "android:pointerIcon";
+        public static final String REQUIRES_FADING_EDGE = "android:requiresFadingEdge";
+        public static final String ROTATION = "rotation";
+        public static final String ROTATION_X = "rotationX";
+        public static final String ROTATION_Y = "rotationY";
+        public static final String SAVE_ENABLED = "isSaveEnabled";
+        public static final String SCALE_X = "scaleX";
+        public static final String SCALE_Y = "scaleY";
+        public static final String SCROLL_INDICATORS = "android:scrollIndicators";
+        public static final String SCROLL_X = "android:scrollX";
+        public static final String SCROLL_Y = "android:scrollY";
+        public static final String SCROLLBAR_ALWAYS_DRAW_HORIZONTAL_TRACK = "";
+        public static final String SCROLLBAR_ALWAYS_DRAW_VERTICAL_TRACK = "";
+        public static final String SCROLLBAR_DEFAULT_DELAY_BEFORE_FADE = "android:scrollbarDefaultDelayBeforeFade";
+        public static final String SCROLLBAR_FADE_DURATION = "android:scrollbarFadeDuration";
+        public static final String SCROLLBAR_SIZE = "android:scrollbarSize";
+        public static final String SCROLLBAR_STYLE = "android:scrollbarStyle";
+        public static final String SCROLLBAR_THUMB_HORIZONTAL = "";
+        public static final String SCROLLBAR_THUMB_VERTICAL = "";
+        public static final String SCROLLBAR_TRACK_HORIZONTAL = "";
+        public static final String SCROLLBAR_TRACK_VERTICAL = "";
+        public static final String SCROLLBARS = "android:scrollbars";
+        public static final String SOUND_EFFECTS_ENABLED = "isSoundEffectsEnabled";
+        public static final String STATE_LIST_ANIMATOR = "android:stateListAnimator";
+        public static final String TAG = "android:tag";
+        public static final String TEXT_ALIGNMENT = "android:textAlignment";
+        public static final String TEXT_DIRECTION = "android:textDirection";
+        public static final String THEME = "android:theme";
+        public static final String TOOLTIP_TEXT = "android:tooltipText";
+        public static final String TRANSFORM_PIVOT_X = "android:transformPivotX";
+        public static final String TRANSFORM_PIVOT_Y = "android:transformPivotY";
+        public static final String TRANSITION_NAME = "android:transitionName";
+        public static final String TRANSLATION_X = "translationX";
+        public static final String TRANSLATION_Y = "translationY";
+        public static final String TRANSLATION_Z = "translationZ";
+        public static final String VERTICAL_SCROLLBAR_POSITION = "android:verticalScrollbarPosition";
+        public static final String VISIBILITY = "android:visibility";
+    }
 
     public static final String GRAVITY = "gravity";
-
-    public static final String ID = "id";
 
     public static final String WIDTH = "width";
     public static final String HEIGHT = "height";
@@ -35,16 +118,6 @@ public class ViewAttrName {
     public static final String MARGIN_END = "marginEnd";
     public static final String MARGIN_VERTICAL = "verticalMargin";
     public static final String MARGIN_HORIZONTAL = "horizontalMargin";
-
-    public static final String PADDING = "padding";
-    public static final String PADDING_TOP = "topPadding";
-    public static final String PADDING_RIGHT = "rightPadding";
-    public static final String PADDING_BOTTOM = "bottomPadding";
-    public static final String PADDING_LEFT = "leftPadding";
-    public static final String PADDING_START = "";
-    public static final String PADDING_END = "";
-    public static final String PADDING_VERTICAL = "verticalPadding";
-    public static final String PADDING_HORIZONTAL = "horizontalPadding";
 
     public static final String ORIENTATION = "orientation";
     public static final String WEIGHT = "weight";

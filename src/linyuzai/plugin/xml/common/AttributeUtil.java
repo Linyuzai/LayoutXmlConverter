@@ -1,14 +1,23 @@
 package linyuzai.plugin.xml.common;
 
-import linyuzai.plugin.xml.attr.*;
+import linyuzai.plugin.xml.attr.UAttribute;
+import linyuzai.plugin.xml.attr.ViewAttrValue;
+import linyuzai.plugin.xml.attr.XmlAttrName;
+import linyuzai.plugin.xml.attr.XmlAttrValue;
 import org.apache.http.util.TextUtils;
-import org.dom4j.*;
+import org.dom4j.Attribute;
+import org.dom4j.Element;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 public class AttributeUtil {
+
+    public static final String VALUE_SHOULD_BE_AN_COLOR_STATE_LIST = " //value should be an color state list";
+    public static final String VALUE_SHOULD_BE_AN_ID = " //value should be an id";
+    public static final String CAN_NOT_SET_BY_CODE = " //Can not be set by code";
 
     public static boolean isParamsAttr(String xmlName) {
         return xmlName.equals(XmlAttrName.LAYOUT_WIDTH) || xmlName.equals(XmlAttrName.LAYOUT_HEIGHT);
@@ -63,17 +72,17 @@ public class AttributeUtil {
                 otherAttr.add(new UAttribute(attr.getQualifiedName(), attr.getValue()));
         }
         if (paramsAttr.size() == 0) {
-            UAttribute widthAttr = new UAttribute(XmlAttrName.LAYOUT_WIDTH, XmlAttrValue.WRAP_CONTENT);
-            UAttribute heightAttr = new UAttribute(XmlAttrName.LAYOUT_HEIGHT, XmlAttrValue.WRAP_CONTENT);
+            UAttribute widthAttr = new UAttribute(XmlAttrName.LAYOUT_WIDTH, XmlAttrValue.LayoutParams.WRAP_CONTENT);
+            UAttribute heightAttr = new UAttribute(XmlAttrName.LAYOUT_HEIGHT, XmlAttrValue.LayoutParams.WRAP_CONTENT);
             paramsAttr.add(widthAttr);
             paramsAttr.add(heightAttr);
         } else if (paramsAttr.size() == 1) {
             UAttribute widthOrHeightAttr = paramsAttr.get(0);
             if (widthOrHeightAttr.getName().equals(XmlAttrName.LAYOUT_WIDTH)) {
-                UAttribute heightAttr = new UAttribute(XmlAttrName.LAYOUT_HEIGHT, XmlAttrValue.WRAP_CONTENT);
+                UAttribute heightAttr = new UAttribute(XmlAttrName.LAYOUT_HEIGHT, XmlAttrValue.LayoutParams.WRAP_CONTENT);
                 paramsAttr.add(heightAttr);
             } else if (widthOrHeightAttr.getName().equals(XmlAttrName.LAYOUT_HEIGHT)) {
-                UAttribute widthAttr = new UAttribute(XmlAttrName.LAYOUT_WIDTH, XmlAttrValue.WRAP_CONTENT);
+                UAttribute widthAttr = new UAttribute(XmlAttrName.LAYOUT_WIDTH, XmlAttrValue.LayoutParams.WRAP_CONTENT);
                 paramsAttr.add(0, widthAttr);
             }
         } else if (paramsAttr.size() == 2) {
@@ -92,12 +101,16 @@ public class AttributeUtil {
         Iterator<UAttribute> ui = uAttributes.iterator();
         while (ui.hasNext()) {
             UAttribute ua = ui.next();
-            if (ua.getName().contains("android:theme")) {
+            if (ua.getName().contains(XmlAttrName.View.THEME)) {
                 ui.remove();
                 return ua;
             }
         }
         return null;
+    }
+
+    public static boolean isNullOrEmpty(String xmlAttribute) {
+        return TextUtils.isEmpty(xmlAttribute) || xmlAttribute.equalsIgnoreCase("@null");
     }
 
     @NotNull
@@ -110,12 +123,12 @@ public class AttributeUtil {
             return getInteger(xmlAlpha, true);
     }
 
+    @NotNull
     public static String getTheme(String xmlTheme) {
-        if (xmlTheme.startsWith("?attr/")) {
-            return "R.attr." + xmlTheme.substring(6).replaceAll("\\.", "_");
-        } else if (xmlTheme.startsWith("?android:attr/")) {
-            return "android.R.attr." + xmlTheme.substring(14).replaceAll("\\.", "_");
-        } else if (xmlTheme.startsWith("@style/"))
+        String attr = getAttrOrAndroidAttr(xmlTheme, true);
+        if (attr != null)
+            return attr;
+        else if (xmlTheme.startsWith("@style/"))
             return "R.style." + xmlTheme.substring(7).replaceAll("\\.", "_");
         else if (xmlTheme.startsWith("@android:style/"))
             return "android.R.style." + xmlTheme.substring(15).replaceAll("\\.", "_");
@@ -127,11 +140,11 @@ public class AttributeUtil {
 
     @NotNull
     public static String getId(String xmlId) {
-        if (xmlId.contains("@+id/"))
+        if (xmlId.startsWith("@+id/"))
             return "R.id." + xmlId.substring(5);
-        else if (xmlId.contains("@id/"))
+        else if (xmlId.startsWith("@id/"))
             return "R.id." + xmlId.substring(4);
-        else if (xmlId.contains("@android:id/"))
+        else if (xmlId.startsWith("@android:id/"))
             return "android.R.id." + xmlId.substring(12);
         else if (TextUtils.isEmpty(xmlId))
             return "0";
@@ -139,16 +152,49 @@ public class AttributeUtil {
             return xmlId + StringUtil.VALUE_NOT_SUPPORT;
     }
 
+    @Nullable
+    public static String getAttrOrAndroidAttr(String xmlAttrOrAndroidAttr, boolean replace) {
+        if (xmlAttrOrAndroidAttr.startsWith("?attr/")) {
+            if (replace)
+                return "R.attr." + xmlAttrOrAndroidAttr.substring(6).replaceAll("\\.", "_");
+            else
+                return "R.attr." + xmlAttrOrAndroidAttr.substring(6);
+        } else if (xmlAttrOrAndroidAttr.startsWith("?android:attr/")) {
+            if (replace)
+                return "android.R.attr." + xmlAttrOrAndroidAttr.substring(14).replaceAll("\\.", "_");
+            else
+                return "android.R.attr." + xmlAttrOrAndroidAttr.substring(14);
+        } else if (xmlAttrOrAndroidAttr.startsWith("?attr/android:")) {
+            if (replace)
+                return "android.R.attr." + xmlAttrOrAndroidAttr.substring(14).replaceAll("\\.", "_");
+            else
+                return "android.R.attr." + xmlAttrOrAndroidAttr.substring(14);
+        } else if (xmlAttrOrAndroidAttr.startsWith("?android:")) {
+            if (replace)
+                return "android.R.attr." + xmlAttrOrAndroidAttr.substring(9).replaceAll("\\.", "_");
+            else
+                return "android.R.attr." + xmlAttrOrAndroidAttr.substring(9);
+        } else if (xmlAttrOrAndroidAttr.startsWith("?")) {
+            if (replace)
+                return "R.attr." + xmlAttrOrAndroidAttr.substring(1).replaceAll("\\.", "_");
+            else
+                return "R.attr." + xmlAttrOrAndroidAttr.substring(1);
+        } else
+            return null;
+    }
+
+    @NotNull
     public static String getWidthOrHeight(String value) {
-        if (value.equals(XmlAttrValue.MATCH_PARENT))
-            return ViewAttrValue.MATCH_PARENT;
-        else if (value.equals(XmlAttrValue.WRAP_CONTENT))
-            return ViewAttrValue.WRAP_CONTENT;
+        if (value.equals(XmlAttrValue.LayoutParams.MATCH_PARENT))
+            return ViewAttrValue.LayoutParams.MATCH_PARENT;
+        else if (value.equals(XmlAttrValue.LayoutParams.WRAP_CONTENT))
+            return ViewAttrValue.LayoutParams.WRAP_CONTENT;
         else
             return getDimension(value, false);
 
     }
 
+    @NotNull
     public static String getWeight(String xmlWeight) {
         if (StringUtil.isInteger(xmlWeight))
             return xmlWeight + "f";
@@ -158,16 +204,12 @@ public class AttributeUtil {
 
     @NotNull
     public static String getDimension(String xmlDimension, boolean toFloat) {
-        if (xmlDimension.startsWith("?attr/")) {
+        String attr = getAttrOrAndroidAttr(xmlDimension, false);
+        if (attr != null) {
             if (toFloat)
-                return "dimenAttr(R.attr." + xmlDimension.substring(6) + ").toFloat()";
+                return "dimenAttr(" + attr + ").toFloat()";
             else
-                return "dimenAttr(R.attr." + xmlDimension.substring(6) + ")";
-        } else if (xmlDimension.startsWith("?android:attr/")) {
-            if (toFloat)
-                return "dimenAttr(android.R.attr." + xmlDimension.substring(14) + ").toFloat()";
-            else
-                return "dimenAttr(android.R.attr." + xmlDimension.substring(14) + ")";
+                return "dimenAttr(" + attr + ")";
         } else if (xmlDimension.contains("dp")) {
             String dpValue = xmlDimension.split("dp")[0];
             if (dpValue.equals("0")) {
@@ -241,11 +283,37 @@ public class AttributeUtil {
     }
 
     @NotNull
+    public static String getDrawable(String xmlDrawable) {
+        String drawable = getImage(xmlDrawable);
+        if (!drawable.contains(StringUtil.VALUE_NOT_SUPPORT)) {
+            return "resources.getDrawable(" + drawable + ")";
+        }
+        String color = getColor(xmlDrawable);
+        if (!color.contains(StringUtil.VALUE_NOT_SUPPORT)) {
+            ImportUtil.support(ImportUtil.COLOR_DRAWABLE);
+            return "ColorDrawable(" + color + ")";
+        }
+        return xmlDrawable + StringUtil.VALUE_NOT_SUPPORT;
+    }
+
+    @NotNull
+    public static String getColorStateList(String xmlColor) {
+        String attr = getAttrOrAndroidAttr(xmlColor, false);
+        if (attr != null)
+            return "resources.getColorStateList(" + attr + ")";
+        else if (xmlColor.startsWith("@color/"))
+            return "resources.getColorStateList(R.color." + xmlColor.substring(7) + ")";
+        else if (xmlColor.startsWith("@android:color/"))
+            return "resources.getColorStateList(android.R.color" + xmlColor.substring(15) + ")";
+        else
+            return xmlColor + StringUtil.VALUE_NOT_SUPPORT;
+    }
+
+    @NotNull
     public static String getColor(String xmlColor) {
-        if (xmlColor.startsWith("?attr/"))
-            return "colorAttr(R.attr." + xmlColor.substring(6) + ")";
-        else if (xmlColor.startsWith("?android:attr/"))
-            return "colorAttr(android.R.attr." + xmlColor.substring(14) + ")";
+        String attr = getAttrOrAndroidAttr(xmlColor, false);
+        if (attr != null)
+            return "colorAttr(" + attr + ")";
         else if (xmlColor.startsWith("@color/"))
             return "resources.getColor(R.color." + xmlColor.substring(7) + ")";
         else if (xmlColor.startsWith("@android:color/"))
@@ -276,32 +344,35 @@ public class AttributeUtil {
     @NotNull
     @Contract(pure = true)
     public static String getParseColor(String parseColor) {
-        switch (parseColor) {
-            case "#000000":
-                return "Color.BLACK";
-            case "#444444":
-                return "Color.DKGRAY";
-            case "#888888":
-                return "Color.GRAY";
-            case "#CCCCCC":
-                return "Color.LTGRAY";
-            case "#FFFFFF":
-                return "Color.WHITE";
-            case "#FF0000":
-                return "Color.RED";
-            case "#00FF00":
-                return "Color.GREEN";
-            case "#0000FF":
-                return "Color.BLUE";
-            case "#FFFF00":
-                return "Color.YELLOW";
-            case "#00FFFF":
-                return "Color.CYAN";
-            case "#FF00FF":
-                return "Color.MAGENTA";
-            default:
-                return "Color.parseColor(\"" + parseColor + "\")";
-        }
+        if (parseColor.startsWith("#")) {
+            switch (parseColor) {
+                case "#000000":
+                    return "Color.BLACK";
+                case "#444444":
+                    return "Color.DKGRAY";
+                case "#888888":
+                    return "Color.GRAY";
+                case "#CCCCCC":
+                    return "Color.LTGRAY";
+                case "#FFFFFF":
+                    return "Color.WHITE";
+                case "#FF0000":
+                    return "Color.RED";
+                case "#00FF00":
+                    return "Color.GREEN";
+                case "#0000FF":
+                    return "Color.BLUE";
+                case "#FFFF00":
+                    return "Color.YELLOW";
+                case "#00FFFF":
+                    return "Color.CYAN";
+                case "#FF00FF":
+                    return "Color.MAGENTA";
+                default:
+                    return "Color.parseColor(\"" + parseColor + "\")";
+            }
+        } else
+            return parseColor + StringUtil.VALUE_NOT_SUPPORT;
     }
 
     @NotNull
@@ -316,6 +387,7 @@ public class AttributeUtil {
             return "\"" + xmlString + "\"";
     }
 
+    @NotNull
     public static String getBoolean(String xmlBoolean) {
         if (xmlBoolean.equals(XmlAttrValue.TRUE))
             return XmlAttrValue.TRUE;
@@ -357,6 +429,7 @@ public class AttributeUtil {
             return xmlInteger + StringUtil.VALUE_NOT_SUPPORT;
     }
 
+    @NotNull
     public static String getFloat(String xmlFloat) {
         if (StringUtil.isFloat(xmlFloat))
             return Float.valueOf(xmlFloat).toString() + "f";
@@ -364,182 +437,194 @@ public class AttributeUtil {
             return getInteger(xmlFloat, true);
     }
 
+    @NotNull
     public static String getOrientation(String xmlOrientation) {
+        ImportUtil.support(ImportUtil.LINEAR_LAYOUT);
         switch (xmlOrientation) {
-            case XmlAttrValue.ORIENTATION_VERTICAL:
-                return ViewAttrValue.ORIENTATION_VERTICAL;
-            case XmlAttrValue.ORIENTATION_HORIZONTAL:
-                return ViewAttrValue.ORIENTATION_HORIZONTAL;
+            case XmlAttrValue.Orientation.VERTICAL:
+                return ViewAttrValue.Orientation.VERTICAL;
+            case XmlAttrValue.Orientation.HORIZONTAL:
+                return ViewAttrValue.Orientation.HORIZONTAL;
             default:
                 if (TextUtils.isEmpty(xmlOrientation))
-                    return XmlAttrValue.ORIENTATION_VERTICAL;
+                    return XmlAttrValue.Orientation.VERTICAL;
                 else
                     return xmlOrientation + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 
+    @NotNull
     public static String getMultiGravity(String xmlMultiGravity) {
+        ImportUtil.support(ImportUtil.GRAVITY);
         String[] xmlGravityArray = xmlMultiGravity.replaceAll("\\s*", "").split("\\|");
         List<String> viewGravityList = new ArrayList<>();
         Arrays.stream(xmlGravityArray).forEach(it -> viewGravityList.add(getGravity(it)));
         return String.join(" or ", viewGravityList);
     }
 
+    @NotNull
     public static String getGravity(String xmlGravity) {
         switch (xmlGravity) {
-            case XmlAttrValue.GRAVITY_CENTER:
-                return ViewAttrValue.GRAVITY_CENTER;
-            case XmlAttrValue.GRAVITY_CENTER_VERTICAL:
-                return ViewAttrValue.GRAVITY_CENTER_VERTICAL;
-            case XmlAttrValue.GRAVITY_CENTER_HORIZONTAL:
-                return ViewAttrValue.GRAVITY_CENTER_HORIZONTAL;
-            case XmlAttrValue.GRAVITY_START:
-                return ViewAttrValue.GRAVITY_START;
-            case XmlAttrValue.GRAVITY_END:
-                return ViewAttrValue.GRAVITY_END;
-            case XmlAttrValue.GRAVITY_TOP:
-                return ViewAttrValue.GRAVITY_TOP;
-            case XmlAttrValue.GRAVITY_BOTTOM:
-                return ViewAttrValue.GRAVITY_BOTTOM;
-            case XmlAttrValue.GRAVITY_LEFT:
-                return ViewAttrValue.GRAVITY_LEFT;
-            case XmlAttrValue.GRAVITY_RIGHT:
-                return ViewAttrValue.GRAVITY_RIGHT;
-            case XmlAttrValue.GRAVITY_FILL:
-                return ViewAttrValue.GRAVITY_FILL;
-            case XmlAttrValue.GRAVITY_FILL_VERTICAL:
-                return ViewAttrValue.GRAVITY_FILL_VERTICAL;
-            case XmlAttrValue.GRAVITY_FILL_HORIZONTAL:
-                return ViewAttrValue.GRAVITY_FILL_HORIZONTAL;
-            case XmlAttrValue.GRAVITY_CLIP_VERTICAL:
-                return ViewAttrValue.GRAVITY_CLIP_VERTICAL;
-            case XmlAttrValue.GRAVITY_CLIP_HORIZONTAL:
-                return ViewAttrValue.GRAVITY_CLIP_HORIZONTAL;
+            case XmlAttrValue.Gravity.CENTER:
+                return ViewAttrValue.Gravity.CENTER;
+            case XmlAttrValue.Gravity.CENTER_VERTICAL:
+                return ViewAttrValue.Gravity.CENTER_VERTICAL;
+            case XmlAttrValue.Gravity.CENTER_HORIZONTAL:
+                return ViewAttrValue.Gravity.CENTER_HORIZONTAL;
+            case XmlAttrValue.Gravity.START:
+                return ViewAttrValue.Gravity.START;
+            case XmlAttrValue.Gravity.END:
+                return ViewAttrValue.Gravity.END;
+            case XmlAttrValue.Gravity.TOP:
+                return ViewAttrValue.Gravity.TOP;
+            case XmlAttrValue.Gravity.BOTTOM:
+                return ViewAttrValue.Gravity.BOTTOM;
+            case XmlAttrValue.Gravity.LEFT:
+                return ViewAttrValue.Gravity.LEFT;
+            case XmlAttrValue.Gravity.RIGHT:
+                return ViewAttrValue.Gravity.RIGHT;
+            case XmlAttrValue.Gravity.FILL:
+                return ViewAttrValue.Gravity.FILL;
+            case XmlAttrValue.Gravity.FILL_VERTICAL:
+                return ViewAttrValue.Gravity.FILL_VERTICAL;
+            case XmlAttrValue.Gravity.FILL_HORIZONTAL:
+                return ViewAttrValue.Gravity.FILL_HORIZONTAL;
+            case XmlAttrValue.Gravity.CLIP_VERTICAL:
+                return ViewAttrValue.Gravity.CLIP_VERTICAL;
+            case XmlAttrValue.Gravity.CLIP_HORIZONTAL:
+                return ViewAttrValue.Gravity.CLIP_HORIZONTAL;
             default:
                 if (TextUtils.isEmpty(xmlGravity))
-                    return XmlAttrValue.GRAVITY_LEFT;
+                    return XmlAttrValue.Gravity.LEFT;
                 else
                     return xmlGravity + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 
+    @NotNull
     public static String getScaleType(String xmlScaleType) {
+        ImportUtil.support(ImportUtil.IMAGE_VIEW);
         switch (xmlScaleType) {
-            case XmlAttrValue.SCALE_TYPE_CENTER:
-                return ViewAttrValue.SCALE_TYPE_CENTER;
-            case XmlAttrValue.SCALE_TYPE_CENTER_CROP:
-                return ViewAttrValue.SCALE_TYPE_CENTER_CROP;
-            case XmlAttrValue.SCALE_TYPE_CENTER_INSIDE:
-                return ViewAttrValue.SCALE_TYPE_CENTER_INSIDE;
-            case XmlAttrValue.SCALE_TYPE_FIT_CENTER:
-                return ViewAttrValue.SCALE_TYPE_FIT_CENTER;
-            case XmlAttrValue.SCALE_TYPE_FIT_START:
-                return ViewAttrValue.SCALE_TYPE_FIT_START;
-            case XmlAttrValue.SCALE_TYPE_FIT_END:
-                return ViewAttrValue.SCALE_TYPE_FIT_END;
-            case XmlAttrValue.SCALE_TYPE_FIT_XY:
-                return ViewAttrValue.SCALE_TYPE_FIT_XY;
-            case XmlAttrValue.SCALE_TYPE_MATRIX:
-                return ViewAttrValue.SCALE_TYPE_MATRIX;
+            case XmlAttrValue.ScaleType.CENTER:
+                return ViewAttrValue.ScaleType.CENTER;
+            case XmlAttrValue.ScaleType.CENTER_CROP:
+                return ViewAttrValue.ScaleType.CENTER_CROP;
+            case XmlAttrValue.ScaleType.CENTER_INSIDE:
+                return ViewAttrValue.ScaleType.CENTER_INSIDE;
+            case XmlAttrValue.ScaleType.FIT_CENTER:
+                return ViewAttrValue.ScaleType.FIT_CENTER;
+            case XmlAttrValue.ScaleType.FIT_START:
+                return ViewAttrValue.ScaleType.FIT_START;
+            case XmlAttrValue.ScaleType.FIT_END:
+                return ViewAttrValue.ScaleType.FIT_END;
+            case XmlAttrValue.ScaleType.FIT_XY:
+                return ViewAttrValue.ScaleType.FIT_XY;
+            case XmlAttrValue.ScaleType.MATRIX:
+                return ViewAttrValue.ScaleType.MATRIX;
             default:
                 if (TextUtils.isEmpty(xmlScaleType))
-                    return XmlAttrValue.SCALE_TYPE_CENTER;
+                    return XmlAttrValue.ScaleType.CENTER;
                 else
                     return xmlScaleType + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 
+    @NotNull
     public static String getTextStyle(String xmlTextStyle) {
+        ImportUtil.support(ImportUtil.TYPEFACE);
         boolean isBold = false;
         boolean isItalic = false;
         String[] textStyles = xmlTextStyle.split("\\|");
         for (String textStyle : textStyles) {
-            if (textStyle.equals(XmlAttrValue.TEXT_STYLE_BOLD))
+            if (textStyle.equals(XmlAttrValue.TextStyle.BOLD))
                 isBold = true;
-            else if (textStyle.equals(XmlAttrValue.TEXT_STYLE_ITALIC))
+            else if (textStyle.equals(XmlAttrValue.TextStyle.ITALIC))
                 isItalic = true;
         }
         if (isBold && isItalic)
-            return ViewAttrValue.TEXT_STYLE_BOLD_ITALIC;
+            return ViewAttrValue.TextStyle.BOLD_ITALIC;
         else if (isBold)
-            return ViewAttrValue.TEXT_STYLE_BOLD;
+            return ViewAttrValue.TextStyle.BOLD;
         else if (isItalic)
-            return ViewAttrValue.TEXT_STYLE_ITALIC;
+            return ViewAttrValue.TextStyle.ITALIC;
         else
-            return ViewAttrValue.TEXT_STYLE_NORMAL;
+            return ViewAttrValue.TextStyle.NORMAL;
     }
 
+    @Contract(pure = true)
     public static String getInputType(String xmlInputType) {
+        ImportUtil.support(ImportUtil.INPUT_TYPE);
         switch (xmlInputType) {
-            case XmlAttrValue.INPUT_TYPE_NONE:
-                return ViewAttrValue.INPUT_TYPE_NONE;
-            case XmlAttrValue.INPUT_TYPE_TEXT:
-                return ViewAttrValue.INPUT_TYPE_TEXT;
-            case XmlAttrValue.INPUT_TYPE_TEXT_CAP_CHARACTERS:
-                return ViewAttrValue.INPUT_TYPE_TEXT_CAP_CHARACTERS;
-            case XmlAttrValue.INPUT_TYPE_TEXT_CAP_WORDS:
-                return ViewAttrValue.INPUT_TYPE_TEXT_CAP_WORDS;
-            case XmlAttrValue.INPUT_TYPE_TEXT_CAP_SENTENCES:
-                return ViewAttrValue.INPUT_TYPE_TEXT_CAP_SENTENCES;
-            case XmlAttrValue.INPUT_TYPE_TEXT_AUTO_CORRECT:
-                return ViewAttrValue.INPUT_TYPE_TEXT_AUTO_CORRECT;
-            case XmlAttrValue.INPUT_TYPE_TEXT_AUTO_COMPLETE:
-                return ViewAttrValue.INPUT_TYPE_TEXT_AUTO_COMPLETE;
-            case XmlAttrValue.INPUT_TYPE_TEXT_MULTI_LINE:
-                return ViewAttrValue.INPUT_TYPE_TEXT_MULTI_LINE;
-            case XmlAttrValue.INPUT_TYPE_TEXT_IME_MULTI_LINE:
-                return ViewAttrValue.INPUT_TYPE_TEXT_IME_MULTI_LINE;
-            case XmlAttrValue.INPUT_TYPE_TEXT_NO_SUGGESTIONS:
-                return ViewAttrValue.INPUT_TYPE_TEXT_NO_SUGGESTIONS;
-            case XmlAttrValue.INPUT_TYPE_TEXT_URI:
-                return ViewAttrValue.INPUT_TYPE_TEXT_URI;
-            case XmlAttrValue.INPUT_TYPE_TEXT_EMAIL_ADDRESS:
-                return ViewAttrValue.INPUT_TYPE_TEXT_EMAIL_ADDRESS;
-            case XmlAttrValue.INPUT_TYPE_TEXT_EMAIL_SUBJECT:
-                return ViewAttrValue.INPUT_TYPE_TEXT_EMAIL_SUBJECT;
-            case XmlAttrValue.INPUT_TYPE_TEXT_SHORT_MESSAGE:
-                return ViewAttrValue.INPUT_TYPE_TEXT_SHORT_MESSAGE;
-            case XmlAttrValue.INPUT_TYPE_TEXT_LONG_MESSAGE:
-                return ViewAttrValue.INPUT_TYPE_TEXT_LONG_MESSAGE;
-            case XmlAttrValue.INPUT_TYPE_TEXT_PERSON_NAME:
-                return ViewAttrValue.INPUT_TYPE_TEXT_PERSON_NAME;
-            case XmlAttrValue.INPUT_TYPE_TEXT_POSTAL_ADDRESS:
-                return ViewAttrValue.INPUT_TYPE_TEXT_POSTAL_ADDRESS;
-            case XmlAttrValue.INPUT_TYPE_TEXT_PASSWORD:
-                return ViewAttrValue.INPUT_TYPE_TEXT_PASSWORD;
-            case XmlAttrValue.INPUT_TYPE_TEXT_VISIBLE_PASSWORD:
-                return ViewAttrValue.INPUT_TYPE_TEXT_VISIBLE_PASSWORD;
-            case XmlAttrValue.INPUT_TYPE_TEXT_WEB_EDIT_TEXT:
-                return ViewAttrValue.INPUT_TYPE_TEXT_WEB_EDIT_TEXT;
-            case XmlAttrValue.INPUT_TYPE_TEXT_FILTER:
-                return ViewAttrValue.INPUT_TYPE_TEXT_FILTER;
-            case XmlAttrValue.INPUT_TYPE_TEXT_PHONETIC:
-                return ViewAttrValue.INPUT_TYPE_TEXT_PHONETIC;
-            case XmlAttrValue.INPUT_TYPE_TEXT_WEB_EMAIL_ADDRESS:
-                return ViewAttrValue.INPUT_TYPE_TEXT_WEB_EMAIL_ADDRESS;
-            case XmlAttrValue.INPUT_TYPE_TEXT_WEB_PASSWORD:
-                return ViewAttrValue.INPUT_TYPE_TEXT_WEB_PASSWORD;
-            case XmlAttrValue.INPUT_TYPE_NUMBER:
-                return ViewAttrValue.INPUT_TYPE_NUMBER;
-            case XmlAttrValue.INPUT_TYPE_NUMBER_SIGNED:
-                return ViewAttrValue.INPUT_TYPE_NUMBER_SIGNED;
-            case XmlAttrValue.INPUT_TYPE_NUMBER_DECIMAL:
-                return ViewAttrValue.INPUT_TYPE_NUMBER_DECIMAL;
-            case XmlAttrValue.INPUT_TYPE_NUMBER_PASSWORD:
-                return ViewAttrValue.INPUT_TYPE_NUMBER_PASSWORD;
-            case XmlAttrValue.INPUT_TYPE_PHONE:
-                return ViewAttrValue.INPUT_TYPE_PHONE;
-            case XmlAttrValue.INPUT_TYPE_DATETIME:
-                return ViewAttrValue.INPUT_TYPE_DATETIME;
-            case XmlAttrValue.INPUT_TYPE_DATE:
-                return ViewAttrValue.INPUT_TYPE_DATE;
-            case XmlAttrValue.INPUT_TYPE_TIME:
-                return ViewAttrValue.INPUT_TYPE_TIME;
+            case XmlAttrValue.InputType.NONE:
+                return ViewAttrValue.InputType.NONE;
+            case XmlAttrValue.InputType.TEXT:
+                return ViewAttrValue.InputType.TEXT;
+            case XmlAttrValue.InputType.TEXT_CAP_CHARACTERS:
+                return ViewAttrValue.InputType.TEXT_CAP_CHARACTERS;
+            case XmlAttrValue.InputType.TEXT_CAP_WORDS:
+                return ViewAttrValue.InputType.TEXT_CAP_WORDS;
+            case XmlAttrValue.InputType.TEXT_CAP_SENTENCES:
+                return ViewAttrValue.InputType.TEXT_CAP_SENTENCES;
+            case XmlAttrValue.InputType.TEXT_AUTO_CORRECT:
+                return ViewAttrValue.InputType.TEXT_AUTO_CORRECT;
+            case XmlAttrValue.InputType.TEXT_AUTO_COMPLETE:
+                return ViewAttrValue.InputType.TEXT_AUTO_COMPLETE;
+            case XmlAttrValue.InputType.TEXT_MULTI_LINE:
+                return ViewAttrValue.InputType.TEXT_MULTI_LINE;
+            case XmlAttrValue.InputType.TEXT_IME_MULTI_LINE:
+                return ViewAttrValue.InputType.TEXT_IME_MULTI_LINE;
+            case XmlAttrValue.InputType.TEXT_NO_SUGGESTIONS:
+                return ViewAttrValue.InputType.TEXT_NO_SUGGESTIONS;
+            case XmlAttrValue.InputType.TEXT_URI:
+                return ViewAttrValue.InputType.TEXT_URI;
+            case XmlAttrValue.InputType.TEXT_EMAIL_ADDRESS:
+                return ViewAttrValue.InputType.TEXT_EMAIL_ADDRESS;
+            case XmlAttrValue.InputType.TEXT_EMAIL_SUBJECT:
+                return ViewAttrValue.InputType.TEXT_EMAIL_SUBJECT;
+            case XmlAttrValue.InputType.TEXT_SHORT_MESSAGE:
+                return ViewAttrValue.InputType.TEXT_SHORT_MESSAGE;
+            case XmlAttrValue.InputType.TEXT_LONG_MESSAGE:
+                return ViewAttrValue.InputType.TEXT_LONG_MESSAGE;
+            case XmlAttrValue.InputType.TEXT_PERSON_NAME:
+                return ViewAttrValue.InputType.TEXT_PERSON_NAME;
+            case XmlAttrValue.InputType.TEXT_POSTAL_ADDRESS:
+                return ViewAttrValue.InputType.TEXT_POSTAL_ADDRESS;
+            case XmlAttrValue.InputType.TEXT_PASSWORD:
+                return ViewAttrValue.InputType.TEXT_PASSWORD;
+            case XmlAttrValue.InputType.TEXT_VISIBLE_PASSWORD:
+                return ViewAttrValue.InputType.TEXT_VISIBLE_PASSWORD;
+            case XmlAttrValue.InputType.TEXT_WEB_EDIT_TEXT:
+                return ViewAttrValue.InputType.TEXT_WEB_EDIT_TEXT;
+            case XmlAttrValue.InputType.TEXT_FILTER:
+                return ViewAttrValue.InputType.TEXT_FILTER;
+            case XmlAttrValue.InputType.TEXT_PHONETIC:
+                return ViewAttrValue.InputType.TEXT_PHONETIC;
+            case XmlAttrValue.InputType.TEXT_WEB_EMAIL_ADDRESS:
+                return ViewAttrValue.InputType.TEXT_WEB_EMAIL_ADDRESS;
+            case XmlAttrValue.InputType.TEXT_WEB_PASSWORD:
+                return ViewAttrValue.InputType.TEXT_WEB_PASSWORD;
+            case XmlAttrValue.InputType.NUMBER:
+                return ViewAttrValue.InputType.NUMBER;
+            case XmlAttrValue.InputType.NUMBER_SIGNED:
+                return ViewAttrValue.InputType.NUMBER_SIGNED;
+            case XmlAttrValue.InputType.NUMBER_DECIMAL:
+                return ViewAttrValue.InputType.NUMBER_DECIMAL;
+            case XmlAttrValue.InputType.NUMBER_PASSWORD:
+                return ViewAttrValue.InputType.NUMBER_PASSWORD;
+            case XmlAttrValue.InputType.PHONE:
+                return ViewAttrValue.InputType.PHONE;
+            case XmlAttrValue.InputType.DATETIME:
+                return ViewAttrValue.InputType.DATETIME;
+            case XmlAttrValue.InputType.DATE:
+                return ViewAttrValue.InputType.DATE;
+            case XmlAttrValue.InputType.TIME:
+                return ViewAttrValue.InputType.TIME;
             default:
-                return ViewAttrValue.INPUT_TYPE_TEXT;
+                return ViewAttrValue.InputType.TEXT;
         }
     }
 
+    @NotNull
     public static String getMultiScrollFlags(String xmlMultiScrollFlags) {
         String[] xmlScrollFlagsArray = xmlMultiScrollFlags.replaceAll("\\s*", "").split("\\|");
         List<String> viewScrollFlagsList = new ArrayList<>();
@@ -547,30 +632,149 @@ public class AttributeUtil {
         return String.join(" or ", viewScrollFlagsList);
     }
 
-    public static String getScrollFlags(String attributeValue) {
-        switch (attributeValue) {
-            case XmlAttrValue.SCROLL_FLAG_ENTER_ALWAYS:
-                return ViewAttrValue.SCROLL_FLAG_ENTER_ALWAYS;
-            case XmlAttrValue.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED:
-                return ViewAttrValue.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED;
-            case XmlAttrValue.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED:
-                return ViewAttrValue.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED;
-            case XmlAttrValue.SCROLL_FLAG_SCROLL:
-                return ViewAttrValue.SCROLL_FLAG_SCROLL;
-            case XmlAttrValue.SCROLL_FLAG_SNAP:
-                return ViewAttrValue.SCROLL_FLAG_SNAP;
+    @NotNull
+    public static String getScrollFlags(String xmlScrollFlags) {
+        switch (xmlScrollFlags) {
+            case XmlAttrValue.ScrollFlag.ENTER_ALWAYS:
+                return ViewAttrValue.ScrollFlag.ENTER_ALWAYS;
+            case XmlAttrValue.ScrollFlag.ENTER_ALWAYS_COLLAPSED:
+                return ViewAttrValue.ScrollFlag.ENTER_ALWAYS_COLLAPSED;
+            case XmlAttrValue.ScrollFlag.EXIT_UNTIL_COLLAPSED:
+                return ViewAttrValue.ScrollFlag.EXIT_UNTIL_COLLAPSED;
+            case XmlAttrValue.ScrollFlag.SCROLL:
+                return ViewAttrValue.ScrollFlag.SCROLL;
+            case XmlAttrValue.ScrollFlag.SNAP:
+                return ViewAttrValue.ScrollFlag.SNAP;
             default:
-                if (TextUtils.isEmpty(attributeValue))
-                    return XmlAttrValue.SCROLL_FLAG_SCROLL;
+                if (TextUtils.isEmpty(xmlScrollFlags))
+                    return XmlAttrValue.ScrollFlag.SCROLL;
                 else
-                    return attributeValue + StringUtil.VALUE_NOT_SUPPORT;
+                    return xmlScrollFlags + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 
+    @NotNull
     public static String getBehavior(String attributeValue) {
         if (TextUtils.isEmpty(attributeValue))
             return "null";
         else
             return attributeValue.replaceAll("\\$", ".") + "()";
+    }
+
+    public static String getAccessibilityLiveRegion(String xmlAccessibilityLiveRegion) {
+        ImportUtil.support(ImportUtil.VIEW);
+        switch (xmlAccessibilityLiveRegion) {
+            case XmlAttrValue.AccessibilityLiveRegion.ASSERTIVE:
+                return ViewAttrValue.AccessibilityLiveRegion.ASSERTIVE;
+            case XmlAttrValue.AccessibilityLiveRegion.NONE:
+                return ViewAttrValue.AccessibilityLiveRegion.NONE;
+            case XmlAttrValue.AccessibilityLiveRegion.POLITE:
+                return ViewAttrValue.AccessibilityLiveRegion.POLITE;
+            default:
+                if (TextUtils.isEmpty(xmlAccessibilityLiveRegion))
+                    return XmlAttrValue.AccessibilityLiveRegion.NONE;
+                else
+                    return xmlAccessibilityLiveRegion + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    @NotNull
+    public static String getMultiAutofillHints(String xmlMultiAutofillHints) {
+        ImportUtil.support(ImportUtil.VIEW);
+        String[] xmlAutofillHintsArray = xmlMultiAutofillHints.replaceAll("\\s*", "").split("\\|");
+        List<String> viewAutofillHintsList = new ArrayList<>();
+        Arrays.stream(xmlAutofillHintsArray).forEach(it -> viewAutofillHintsList.add(getAutofillHints(it)));
+        return String.join(" ,", viewAutofillHintsList);
+    }
+
+    public static String getAutofillHints(String xmlAutofillHints) {
+        switch (xmlAutofillHints) {
+            case XmlAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_DATE:
+                return ViewAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_DATE;
+            case XmlAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_DAY:
+                return ViewAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_DAY;
+            case XmlAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_MONTH:
+                return ViewAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_MONTH;
+            case XmlAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_YEAR:
+                return ViewAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_YEAR;
+            case XmlAttrValue.AutofillHint.CREDIT_CARD_NUMBER:
+                return ViewAttrValue.AutofillHint.CREDIT_CARD_NUMBER;
+            case XmlAttrValue.AutofillHint.CREDIT_CARD_SECURITY_CODE:
+                return ViewAttrValue.AutofillHint.CREDIT_CARD_SECURITY_CODE;
+            case XmlAttrValue.AutofillHint.EMAIL_ADDRESS:
+                return ViewAttrValue.AutofillHint.EMAIL_ADDRESS;
+            case XmlAttrValue.AutofillHint.NAME:
+                return ViewAttrValue.AutofillHint.NAME;
+            case XmlAttrValue.AutofillHint.PASSWORD:
+                return ViewAttrValue.AutofillHint.PASSWORD;
+            case XmlAttrValue.AutofillHint.PHONE:
+                return ViewAttrValue.AutofillHint.PHONE;
+            case XmlAttrValue.AutofillHint.POSTAL_ADDRESS:
+                return ViewAttrValue.AutofillHint.POSTAL_ADDRESS;
+            case XmlAttrValue.AutofillHint.POSTAL_CODE:
+                return ViewAttrValue.AutofillHint.POSTAL_CODE;
+            case XmlAttrValue.AutofillHint.USERNAME:
+                return ViewAttrValue.AutofillHint.USERNAME;
+            default:
+                return "\"" + xmlAutofillHints + "\"";
+        }
+    }
+
+    public static String getPorterDuffMode(String xmlPorterDuffMode) {
+        ImportUtil.support(ImportUtil.PORTER_DUFF);
+        switch (xmlPorterDuffMode) {
+            case XmlAttrValue.PorterDuffMode.ADD:
+                return ViewAttrValue.PorterDuffMode.ADD;
+            case XmlAttrValue.PorterDuffMode.CLEAR:
+                return ViewAttrValue.PorterDuffMode.CLEAR;
+            case XmlAttrValue.PorterDuffMode.DARKEN:
+                return ViewAttrValue.PorterDuffMode.DARKEN;
+            case XmlAttrValue.PorterDuffMode.DST:
+                return ViewAttrValue.PorterDuffMode.DST;
+            case XmlAttrValue.PorterDuffMode.DST_ATOP:
+                return ViewAttrValue.PorterDuffMode.DST_ATOP;
+            case XmlAttrValue.PorterDuffMode.DST_IN:
+                return ViewAttrValue.PorterDuffMode.DST_IN;
+            case XmlAttrValue.PorterDuffMode.DST_OUT:
+                return ViewAttrValue.PorterDuffMode.DST_OUT;
+            case XmlAttrValue.PorterDuffMode.DST_OVER:
+                return ViewAttrValue.PorterDuffMode.DST_OVER;
+            case XmlAttrValue.PorterDuffMode.LIGHTEN:
+                return ViewAttrValue.PorterDuffMode.LIGHTEN;
+            case XmlAttrValue.PorterDuffMode.MULTIPLY:
+                return ViewAttrValue.PorterDuffMode.MULTIPLY;
+            case XmlAttrValue.PorterDuffMode.OVERLAY:
+                return ViewAttrValue.PorterDuffMode.OVERLAY;
+            case XmlAttrValue.PorterDuffMode.SCREEN:
+                return ViewAttrValue.PorterDuffMode.SCREEN;
+            case XmlAttrValue.PorterDuffMode.SRC:
+                return ViewAttrValue.PorterDuffMode.SRC;
+            case XmlAttrValue.PorterDuffMode.SRC_ATOP:
+                return ViewAttrValue.PorterDuffMode.SRC_ATOP;
+            case XmlAttrValue.PorterDuffMode.SRC_IN:
+                return ViewAttrValue.PorterDuffMode.SRC_IN;
+            case XmlAttrValue.PorterDuffMode.SRC_OUT:
+                return ViewAttrValue.PorterDuffMode.SRC_OUT;
+            case XmlAttrValue.PorterDuffMode.SRC_OVER:
+                return ViewAttrValue.PorterDuffMode.SRC_OVER;
+            case XmlAttrValue.PorterDuffMode.XOR:
+                return ViewAttrValue.PorterDuffMode.XOR;
+            default:
+                return xmlPorterDuffMode + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    public static String getDrawingCacheQuality(String xmlDrawingCacheQuality) {
+        ImportUtil.support(ImportUtil.VIEW);
+        switch (xmlDrawingCacheQuality) {
+            case XmlAttrValue.DrawingCacheQuality.AUTO:
+                return ViewAttrValue.DrawingCacheQuality.AUTO;
+            case XmlAttrValue.DrawingCacheQuality.HIGH:
+                return ViewAttrValue.DrawingCacheQuality.HIGH;
+            case XmlAttrValue.DrawingCacheQuality.LOW:
+                return ViewAttrValue.DrawingCacheQuality.LOW;
+            default:
+                return xmlDrawingCacheQuality + StringUtil.VALUE_NOT_SUPPORT;
+        }
     }
 }

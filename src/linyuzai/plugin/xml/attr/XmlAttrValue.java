@@ -1,6 +1,6 @@
 package linyuzai.plugin.xml.attr;
 
-public class XmlAttrValue {
+public final class XmlAttrValue {
     public static final String NONE = "none";
     public static final String TRUE = "true";
     public static final String FALSE = "false";

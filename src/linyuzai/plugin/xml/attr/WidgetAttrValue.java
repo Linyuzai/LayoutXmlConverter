@@ -1,9 +1,7 @@
 package linyuzai.plugin.xml.attr;
 
-public final class ViewAttrValue {
+public final class WidgetAttrValue {
     public static final String EMPTY = "";
-    public static final String TRUE = "true";
-    public static final String FALSE = "false";
 
     public static final class LayoutParams {
         public static final String MATCH_PARENT = "matchParent";

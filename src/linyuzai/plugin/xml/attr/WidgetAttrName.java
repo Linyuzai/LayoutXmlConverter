@@ -1,6 +1,6 @@
 package linyuzai.plugin.xml.attr;
 
-public final class ViewAttrName {
+public final class WidgetAttrName {
 
     public static final class View {
         public static final String ID = "id";

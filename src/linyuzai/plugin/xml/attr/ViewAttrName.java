@@ -3,7 +3,6 @@ package linyuzai.plugin.xml.attr;
 public final class ViewAttrName {
 
     public static final class View {
-
         public static final String ID = "id";
         public static final String ACCESSIBILITY_LIVE_REGION = "accessibilityLiveRegion";
         public static final String ACCESSIBILITY_TRAVERSAL_AFTER = "accessibilityTraversalAfter";
@@ -32,8 +31,8 @@ public final class ViewAttrName {
         public static final String FORCE_HAS_OVERLAPPING_RENDERING = "forceHasOverlappingRendering";
         public static final String FOREGROUND = "foreground";
         public static final String FOREGROUND_GRAVITY = "foregroundGravity";
-        public static final String FOREGROUND_TINT = "android:foregroundTint";
-        public static final String FOREGROUND_TINT_MODE = "android:foregroundTintMode";
+        public static final String FOREGROUND_TINT = "foregroundTintList";
+        public static final String FOREGROUND_TINT_MODE = "foregroundTintMode";
         public static final String HAPTIC_FEEDBACK_ENABLED = "isHapticFeedbackEnabled";
         public static final String IMPORTANT_FOR_ACCESSIBILITY = "android:importantForAccessibility";
         public static final String IMPORTANT_FOR_AUTOFILL = "android:importantForAutofill";
@@ -104,20 +103,23 @@ public final class ViewAttrName {
         public static final String VISIBILITY = "android:visibility";
     }
 
-    public static final String GRAVITY = "gravity";
+    public static final class ViewGroup {
 
-    public static final String WIDTH = "width";
-    public static final String HEIGHT = "height";
-
-    public static final String MARGIN = "margin";
-    public static final String MARGIN_TOP = "topMargin";
-    public static final String MARGIN_RIGHT = "rightMargin";
-    public static final String MARGIN_BOTTOM = "bottomMargin";
-    public static final String MARGIN_LEFT = "leftMargin";
-    public static final String MARGIN_START = "marginStart";
-    public static final String MARGIN_END = "marginEnd";
-    public static final String MARGIN_VERTICAL = "verticalMargin";
-    public static final String MARGIN_HORIZONTAL = "horizontalMargin";
+        public static final class LayoutParams {
+            public static final String GRAVITY = "gravity";
+            public static final String WIDTH = "width";
+            public static final String HEIGHT = "height";
+            public static final String MARGIN = "margin";
+            public static final String MARGIN_TOP = "topMargin";
+            public static final String MARGIN_RIGHT = "rightMargin";
+            public static final String MARGIN_BOTTOM = "bottomMargin";
+            public static final String MARGIN_LEFT = "leftMargin";
+            public static final String MARGIN_START = "marginStart";
+            public static final String MARGIN_END = "marginEnd";
+            public static final String MARGIN_VERTICAL = "verticalMargin";
+            public static final String MARGIN_HORIZONTAL = "horizontalMargin";
+        }
+    }
 
     public static final String ORIENTATION = "orientation";
     public static final String WEIGHT = "weight";

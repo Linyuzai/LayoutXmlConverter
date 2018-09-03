@@ -20,12 +20,12 @@ public class AttributeUtil {
     public static final String CAN_NOT_SET_BY_CODE = " //Can not be set by code";
 
     public static boolean isParamsAttr(String xmlName) {
-        return xmlName.equals(XmlAttrName.LAYOUT_WIDTH) || xmlName.equals(XmlAttrName.LAYOUT_HEIGHT);
+        return xmlName.equals(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_WIDTH) || xmlName.equals(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_HEIGHT);
     }
 
     public static boolean isLayoutAttr(String xmlName) {
-        return xmlName.startsWith(XmlAttrName.LAYOUT_MARGIN) ||
-                xmlName.equals(XmlAttrName.LAYOUT_GRAVITY) ||
+        return xmlName.startsWith(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN) ||
+                xmlName.equals(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_GRAVITY) ||
                 xmlName.equals(XmlAttrName.LAYOUT_WEIGHT) ||
                 xmlName.equals(XmlAttrName.LAYOUT_ALIGN_PARENT_TOP) ||
                 xmlName.equals(XmlAttrName.LAYOUT_ALIGN_PARENT_BOTTOM) ||
@@ -72,21 +72,21 @@ public class AttributeUtil {
                 otherAttr.add(new UAttribute(attr.getQualifiedName(), attr.getValue()));
         }
         if (paramsAttr.size() == 0) {
-            UAttribute widthAttr = new UAttribute(XmlAttrName.LAYOUT_WIDTH, XmlAttrValue.LayoutParams.WRAP_CONTENT);
-            UAttribute heightAttr = new UAttribute(XmlAttrName.LAYOUT_HEIGHT, XmlAttrValue.LayoutParams.WRAP_CONTENT);
+            UAttribute widthAttr = new UAttribute(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_WIDTH, XmlAttrValue.LayoutParams.WRAP_CONTENT);
+            UAttribute heightAttr = new UAttribute(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_HEIGHT, XmlAttrValue.LayoutParams.WRAP_CONTENT);
             paramsAttr.add(widthAttr);
             paramsAttr.add(heightAttr);
         } else if (paramsAttr.size() == 1) {
             UAttribute widthOrHeightAttr = paramsAttr.get(0);
-            if (widthOrHeightAttr.getName().equals(XmlAttrName.LAYOUT_WIDTH)) {
-                UAttribute heightAttr = new UAttribute(XmlAttrName.LAYOUT_HEIGHT, XmlAttrValue.LayoutParams.WRAP_CONTENT);
+            if (widthOrHeightAttr.getName().equals(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_WIDTH)) {
+                UAttribute heightAttr = new UAttribute(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_HEIGHT, XmlAttrValue.LayoutParams.WRAP_CONTENT);
                 paramsAttr.add(heightAttr);
-            } else if (widthOrHeightAttr.getName().equals(XmlAttrName.LAYOUT_HEIGHT)) {
-                UAttribute widthAttr = new UAttribute(XmlAttrName.LAYOUT_WIDTH, XmlAttrValue.LayoutParams.WRAP_CONTENT);
+            } else if (widthOrHeightAttr.getName().equals(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_HEIGHT)) {
+                UAttribute widthAttr = new UAttribute(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_WIDTH, XmlAttrValue.LayoutParams.WRAP_CONTENT);
                 paramsAttr.add(0, widthAttr);
             }
         } else if (paramsAttr.size() == 2) {
-            if (paramsAttr.get(0).getName().equals(XmlAttrName.LAYOUT_HEIGHT)) {
+            if (paramsAttr.get(0).getName().equals(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_HEIGHT)) {
                 Collections.swap(paramsAttr, 0, 1);
             }
         }

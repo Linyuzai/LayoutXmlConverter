@@ -2,24 +2,8 @@ package linyuzai.plugin.xml.attr;
 
 public final class XmlAttrName {
 
-    //gravity
-    public static final String GRAVITY = "android:gravity";
-    //view group layout
-    public static final String LAYOUT_WIDTH = "android:layout_width";
-    public static final String LAYOUT_GRAVITY = "android:layout_gravity";
     //AppBarLayout
     public static final String LAYOUT_SCROLL_FLAGS = ":layout_scrollFlags";
-    public static final String LAYOUT_HEIGHT = "android:layout_height";
-
-    public static final String LAYOUT_MARGIN = "android:layout_margin";
-    public static final String LAYOUT_MARGIN_TOP = "android:layout_marginTop";
-    public static final String LAYOUT_MARGIN_RIGHT = "android:layout_marginRight";
-    public static final String LAYOUT_MARGIN_BOTTOM = "android:layout_marginBottom";
-    public static final String LAYOUT_MARGIN_LEFT = "android:layout_marginLeft";
-    public static final String LAYOUT_MARGIN_START = "android:layout_marginStart";
-    public static final String LAYOUT_MARGIN_END = "android:layout_marginEnd";
-    public static final String LAYOUT_MARGIN_VERTICAL = "android:layout_marginVertical";
-    public static final String LAYOUT_MARGIN_HORIZONTAL = "android:layout_marginHorizontal";
 
 
     //linear layout
@@ -144,6 +128,25 @@ public final class XmlAttrName {
         public static final String TRANSLATION_Z = "android:translationZ";
         public static final String VERTICAL_SCROLLBAR_POSITION = "android:verticalScrollbarPosition";
         public static final String VISIBILITY = "android:visibility";
+        public static final String GRAVITY = "android:gravity";
+    }
+
+    public static final class ViewGroup {
+
+        public static final class LayoutParams {
+            public static final String LAYOUT_GRAVITY = "android:layout_gravity";
+            public static final String LAYOUT_WIDTH = "android:layout_width";
+            public static final String LAYOUT_HEIGHT = "android:layout_height";
+            public static final String LAYOUT_MARGIN = "android:layout_margin";
+            public static final String LAYOUT_MARGIN_TOP = "android:layout_marginTop";
+            public static final String LAYOUT_MARGIN_RIGHT = "android:layout_marginRight";
+            public static final String LAYOUT_MARGIN_BOTTOM = "android:layout_marginBottom";
+            public static final String LAYOUT_MARGIN_LEFT = "android:layout_marginLeft";
+            public static final String LAYOUT_MARGIN_START = "android:layout_marginStart";
+            public static final String LAYOUT_MARGIN_END = "android:layout_marginEnd";
+            public static final String LAYOUT_MARGIN_VERTICAL = "android:layout_marginVertical";
+            public static final String LAYOUT_MARGIN_HORIZONTAL = "android:layout_marginHorizontal";
+        }
     }
 
     //toolbar

@@ -289,12 +289,12 @@ public class AnkoConverter {
                     value = AttributeUtil.getMultiGravity(attributeValue);
                     break;
                 case XmlAttrName.View.FOREGROUND_TINT:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.FOREGROUND_TINT;
+                    value = AttributeUtil.getColorStateList(attributeValue);
                     break;
                 case XmlAttrName.View.FOREGROUND_TINT_MODE:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.FOREGROUND_TINT_MODE;
+                    value = AttributeUtil.getPorterDuffMode(attributeValue);
                     break;
                 case XmlAttrName.View.HAPTIC_FEEDBACK_ENABLED:
                     name = ViewAttrName.View.HAPTIC_FEEDBACK_ENABLED;
@@ -621,8 +621,8 @@ public class AnkoConverter {
                     value = "typeface, " + AttributeUtil.getTextStyle(attributeValue);
                     isEqualsOperator = false;
                     break;
-                case XmlAttrName.GRAVITY:
-                    name = ViewAttrName.GRAVITY;
+                case XmlAttrName.View.GRAVITY:
+                    name = ViewAttrName.ViewGroup.LayoutParams.GRAVITY;
                     value = AttributeUtil.getMultiGravity(attributeValue);
                     break;
                 case XmlAttrName.MAX_LINES:
@@ -653,44 +653,44 @@ public class AnkoConverter {
                     name = ViewAttrName.INPUT_TYPE;
                     value = AttributeUtil.getInputType(attributeValue);
                     break;
-                case XmlAttrName.LAYOUT_MARGIN:
-                    name = ViewAttrName.MARGIN;
+                case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN:
+                    name = ViewAttrName.ViewGroup.LayoutParams.MARGIN;
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
-                case XmlAttrName.LAYOUT_MARGIN_TOP:
-                    name = ViewAttrName.MARGIN_TOP;
+                case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_TOP:
+                    name = ViewAttrName.ViewGroup.LayoutParams.MARGIN_TOP;
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
-                case XmlAttrName.LAYOUT_MARGIN_RIGHT:
-                    name = ViewAttrName.MARGIN_RIGHT;
+                case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_RIGHT:
+                    name = ViewAttrName.ViewGroup.LayoutParams.MARGIN_RIGHT;
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
-                case XmlAttrName.LAYOUT_MARGIN_BOTTOM:
-                    name = ViewAttrName.MARGIN_BOTTOM;
+                case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_BOTTOM:
+                    name = ViewAttrName.ViewGroup.LayoutParams.MARGIN_BOTTOM;
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
-                case XmlAttrName.LAYOUT_MARGIN_LEFT:
-                    name = ViewAttrName.MARGIN_LEFT;
+                case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_LEFT:
+                    name = ViewAttrName.ViewGroup.LayoutParams.MARGIN_LEFT;
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
-                case XmlAttrName.LAYOUT_MARGIN_START:
-                    name = ViewAttrName.MARGIN_START;
+                case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_START:
+                    name = ViewAttrName.ViewGroup.LayoutParams.MARGIN_START;
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
-                case XmlAttrName.LAYOUT_MARGIN_END:
-                    name = ViewAttrName.MARGIN_END;
+                case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_END:
+                    name = ViewAttrName.ViewGroup.LayoutParams.MARGIN_END;
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
-                case XmlAttrName.LAYOUT_MARGIN_VERTICAL:
-                    name = ViewAttrName.MARGIN_VERTICAL;
+                case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_VERTICAL:
+                    name = ViewAttrName.ViewGroup.LayoutParams.MARGIN_VERTICAL;
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
-                case XmlAttrName.LAYOUT_MARGIN_HORIZONTAL:
-                    name = ViewAttrName.MARGIN_HORIZONTAL;
+                case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_HORIZONTAL:
+                    name = ViewAttrName.ViewGroup.LayoutParams.MARGIN_HORIZONTAL;
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
-                case XmlAttrName.LAYOUT_GRAVITY:
-                    name = ViewAttrName.GRAVITY;
+                case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_GRAVITY:
+                    name = ViewAttrName.ViewGroup.LayoutParams.GRAVITY;
                     value = AttributeUtil.getMultiGravity(attributeValue);
                     break;
                 case XmlAttrName.LAYOUT_WEIGHT:

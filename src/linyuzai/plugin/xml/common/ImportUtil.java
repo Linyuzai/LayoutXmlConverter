@@ -23,6 +23,9 @@ public class ImportUtil {
     public static final String IMAGE_VIEW = "android.widget.ImageView";
     public static final String PORTER_DUFF = "android.graphics.PorterDuff";
     public static final String COLOR_DRAWABLE = "android.graphics.drawable.ColorDrawable";
+    public static final String VIEW_OUTLINE_PROVIDER = "android.view.ViewOutlineProvider";
+    public static final String POINTER_ICON = "android.view.PointerIcon";
+    public static final String ANIMATOR_INFLATER = "android.animation.AnimatorInflater";
 
     public static final String DESIGN = "android.support.design.widget";
 

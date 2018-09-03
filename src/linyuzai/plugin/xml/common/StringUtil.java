@@ -2,6 +2,10 @@ package linyuzai.plugin.xml.common;
 
 public class StringUtil {
     public static final String VALUE_NOT_SUPPORT = " //not support value";
+    public static final String VALUE_SHOULD_BE_AN_COLOR_STATE_LIST = " //value should be an color state list";
+    public static final String VALUE_SHOULD_BE_AN_ID = " //value should be an id";
+    public static final String CAN_NOT_SET_BY_CODE = " //Can not be set by code";
+    public static final String NOTHING_TO_SET = " //nothing to set";
 
     public static boolean isAlpha(String alpha) {
         try {
@@ -47,5 +51,9 @@ public class StringUtil {
         return attr.startsWith("?attr/") || attr.startsWith("?android:attr/") ||
                 attr.startsWith("?attr/android:") || attr.startsWith("?android:") ||
                 attr.startsWith("?");
+    }
+
+    public static boolean isDrawableRes(String drawableRes) {
+        return drawableRes.startsWith("@drawable/") || drawableRes.startsWith("@android:drawable/");
     }
 }

@@ -5,7 +5,6 @@ public final class XmlAttrName {
     //AppBarLayout
     public static final String LAYOUT_SCROLL_FLAGS = ":layout_scrollFlags";
 
-
     //linear layout
     public static final String ORIENTATION = "android:orientation";
     public static final String LAYOUT_WEIGHT = "android:layout_weight";

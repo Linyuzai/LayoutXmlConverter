@@ -1,24 +1,27 @@
 <idea-plugin>
     <id>linyuzai.plugin.xml</id>
     <name>Kotlin Anko Converter For Xml</name>
-    <version>1.2.3</version>
+    <version>1.3.0</version>
     <vendor email="120718461@qq.com" url="https://github.com/Linyuzai/LayoutXmlConverter">Personal</vendor>
 
     <description><![CDATA[
       Convert layout xml to kotlin code use anko.<br>
-      Java 8 at least.<br>
+      Compile with Java 8.<br>
       Select or open a layout xml under res/layout.<br>
       Open the Code Menu.<br>
       Chose the last option "Convert Layout Xml to Kotlin Anko".<br>
     ]]></description>
 
     <change-notes><![CDATA[
-      Support gravity start,end.<br>
-      Support android theme.<br>
-      Support layout_scrollFlags.<br>
-      Support layout_behavior.<br>
-      Support popupTheme.<br>
-      Support ?attr/ and ?android:attr/<br>
+      Support all Attributes of class View.<br>
+      To Do List:<br>
+      ViewGroup.<br>
+      FrameLayout.<br>
+      LinearLayout.<br>
+      RelativeLayout.<br>
+      TextView.<br>
+      EditText.<br>
+      ImageView.<br>
     ]]>
     </change-notes>
 

@@ -15,10 +15,6 @@ import java.util.*;
 
 public class AttributeUtil {
 
-    public static final String VALUE_SHOULD_BE_AN_COLOR_STATE_LIST = " //value should be an color state list";
-    public static final String VALUE_SHOULD_BE_AN_ID = " //value should be an id";
-    public static final String CAN_NOT_SET_BY_CODE = " //Can not be set by code";
-
     public static boolean isParamsAttr(String xmlName) {
         return xmlName.equals(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_WIDTH) || xmlName.equals(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_HEIGHT);
     }
@@ -329,12 +325,16 @@ public class AttributeUtil {
     public static String getSystemColor(String systemColor) {
         switch (systemColor) {
             case "transparent":
+                ImportUtil.support(ImportUtil.COLOR);
                 return "Color.TRANSPARENT";
             case "white":
+                ImportUtil.support(ImportUtil.COLOR);
                 return "Color.WHITE";
             case "black":
+                ImportUtil.support(ImportUtil.COLOR);
                 return "Color.BLACK";
             case "red":
+                ImportUtil.support(ImportUtil.COLOR);
                 return "Color.RED";
             default:
                 return "resources.getColor(android.R.color." + systemColor + ")";
@@ -344,6 +344,7 @@ public class AttributeUtil {
     @NotNull
     @Contract(pure = true)
     public static String getParseColor(String parseColor) {
+        ImportUtil.support(ImportUtil.COLOR);
         if (parseColor.startsWith("#")) {
             switch (parseColor) {
                 case "#000000":
@@ -625,16 +626,16 @@ public class AttributeUtil {
     }
 
     @NotNull
-    public static String getMultiScrollFlags(String xmlMultiScrollFlags) {
-        String[] xmlScrollFlagsArray = xmlMultiScrollFlags.replaceAll("\\s*", "").split("\\|");
-        List<String> viewScrollFlagsList = new ArrayList<>();
-        Arrays.stream(xmlScrollFlagsArray).forEach(it -> viewScrollFlagsList.add(getScrollFlags(it)));
-        return String.join(" or ", viewScrollFlagsList);
+    public static String getMultiScrollFlag(String xmlMultiScrollFlag) {
+        String[] xmlScrollFlagArray = xmlMultiScrollFlag.replaceAll("\\s*", "").split("\\|");
+        List<String> viewScrollFlagList = new ArrayList<>();
+        Arrays.stream(xmlScrollFlagArray).forEach(it -> viewScrollFlagList.add(getScrollFlag(it)));
+        return String.join(" or ", viewScrollFlagList);
     }
 
     @NotNull
-    public static String getScrollFlags(String xmlScrollFlags) {
-        switch (xmlScrollFlags) {
+    public static String getScrollFlag(String xmlScrollFlag) {
+        switch (xmlScrollFlag) {
             case XmlAttrValue.ScrollFlag.ENTER_ALWAYS:
                 return ViewAttrValue.ScrollFlag.ENTER_ALWAYS;
             case XmlAttrValue.ScrollFlag.ENTER_ALWAYS_COLLAPSED:
@@ -646,10 +647,10 @@ public class AttributeUtil {
             case XmlAttrValue.ScrollFlag.SNAP:
                 return ViewAttrValue.ScrollFlag.SNAP;
             default:
-                if (TextUtils.isEmpty(xmlScrollFlags))
+                if (TextUtils.isEmpty(xmlScrollFlag))
                     return XmlAttrValue.ScrollFlag.SCROLL;
                 else
-                    return xmlScrollFlags + StringUtil.VALUE_NOT_SUPPORT;
+                    return xmlScrollFlag + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 
@@ -679,16 +680,16 @@ public class AttributeUtil {
     }
 
     @NotNull
-    public static String getMultiAutofillHints(String xmlMultiAutofillHints) {
+    public static String getMultiAutofillHint(String xmlMultiAutofillHint) {
         ImportUtil.support(ImportUtil.VIEW);
-        String[] xmlAutofillHintsArray = xmlMultiAutofillHints.replaceAll("\\s*", "").split("\\|");
-        List<String> viewAutofillHintsList = new ArrayList<>();
-        Arrays.stream(xmlAutofillHintsArray).forEach(it -> viewAutofillHintsList.add(getAutofillHints(it)));
-        return String.join(" ,", viewAutofillHintsList);
+        String[] xmlAutofillHintArray = xmlMultiAutofillHint.replaceAll("\\s*", "").split("\\|");
+        List<String> viewAutofillHintList = new ArrayList<>();
+        Arrays.stream(xmlAutofillHintArray).forEach(it -> viewAutofillHintList.add(getAutofillHint(it)));
+        return String.join(", ", viewAutofillHintList);
     }
 
-    public static String getAutofillHints(String xmlAutofillHints) {
-        switch (xmlAutofillHints) {
+    public static String getAutofillHint(String xmlAutofillHint) {
+        switch (xmlAutofillHint) {
             case XmlAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_DATE:
                 return ViewAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_DATE;
             case XmlAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_DAY:
@@ -716,7 +717,7 @@ public class AttributeUtil {
             case XmlAttrValue.AutofillHint.USERNAME:
                 return ViewAttrValue.AutofillHint.USERNAME;
             default:
-                return "\"" + xmlAutofillHints + "\"";
+                return "\"" + xmlAutofillHint + "\"";
         }
     }
 
@@ -775,6 +776,279 @@ public class AttributeUtil {
                 return ViewAttrValue.DrawingCacheQuality.LOW;
             default:
                 return xmlDrawingCacheQuality + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    public static String getImportantForAccessibility(String xmlImportantForAccessibility) {
+        ImportUtil.support(ImportUtil.VIEW);
+        switch (xmlImportantForAccessibility) {
+            case XmlAttrValue.ImportantForAccessibility.AUTO:
+                return ViewAttrValue.ImportantForAccessibility.AUTO;
+            case XmlAttrValue.ImportantForAccessibility.NO:
+                return ViewAttrValue.ImportantForAccessibility.NO;
+            case XmlAttrValue.ImportantForAccessibility.NO_HIDE_DESCENDANTS:
+                return ViewAttrValue.ImportantForAccessibility.NO_HIDE_DESCENDANTS;
+            case XmlAttrValue.ImportantForAccessibility.YES:
+                return ViewAttrValue.ImportantForAccessibility.YES;
+            default:
+                return xmlImportantForAccessibility + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    public static String getImportantForAutofill(String xmlImportantForAutofill) {
+        ImportUtil.support(ImportUtil.VIEW);
+        switch (xmlImportantForAutofill) {
+            case XmlAttrValue.ImportantForAutofill.AUTO:
+                return ViewAttrValue.ImportantForAutofill.AUTO;
+            case XmlAttrValue.ImportantForAutofill.NO:
+                return ViewAttrValue.ImportantForAutofill.NO;
+            case XmlAttrValue.ImportantForAutofill.NO_EXCLUDE_DESCENDANTS:
+                return ViewAttrValue.ImportantForAutofill.NO_EXCLUDE_DESCENDANTS;
+            case XmlAttrValue.ImportantForAutofill.YES:
+                return ViewAttrValue.ImportantForAutofill.YES;
+            case XmlAttrValue.ImportantForAutofill.YES_EXCLUDE_DESCENDANTS:
+                return ViewAttrValue.ImportantForAutofill.YES_EXCLUDE_DESCENDANTS;
+            default:
+                return xmlImportantForAutofill + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    public static String getLayerType(String xmlLayerType) {
+        ImportUtil.support(ImportUtil.VIEW);
+        switch (xmlLayerType) {
+            case XmlAttrValue.LayerType.HARDWARE:
+                return ViewAttrValue.LayerType.HARDWARE;
+            case XmlAttrValue.LayerType.NONE:
+                return ViewAttrValue.LayerType.NONE;
+            case XmlAttrValue.LayerType.SOFTWARE:
+                return ViewAttrValue.LayerType.SOFTWARE;
+            default:
+                return xmlLayerType + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    public static String getLayoutDirection(String xmlLayoutDirection) {
+        ImportUtil.support(ImportUtil.VIEW);
+        switch (xmlLayoutDirection) {
+            case XmlAttrValue.LayoutDirection.INHERIT:
+                return ViewAttrValue.LayoutDirection.INHERIT;
+            case XmlAttrValue.LayoutDirection.LOCALE:
+                return ViewAttrValue.LayoutDirection.LOCALE;
+            case XmlAttrValue.LayoutDirection.LTR:
+                return ViewAttrValue.LayoutDirection.LTR;
+            case XmlAttrValue.LayoutDirection.RTL:
+                return ViewAttrValue.LayoutDirection.RTL;
+            default:
+                return xmlLayoutDirection + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    public static String getOutlineProvider(String xmlOutlineProvider) {
+        ImportUtil.support(ImportUtil.VIEW_OUTLINE_PROVIDER);
+        switch (xmlOutlineProvider) {
+            case XmlAttrValue.OutlineProvider.BACKGROUND:
+                return ViewAttrValue.OutlineProvider.BACKGROUND;
+            case XmlAttrValue.OutlineProvider.BOUNDS:
+                return ViewAttrValue.OutlineProvider.BOUNDS;
+            case XmlAttrValue.OutlineProvider.NONE:
+                return ViewAttrValue.OutlineProvider.NONE;
+            case XmlAttrValue.OutlineProvider.PADDED_BOUNDS:
+                return ViewAttrValue.OutlineProvider.PADDED_BOUNDS;
+            default:
+                return xmlOutlineProvider + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    public static String getOverScrollMode(String xmlOverScrollMode) {
+        ImportUtil.support(ImportUtil.VIEW);
+        switch (xmlOverScrollMode) {
+            case XmlAttrValue.OverScrollMode.ALWAYS:
+                return ViewAttrValue.OverScrollMode.ALWAYS;
+            case XmlAttrValue.OverScrollMode.IF_CONTENT_SCROLLS:
+                return ViewAttrValue.OverScrollMode.IF_CONTENT_SCROLLS;
+            case XmlAttrValue.OverScrollMode.NEVER:
+                return ViewAttrValue.OverScrollMode.NEVER;
+            default:
+                return xmlOverScrollMode + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    public static String getPointerIconType(String xmlPointerIconType) {
+        ImportUtil.support(ImportUtil.POINTER_ICON);
+        switch (xmlPointerIconType) {
+            case XmlAttrValue.PointerIconType.ALIAS:
+                return ViewAttrValue.PointerIconType.ALIAS;
+            case XmlAttrValue.PointerIconType.ALL_SCROLL:
+                return ViewAttrValue.PointerIconType.ALL_SCROLL;
+            case XmlAttrValue.PointerIconType.ARROW:
+                return ViewAttrValue.PointerIconType.ARROW;
+            case XmlAttrValue.PointerIconType.CELL:
+                return ViewAttrValue.PointerIconType.CELL;
+            case XmlAttrValue.PointerIconType.CONTEXT_MENU:
+                return ViewAttrValue.PointerIconType.CONTEXT_MENU;
+            case XmlAttrValue.PointerIconType.COPY:
+                return ViewAttrValue.PointerIconType.COPY;
+            case XmlAttrValue.PointerIconType.CROSSHAIR:
+                return ViewAttrValue.PointerIconType.CROSSHAIR;
+            case XmlAttrValue.PointerIconType.GRAB:
+                return ViewAttrValue.PointerIconType.GRAB;
+            case XmlAttrValue.PointerIconType.GRABBING:
+                return ViewAttrValue.PointerIconType.GRABBING;
+            case XmlAttrValue.PointerIconType.HAND:
+                return ViewAttrValue.PointerIconType.HAND;
+            case XmlAttrValue.PointerIconType.HELP:
+                return ViewAttrValue.PointerIconType.HELP;
+            case XmlAttrValue.PointerIconType.HORIZONTAL_DOUBLE_ARROW:
+                return ViewAttrValue.PointerIconType.HORIZONTAL_DOUBLE_ARROW;
+            case XmlAttrValue.PointerIconType.NO_DROP:
+                return ViewAttrValue.PointerIconType.NO_DROP;
+            case XmlAttrValue.PointerIconType.NULL:
+                return ViewAttrValue.PointerIconType.NULL;
+            case XmlAttrValue.PointerIconType.TEXT:
+                return ViewAttrValue.PointerIconType.TEXT;
+            case XmlAttrValue.PointerIconType.TOP_LEFT_DIAGONAL_DOUBLE_ARROW:
+                return ViewAttrValue.PointerIconType.TOP_LEFT_DIAGONAL_DOUBLE_ARROW;
+            case XmlAttrValue.PointerIconType.TOP_RIGHT_DIAGONAL_DOUBLE_ARROW:
+                return ViewAttrValue.PointerIconType.TOP_RIGHT_DIAGONAL_DOUBLE_ARROW;
+            case XmlAttrValue.PointerIconType.VERTICAL_DOUBLE_ARROW:
+                return ViewAttrValue.PointerIconType.VERTICAL_DOUBLE_ARROW;
+            case XmlAttrValue.PointerIconType.VERTICAL_TEXT:
+                return ViewAttrValue.PointerIconType.VERTICAL_TEXT;
+            case XmlAttrValue.PointerIconType.WAIT:
+                return ViewAttrValue.PointerIconType.WAIT;
+            case XmlAttrValue.PointerIconType.ZOOM_IN:
+                return ViewAttrValue.PointerIconType.ZOOM_IN;
+            case XmlAttrValue.PointerIconType.ZOOM_OUT:
+                return ViewAttrValue.PointerIconType.ZOOM_OUT;
+            default:
+                return xmlPointerIconType + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    public static String getMultiScrollIndicator(String xmlMultiScrollIndicator) {
+        ImportUtil.support(ImportUtil.VIEW);
+        String[] xmlScrollIndicatorArray = xmlMultiScrollIndicator.replaceAll("\\s*", "").split("\\|");
+        List<String> viewScrollIndicatorList = new ArrayList<>();
+        Arrays.stream(xmlScrollIndicatorArray).forEach(it -> viewScrollIndicatorList.add(getScrollIndicator(it)));
+        return String.join(" or ", viewScrollIndicatorList);
+    }
+
+    @Contract(pure = true)
+    public static String getScrollIndicator(String xmlScrollIndicator) {
+        switch (xmlScrollIndicator) {
+            case XmlAttrValue.ScrollIndicator.BOTTOM:
+                return ViewAttrValue.ScrollIndicator.BOTTOM;
+            case XmlAttrValue.ScrollIndicator.END:
+                return ViewAttrValue.ScrollIndicator.END;
+            case XmlAttrValue.ScrollIndicator.LEFT:
+                return ViewAttrValue.ScrollIndicator.LEFT;
+            case XmlAttrValue.ScrollIndicator.RIGHT:
+                return ViewAttrValue.ScrollIndicator.RIGHT;
+            case XmlAttrValue.ScrollIndicator.START:
+                return ViewAttrValue.ScrollIndicator.START;
+            case XmlAttrValue.ScrollIndicator.TOP:
+                return ViewAttrValue.ScrollIndicator.TOP;
+            default:
+                return xmlScrollIndicator + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    public static String getScrollBarStyle(String xmlScrollBarStyle) {
+        ImportUtil.support(ImportUtil.VIEW);
+        switch (xmlScrollBarStyle) {
+            case XmlAttrValue.ScrollBarStyle.SCROLLBARS_INSIDE_INSET:
+                return ViewAttrValue.ScrollBarStyle.SCROLLBARS_INSIDE_INSET;
+            case XmlAttrValue.ScrollBarStyle.SCROLLBARS_INSIDE_OVERLAY:
+                return ViewAttrValue.ScrollBarStyle.SCROLLBARS_INSIDE_OVERLAY;
+            case XmlAttrValue.ScrollBarStyle.SCROLLBARS_OUTSIDE_INSET:
+                return ViewAttrValue.ScrollBarStyle.SCROLLBARS_OUTSIDE_INSET;
+            case XmlAttrValue.ScrollBarStyle.SCROLLBARS_OUTSIDE_OVERLAY:
+                return ViewAttrValue.ScrollBarStyle.SCROLLBARS_OUTSIDE_OVERLAY;
+            default:
+                return xmlScrollBarStyle + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    @NotNull
+    public static String getStateListAnimator(String xmlStateListAnimator) {
+        ImportUtil.support(ImportUtil.ANIMATOR_INFLATER);
+        if (StringUtil.isDrawableRes(xmlStateListAnimator)) {
+            return "AnimatorInflater.loadStateListAnimator(context, " + getImage(xmlStateListAnimator) + ")";
+        } else
+            return xmlStateListAnimator + StringUtil.VALUE_NOT_SUPPORT;
+    }
+
+    public static String getTextAlignment(String xmlTextAlignment) {
+        ImportUtil.support(ImportUtil.VIEW);
+        switch (xmlTextAlignment) {
+            case XmlAttrValue.TextAlignment.CENTER:
+                return ViewAttrValue.TextAlignment.CENTER;
+            case XmlAttrValue.TextAlignment.GRAVITY:
+                return ViewAttrValue.TextAlignment.GRAVITY;
+            case XmlAttrValue.TextAlignment.INHERIT:
+                return ViewAttrValue.TextAlignment.INHERIT;
+            case XmlAttrValue.TextAlignment.TEXT_END:
+                return ViewAttrValue.TextAlignment.TEXT_END;
+            case XmlAttrValue.TextAlignment.TEXT_START:
+                return ViewAttrValue.TextAlignment.TEXT_START;
+            case XmlAttrValue.TextAlignment.VIEW_END:
+                return ViewAttrValue.TextAlignment.VIEW_END;
+            case XmlAttrValue.TextAlignment.VIEW_START:
+                return ViewAttrValue.TextAlignment.VIEW_START;
+            default:
+                return xmlTextAlignment + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    public static String getTextDirection(String xmlTextDirection) {
+        ImportUtil.support(ImportUtil.VIEW);
+        switch (xmlTextDirection) {
+            case XmlAttrValue.TextDirection.ANY_RTL:
+                return ViewAttrValue.TextDirection.ANY_RTL;
+            case XmlAttrValue.TextDirection.FIRST_STRONG:
+                return ViewAttrValue.TextDirection.FIRST_STRONG;
+            case XmlAttrValue.TextDirection.FIRST_STRONG_LTR:
+                return ViewAttrValue.TextDirection.FIRST_STRONG_LTR;
+            case XmlAttrValue.TextDirection.FIRST_STRONG_RTL:
+                return ViewAttrValue.TextDirection.FIRST_STRONG_RTL;
+            case XmlAttrValue.TextDirection.INHERIT:
+                return ViewAttrValue.TextDirection.INHERIT;
+            case XmlAttrValue.TextDirection.LOCALE:
+                return ViewAttrValue.TextDirection.LOCALE;
+            case XmlAttrValue.TextDirection.LTR:
+                return ViewAttrValue.TextDirection.LTR;
+            case XmlAttrValue.TextDirection.RTL:
+                return ViewAttrValue.TextDirection.RTL;
+            default:
+                return xmlTextDirection + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    public static String getVerticalScrollbarPosition(String xmlVerticalScrollbarPosition) {
+        ImportUtil.support(ImportUtil.VIEW);
+        switch (xmlVerticalScrollbarPosition) {
+            case XmlAttrValue.VerticalScrollbarPosition.SCROLLBAR_POSITION_DEFAULT:
+                return ViewAttrValue.VerticalScrollbarPosition.SCROLLBAR_POSITION_DEFAULT;
+            case XmlAttrValue.VerticalScrollbarPosition.SCROLLBAR_POSITION_LEFT:
+                return ViewAttrValue.VerticalScrollbarPosition.SCROLLBAR_POSITION_LEFT;
+            case XmlAttrValue.VerticalScrollbarPosition.SCROLLBAR_POSITION_RIGHT:
+                return ViewAttrValue.VerticalScrollbarPosition.SCROLLBAR_POSITION_RIGHT;
+            default:
+                return xmlVerticalScrollbarPosition + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    public static String getVisibility(String xmlVisibility) {
+        ImportUtil.support(ImportUtil.VIEW);
+        switch (xmlVisibility) {
+            case XmlAttrValue.Visibility.GONE:
+                return ViewAttrValue.Visibility.GONE;
+            case XmlAttrValue.Visibility.INVISIBLE:
+                return ViewAttrValue.Visibility.INVISIBLE;
+            case XmlAttrValue.Visibility.VISIBLE:
+                return ViewAttrValue.Visibility.VISIBLE;
+            default:
+                return xmlVisibility + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 }

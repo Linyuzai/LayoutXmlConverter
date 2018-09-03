@@ -62,7 +62,7 @@ public class AnkoConverter {
         noteBuilder.append("/**\n");
         noteBuilder.append(" * Generate with Plugin\n");
         noteBuilder.append(" * @plugin Kotlin Anko Converter For Xml\n");
-        noteBuilder.append(" * @version 1.2.3\n");
+        noteBuilder.append(" * @version 1.3.0\n");
         noteBuilder.append(" */\n");
     }
 
@@ -143,15 +143,40 @@ public class AnkoConverter {
         if (layout.size() > 0) {
             codeBuilder.append(" {\n");
             for (UAttribute attr : layout)
-                writeAttribute(null, attr.getName(), attr.getValue(), deep + 1);
+                writeAttribute(null, attr.getName(), attr.getValue(), deep + 1, false);
             writeTab(deep);
             codeBuilder.append("}");
         }
         codeBuilder.append("\n");
     }
 
-    private void writeAttribute(String className, String attributeName, String attributeValue, int deep) {
+    private void writeOrientationEnableAttribute(String className, String attributeName, String attributeValue, int deep) {
+        boolean isVerticalEnable = false;
+        boolean isHorizontalEnable = false;
+        if (attributeValue.contains(XmlAttrValue.Orientation.VERTICAL))
+            isVerticalEnable = true;
+        if (attributeValue.contains(XmlAttrValue.Orientation.HORIZONTAL))
+            isHorizontalEnable = true;
+        if (isVerticalEnable) {
+            writeAttribute(className, attributeName, XmlAttrValue.Orientation.VERTICAL + ";" +
+                    XmlAttrValue.TRUE, deep, true);
+        } else {
+            writeAttribute(className, attributeName, XmlAttrValue.Orientation.VERTICAL + ";" +
+                    XmlAttrValue.FALSE, deep, true);
+        }
         writeTab(deep);
+        if (isHorizontalEnable) {
+            writeAttribute(className, attributeName, XmlAttrValue.Orientation.HORIZONTAL + ";" +
+                    XmlAttrValue.TRUE, deep, true);
+        } else {
+            writeAttribute(className, attributeName, XmlAttrValue.Orientation.HORIZONTAL + ";" +
+                    XmlAttrValue.FALSE, deep, true);
+        }
+    }
+
+    private void writeAttribute(String className, String attributeName, String attributeValue, int deep, boolean isRecursion) {
+        if (!isRecursion)
+            writeTab(deep);
         String name = attributeName;
         String value = attributeValue;
         String extra = "";
@@ -189,7 +214,7 @@ public class AnkoConverter {
                     break;
                 case XmlAttrName.View.AUTOFILL_HINTS:
                     name = ViewAttrName.View.AUTOFILL_HINTS;
-                    value = AttributeUtil.getMultiAutofillHints(attributeValue);
+                    value = AttributeUtil.getMultiAutofillHint(attributeValue);
                     isEqualsOperator = false;
                     break;
                 case XmlAttrName.View.BACKGROUND:
@@ -199,7 +224,6 @@ public class AnkoConverter {
                     } else {
                         name = ViewAttrName.View.BACKGROUND_COLOR;
                         value = AttributeUtil.getColor(attributeValue);
-                        ImportUtil.support(ImportUtil.COLOR);
                     }
                     break;
                 case XmlAttrName.View.BACKGROUND_TINT:
@@ -243,7 +267,7 @@ public class AnkoConverter {
                     value = AttributeUtil.getBoolean(attributeValue);
                     break;
                 case XmlAttrName.View.FADING_EDGE:
-                    writeAttribute(className, XmlAttrName.View.REQUIRES_FADING_EDGE, attributeValue, 0);
+                    writeAttribute(className, XmlAttrName.View.REQUIRES_FADING_EDGE, attributeValue, deep, true);
                     return;
                 case XmlAttrName.View.FADING_EDGE_LENGTH:
                     name = ViewAttrName.View.FADING_EDGE_LENGTH;
@@ -301,12 +325,12 @@ public class AnkoConverter {
                     value = AttributeUtil.getBoolean(attributeValue);
                     break;
                 case XmlAttrName.View.IMPORTANT_FOR_ACCESSIBILITY:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.IMPORTANT_FOR_ACCESSIBILITY;
+                    value = AttributeUtil.getImportantForAccessibility(attributeValue);
                     break;
                 case XmlAttrName.View.IMPORTANT_FOR_AUTOFILL:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.IMPORTANT_FOR_AUTOFILL;
+                    value = AttributeUtil.getImportantForAutofill(attributeValue);
                     break;
                 case XmlAttrName.View.IS_SCROLL_CONTAINER:
                     name = ViewAttrName.View.IS_SCROLL_CONTAINER;
@@ -321,28 +345,29 @@ public class AnkoConverter {
                     value = AttributeUtil.getBoolean(attributeValue);
                     break;
                 case XmlAttrName.View.LABEL_FOR:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.LABEL_FOR;
+                    value = AttributeUtil.getId(attributeValue);
                     break;
                 case XmlAttrName.View.LAYER_TYPE:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.LAYER_TYPE;
+                    value = AttributeUtil.getLayerType(attributeValue) + ", null";
+                    isEqualsOperator = false;
                     break;
                 case XmlAttrName.View.LAYOUT_DIRECTION:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.LAYOUT_DIRECTION;
+                    value = AttributeUtil.getLayoutDirection(attributeValue);
                     break;
                 case XmlAttrName.View.LONG_CLICKABLE:
                     name = ViewAttrName.View.LONG_CLICKABLE;
                     value = AttributeUtil.getBoolean(attributeValue);
                     break;
                 case XmlAttrName.View.MIN_HEIGHT:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.MIN_HEIGHT;
+                    value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.View.MIN_WIDTH:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.MIN_WIDTH;
+                    value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.View.NESTED_SCROLLING_ENABLED:
                     name = ViewAttrName.View.NESTED_SCROLLING_ENABLED;
@@ -354,7 +379,7 @@ public class AnkoConverter {
                         value = AttributeUtil.getId(attributeValue);
                     } else {
                         isNote = true;
-                        extra = AttributeUtil.VALUE_SHOULD_BE_AN_ID;
+                        extra = StringUtil.VALUE_SHOULD_BE_AN_ID;
                     }
                     break;
                 case XmlAttrName.View.NEXT_FOCUS_DOWN:
@@ -363,7 +388,7 @@ public class AnkoConverter {
                         value = AttributeUtil.getId(attributeValue);
                     } else {
                         isNote = true;
-                        extra = AttributeUtil.VALUE_SHOULD_BE_AN_ID;
+                        extra = StringUtil.VALUE_SHOULD_BE_AN_ID;
                     }
                     break;
                 case XmlAttrName.View.NEXT_FOCUS_FORWARD:
@@ -372,7 +397,7 @@ public class AnkoConverter {
                         value = AttributeUtil.getId(attributeValue);
                     } else {
                         isNote = true;
-                        extra = AttributeUtil.VALUE_SHOULD_BE_AN_ID;
+                        extra = StringUtil.VALUE_SHOULD_BE_AN_ID;
                     }
                     break;
                 case XmlAttrName.View.NEXT_FOCUS_LEFT:
@@ -381,7 +406,7 @@ public class AnkoConverter {
                         value = AttributeUtil.getId(attributeValue);
                     } else {
                         isNote = true;
-                        extra = AttributeUtil.VALUE_SHOULD_BE_AN_ID;
+                        extra = StringUtil.VALUE_SHOULD_BE_AN_ID;
                     }
                     break;
                 case XmlAttrName.View.NEXT_FOCUS_RIGHT:
@@ -390,7 +415,7 @@ public class AnkoConverter {
                         value = AttributeUtil.getId(attributeValue);
                     } else {
                         isNote = true;
-                        extra = AttributeUtil.VALUE_SHOULD_BE_AN_ID;
+                        extra = StringUtil.VALUE_SHOULD_BE_AN_ID;
                     }
                     break;
                 case XmlAttrName.View.NEXT_FOCUS_UP:
@@ -399,20 +424,20 @@ public class AnkoConverter {
                         value = AttributeUtil.getId(attributeValue);
                     } else {
                         isNote = true;
-                        extra = AttributeUtil.VALUE_SHOULD_BE_AN_ID;
+                        extra = StringUtil.VALUE_SHOULD_BE_AN_ID;
                     }
                     break;
                 case XmlAttrName.View.ON_CLICK:
                     isFunction = true;
-                    name = "setOnClickListener";
+                    name = ViewAttrName.View.ON_CLICK;
                     break;
                 case XmlAttrName.View.OUTLINE_PROVIDER:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.OUTLINE_PROVIDER;
+                    value = AttributeUtil.getOutlineProvider(attributeValue);
                     break;
                 case XmlAttrName.View.OVER_SCROLL_MODE:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.OVER_SCROLL_MODE;
+                    value = AttributeUtil.getOverScrollMode(attributeValue);
                     break;
                 case XmlAttrName.View.PADDING:
                     name = ViewAttrName.View.PADDING;
@@ -423,8 +448,9 @@ public class AnkoConverter {
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.View.PADDING_END:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.PADDING_END;
+                    value = "paddingStart, paddingTop, " + AttributeUtil.getDimension(attributeValue, false) + ", paddingBottom";
+                    isEqualsOperator = false;
                     break;
                 case XmlAttrName.View.PADDING_HORIZONTAL:
                     name = ViewAttrName.View.PADDING_HORIZONTAL;
@@ -439,8 +465,9 @@ public class AnkoConverter {
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.View.PADDING_START:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.PADDING_START;
+                    value = AttributeUtil.getDimension(attributeValue, false) + ", paddingTop, paddingEnd, paddingBottom";
+                    isEqualsOperator = false;
                     break;
                 case XmlAttrName.View.PADDING_TOP:
                     name = ViewAttrName.View.PADDING_TOP;
@@ -451,12 +478,25 @@ public class AnkoConverter {
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.View.POINTER_ICON:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.POINTER_ICON;
+                    value = "PointerIcon.getSystemIcon(context, " + AttributeUtil.getPointerIconType(attributeValue) + ")";
                     break;
                 case XmlAttrName.View.REQUIRES_FADING_EDGE:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    if (attributeValue.contains(";")) {
+                        String[] attrArr = attributeValue.split(";");
+                        switch (attrArr[0]) {
+                            case XmlAttrValue.Orientation.VERTICAL:
+                                name = ViewAttrName.View.REQUIRES_FADING_EDGE_VERTICAL;
+                                break;
+                            case XmlAttrValue.Orientation.HORIZONTAL:
+                                name = ViewAttrName.View.REQUIRES_FADING_EDGE_HORIZONTAL;
+                                break;
+                        }
+                        value = attrArr[1];
+                    } else {
+                        writeOrientationEnableAttribute(className, attributeName, attributeValue, deep);
+                        return;
+                    }
                     break;
                 case XmlAttrName.View.ROTATION:
                     name = ViewAttrName.View.ROTATION;
@@ -483,99 +523,105 @@ public class AnkoConverter {
                     value = AttributeUtil.getFloat(attributeValue);
                     break;
                 case XmlAttrName.View.SCROLL_INDICATORS:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    if (attributeValue.equals(XmlAttrValue.NONE)) {
+                        isNote = true;
+                        extra = StringUtil.NOTHING_TO_SET;
+                    } else {
+                        name = ViewAttrName.View.SCROLL_INDICATORS;
+                        value = AttributeUtil.getMultiScrollIndicator(attributeValue);
+                    }
                     break;
                 case XmlAttrName.View.SCROLL_X:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.SCROLL_X;
+                    value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.View.SCROLL_Y:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.SCROLL_Y;
+                    value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.View.SCROLLBAR_ALWAYS_DRAW_HORIZONTAL_TRACK:
-                    isNote = true;
-                    extra = AttributeUtil.CAN_NOT_SET_BY_CODE;
-                    break;
                 case XmlAttrName.View.SCROLLBAR_ALWAYS_DRAW_VERTICAL_TRACK:
                     isNote = true;
-                    extra = AttributeUtil.CAN_NOT_SET_BY_CODE;
+                    extra = StringUtil.CAN_NOT_SET_BY_CODE;
                     break;
                 case XmlAttrName.View.SCROLLBAR_DEFAULT_DELAY_BEFORE_FADE:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.SCROLLBAR_DEFAULT_DELAY_BEFORE_FADE;
+                    value = AttributeUtil.getInteger(attributeValue, false);
                     break;
                 case XmlAttrName.View.SCROLLBAR_FADE_DURATION:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.SCROLLBAR_FADE_DURATION;
+                    value = AttributeUtil.getInteger(attributeValue, false);
                     break;
                 case XmlAttrName.View.SCROLLBAR_SIZE:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.SCROLLBAR_SIZE;
+                    value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.View.SCROLLBAR_STYLE:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.SCROLLBAR_STYLE;
+                    value = AttributeUtil.getScrollBarStyle(attributeValue);
                     break;
                 case XmlAttrName.View.SCROLLBAR_THUMB_HORIZONTAL:
-                    isNote = true;
-                    extra = AttributeUtil.CAN_NOT_SET_BY_CODE;
-                    break;
                 case XmlAttrName.View.SCROLLBAR_THUMB_VERTICAL:
-                    isNote = true;
-                    extra = AttributeUtil.CAN_NOT_SET_BY_CODE;
-                    break;
                 case XmlAttrName.View.SCROLLBAR_TRACK_HORIZONTAL:
-                    isNote = true;
-                    extra = AttributeUtil.CAN_NOT_SET_BY_CODE;
-                    break;
                 case XmlAttrName.View.SCROLLBAR_TRACK_VERTICAL:
                     isNote = true;
-                    extra = AttributeUtil.CAN_NOT_SET_BY_CODE;
+                    extra = StringUtil.CAN_NOT_SET_BY_CODE;
                     break;
                 case XmlAttrName.View.SCROLLBARS:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    if (attributeValue.contains(";")) {
+                        String[] attrArr = attributeValue.split(";");
+                        switch (attrArr[0]) {
+                            case XmlAttrValue.Orientation.VERTICAL:
+                                name = ViewAttrName.View.SCROLLBARS_VERTICAL;
+                                break;
+                            case XmlAttrValue.Orientation.HORIZONTAL:
+                                name = ViewAttrName.View.SCROLLBARS_HORIZONTAL;
+                                break;
+                        }
+                        value = attrArr[1];
+                    } else {
+                        writeOrientationEnableAttribute(className, attributeName, attributeValue, deep);
+                        return;
+                    }
                     break;
                 case XmlAttrName.View.SOUND_EFFECTS_ENABLED:
                     name = ViewAttrName.View.SOUND_EFFECTS_ENABLED;
                     value = AttributeUtil.getBoolean(attributeValue);
                     break;
                 case XmlAttrName.View.STATE_LIST_ANIMATOR:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.STATE_LIST_ANIMATOR;
+                    value = AttributeUtil.getStateListAnimator(attributeValue);
                     break;
                 case XmlAttrName.View.TAG:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.TAG;
+                    value = AttributeUtil.getString(attributeValue);
                     break;
                 case XmlAttrName.View.TEXT_ALIGNMENT:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.TEXT_ALIGNMENT;
+                    value = AttributeUtil.getTextAlignment(attributeValue);
                     break;
                 case XmlAttrName.View.TEXT_DIRECTION:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.TEXT_DIRECTION;
+                    value = AttributeUtil.getTextDirection(attributeValue);
                     break;
                 /*case XmlAttrName.THEME:
-                    //Not Here
+                    //Not be Here
                     break;*/
                 case XmlAttrName.View.TOOLTIP_TEXT:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.TOOLTIP_TEXT;
+                    value = AttributeUtil.getString(attributeValue);
                     break;
                 case XmlAttrName.View.TRANSFORM_PIVOT_X:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.TRANSFORM_PIVOT_X;
+                    value = AttributeUtil.getDimension(attributeValue, true);
                     break;
                 case XmlAttrName.View.TRANSFORM_PIVOT_Y:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.TRANSFORM_PIVOT_Y;
+                    value = AttributeUtil.getDimension(attributeValue, true);
                     break;
                 case XmlAttrName.View.TRANSITION_NAME:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.TRANSITION_NAME;
+                    value = AttributeUtil.getString(attributeValue);
                     break;
                 case XmlAttrName.View.TRANSLATION_X:
                     name = ViewAttrName.View.TRANSLATION_X;
@@ -590,12 +636,12 @@ public class AnkoConverter {
                     value = AttributeUtil.getDimension(attributeValue, true);
                     break;
                 case XmlAttrName.View.VERTICAL_SCROLLBAR_POSITION:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.VERTICAL_SCROLLBAR_POSITION;
+                    value = AttributeUtil.getVerticalScrollbarPosition(attributeValue);
                     break;
                 case XmlAttrName.View.VISIBILITY:
-                    // TODO: 2018/8/30
-                    isNotSupportAttribute = true;
+                    name = ViewAttrName.View.VISIBILITY;
+                    value = AttributeUtil.getVisibility(attributeValue);
                     break;
                 /**
                  * View Attrs End
@@ -863,7 +909,7 @@ public class AnkoConverter {
             value = AttributeUtil.getTheme(attributeValue);
         } else if (attributeName.contains(XmlAttrName.LAYOUT_SCROLL_FLAGS)) {
             name = ViewAttrName.SCROLL_FLAGS;
-            value = AttributeUtil.getMultiScrollFlags(attributeValue);
+            value = AttributeUtil.getMultiScrollFlag(attributeValue);
         } else if (attributeName.contains(XmlAttrName.LAYOUT_BEHAVIOR)) {
             name = ViewAttrName.BEHAVIOR;
             if (attributeValue.contains("@")) {
@@ -908,7 +954,7 @@ public class AnkoConverter {
         int otherCount = attributes.get(0).size();
         writeViewStart(root.getName(), themeAttr, deep, otherCount == 0 && root.elements().size() == 0);
         for (UAttribute attribute : attributes.get(0)) {
-            writeAttribute(root.getName(), attribute.getName(), attribute.getValue(), deep + 1);
+            writeAttribute(root.getName(), attribute.getName(), attribute.getValue(), deep + 1, false);
         }
         for (Element element : root.elements()) {
             writeView(element, deep + 1);

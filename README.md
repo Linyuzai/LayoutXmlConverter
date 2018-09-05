@@ -1,6 +1,6 @@
 # LayoutXmlConverter
 Convert Android layout xml to kotlin anko code<br>
-Version 1.3.0<br>
+Version 1.3.1<br>
 
 ![plugin1.png](http://upload-images.jianshu.io/upload_images/2113387-fa20d3459e03f08f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 

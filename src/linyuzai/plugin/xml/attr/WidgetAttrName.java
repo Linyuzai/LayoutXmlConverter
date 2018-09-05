@@ -105,6 +105,7 @@ public final class WidgetAttrName {
         public static final String TRANSLATION_Z = "translationZ";
         public static final String VERTICAL_SCROLLBAR_POSITION = "verticalScrollbarPosition";
         public static final String VISIBILITY = "visibility";
+        public static final String GRAVITY = "gravity";
     }
 
     public static final class ViewGroup {

@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>linyuzai.plugin.xml</id>
     <name>Kotlin Anko Converter For Xml</name>
-    <version>1.3.0</version>
+    <version>1.3.1</version>
     <vendor email="120718461@qq.com" url="https://github.com/Linyuzai/LayoutXmlConverter">Personal</vendor>
 
     <description><![CDATA[
@@ -13,7 +13,7 @@
     ]]></description>
 
     <change-notes><![CDATA[
-      Support all Attributes of class View.<br>
+      Fix ImportantForAutofill Attr to MultiImportantForAutofill
       To Do List:<br>
       ViewGroup.<br>
       FrameLayout.<br>

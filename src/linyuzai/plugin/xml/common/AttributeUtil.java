@@ -54,6 +54,17 @@ public class AttributeUtil {
         return count;
     }
 
+    public static int countOfElementAttributes(Element root) {
+        int count = 0;
+        if (root.elements() != null && root.elements().size() > 0) {
+            for (Element element : root.elements()) {
+                count += (element.attributeCount() + countOfElementAttributes(element));
+            }
+            return count;
+        }
+        return count;
+    }
+
     public static List<List<UAttribute>> splitAttributes(List<Attribute> attributes) {
         List<UAttribute> paramsAttr = new ArrayList<>();
         List<UAttribute> layoutAttr = new ArrayList<>();
@@ -181,13 +192,15 @@ public class AttributeUtil {
 
     @NotNull
     public static String getWidthOrHeight(String value) {
-        if (value.equals(XmlAttrValue.LayoutParams.MATCH_PARENT))
-            return WidgetAttrValue.LayoutParams.MATCH_PARENT;
-        else if (value.equals(XmlAttrValue.LayoutParams.WRAP_CONTENT))
-            return WidgetAttrValue.LayoutParams.WRAP_CONTENT;
-        else
-            return getDimension(value, false);
-
+        switch (value) {
+            case XmlAttrValue.LayoutParams.MATCH_PARENT:
+            case XmlAttrValue.LayoutParams.FILL_PARENT:
+                return WidgetAttrValue.LayoutParams.MATCH_PARENT;
+            case XmlAttrValue.LayoutParams.WRAP_CONTENT:
+                return WidgetAttrValue.LayoutParams.WRAP_CONTENT;
+            default:
+                return getDimension(value, false);
+        }
     }
 
     @NotNull
@@ -688,6 +701,7 @@ public class AttributeUtil {
         return String.join(", ", viewAutofillHintList);
     }
 
+    @Contract(pure = true)
     public static String getAutofillHint(String xmlAutofillHint) {
         switch (xmlAutofillHint) {
             case XmlAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_DATE:
@@ -795,8 +809,16 @@ public class AttributeUtil {
         }
     }
 
-    public static String getImportantForAutofill(String xmlImportantForAutofill) {
+    public static String getMultiImportantForAutofill(String xmlMultiImportantForAutofill) {
         ImportUtil.support(ImportUtil.VIEW);
+        String[] xmlImportantForAutofillArray = xmlMultiImportantForAutofill.replaceAll("\\s*", "").split("\\|");
+        List<String> viewImportantForAutofillList = new ArrayList<>();
+        Arrays.stream(xmlImportantForAutofillArray).forEach(it -> viewImportantForAutofillList.add(getImportantForAutofill(it)));
+        return String.join(" or ", viewImportantForAutofillList);
+    }
+
+    @Contract(pure = true)
+    public static String getImportantForAutofill(String xmlImportantForAutofill) {
         switch (xmlImportantForAutofill) {
             case XmlAttrValue.ImportantForAutofill.AUTO:
                 return WidgetAttrValue.ImportantForAutofill.AUTO;

@@ -330,7 +330,7 @@ public class AnkoConverter {
                     break;
                 case XmlAttrName.View.IMPORTANT_FOR_AUTOFILL:
                     name = WidgetAttrName.View.IMPORTANT_FOR_AUTOFILL;
-                    value = AttributeUtil.getImportantForAutofill(attributeValue);
+                    value = AttributeUtil.getMultiImportantForAutofill(attributeValue);
                     break;
                 case XmlAttrName.View.IS_SCROLL_CONTAINER:
                     name = WidgetAttrName.View.IS_SCROLL_CONTAINER;
@@ -668,7 +668,7 @@ public class AnkoConverter {
                     isEqualsOperator = false;
                     break;
                 case XmlAttrName.View.GRAVITY:
-                    name = WidgetAttrName.ViewGroup.LayoutParams.GRAVITY;
+                    name = WidgetAttrName.View.GRAVITY;
                     value = AttributeUtil.getMultiGravity(attributeValue);
                     break;
                 case XmlAttrName.MAX_LINES:

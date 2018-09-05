@@ -6,6 +6,7 @@ public final class XmlAttrValue {
     public static final String FALSE = "false";
 
     public static final class LayoutParams {
+        public static final String FILL_PARENT = "fill_parent";
         public static final String MATCH_PARENT = "match_parent";
         public static final String WRAP_CONTENT = "wrap_content";
     }

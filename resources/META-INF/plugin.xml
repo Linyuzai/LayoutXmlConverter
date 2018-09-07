@@ -13,9 +13,14 @@
     ]]></description>
 
     <change-notes><![CDATA[
-      Support all Attributes of class ViewGroup.
-      Support all Attributes of class FrameLayout.
-      Support all Attributes of class LinearLayout.
+      Current Version:<br>
+      Support all Attributes of class LinearLayout.<br>
+
+      Previous Version:<br>
+      Support all Attributes of class View.<br>
+      Support all Attributes of class ViewGroup.<br>
+      Support all Attributes of class FrameLayout.<br>
+
       To Do List:<br>
       RelativeLayout.<br>
       TextView.<br>

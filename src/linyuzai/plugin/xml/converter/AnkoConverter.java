@@ -62,7 +62,7 @@ public class AnkoConverter {
         noteBuilder.append("/**\n");
         noteBuilder.append(" * Generate with Plugin\n");
         noteBuilder.append(" * @plugin Kotlin Anko Converter For Xml\n");
-        noteBuilder.append(" * @version 1.3.3\n");
+        noteBuilder.append(" * @version 1.3.4\n");
         noteBuilder.append(" */\n");
     }
 
@@ -643,6 +643,10 @@ public class AnkoConverter {
                     name = WidgetAttrName.View.VISIBILITY;
                     value = AttributeUtil.getVisibility(attributeValue);
                     break;
+                case XmlAttrName.View.GRAVITY:
+                    name = WidgetAttrName.View.GRAVITY;
+                    value = AttributeUtil.getMultiGravity(attributeValue);
+                    break;
                 /**
                  * View Attrs End
                  */
@@ -703,72 +707,6 @@ public class AnkoConverter {
                     name = WidgetAttrName.ViewGroup.TRANSITION_GROUP;
                     value = AttributeUtil.getBoolean(attributeValue);
                     break;
-                /**
-                 * ViewGroup Attrs End
-                 */
-                /**
-                 * FrameLayout Attrs Start
-                 */
-                case XmlAttrName.FrameLayout.MEASURE_ALL_CHILDREN:
-                    name = WidgetAttrName.FrameLayout.MEASURE_ALL_CHILDREN;
-                    value = AttributeUtil.getBoolean(attributeValue);
-                    break;
-                /**
-                 * FrameLayout Attrs End
-                 */
-                case XmlAttrName.TEXT:
-                    name = WidgetAttrName.TEXT;
-                    value = AttributeUtil.getString(attributeValue);
-                    break;
-                case XmlAttrName.TEXT_SIZE:
-                    name = WidgetAttrName.TEXT_SIZE;
-                    value = AttributeUtil.getDimension(attributeValue, true);
-                    break;
-                case XmlAttrName.TEXT_COLOR:
-                    name = WidgetAttrName.TEXT_COLOR;
-                    value = AttributeUtil.getColor(attributeValue);
-                    break;
-                case XmlAttrName.TEXT_COLOR_HINT:
-                    name = WidgetAttrName.HINT_TEXT_COLOR;
-                    value = AttributeUtil.getColor(attributeValue);
-                    break;
-                case XmlAttrName.TEXT_STYLE:
-                    name = WidgetAttrName.TEXT_STYLE;
-                    value = "typeface, " + AttributeUtil.getTextStyle(attributeValue);
-                    isEqualsOperator = false;
-                    break;
-                case XmlAttrName.View.GRAVITY:
-                    name = WidgetAttrName.View.GRAVITY;
-                    value = AttributeUtil.getMultiGravity(attributeValue);
-                    break;
-                case XmlAttrName.MAX_LINES:
-                    name = WidgetAttrName.MAX_LINES;
-                    value = AttributeUtil.getInteger(attributeValue, false);
-                    break;
-                case XmlAttrName.ORIENTATION:
-                    name = WidgetAttrName.ORIENTATION;
-                    value = AttributeUtil.getOrientation(attributeValue);
-                    break;
-                case XmlAttrName.SRC:
-                    name = WidgetAttrName.IMAGE_RESOURCE;
-                    value = AttributeUtil.getImage(attributeValue);
-                    break;
-                case XmlAttrName.SCALE_TYPE:
-                    name = WidgetAttrName.SCALE_TYPE;
-                    value = AttributeUtil.getScaleType(attributeValue);
-                    break;
-                case XmlAttrName.SINGLE_LINE:
-                    name = WidgetAttrName.SINGLE_LINE;
-                    value = AttributeUtil.getBoolean(attributeValue);
-                    break;
-                case XmlAttrName.HINT:
-                    name = WidgetAttrName.HINT;
-                    value = AttributeUtil.getString(attributeValue);
-                    break;
-                case XmlAttrName.INPUT_TYPE:
-                    name = WidgetAttrName.INPUT_TYPE;
-                    value = AttributeUtil.getInputType(attributeValue);
-                    break;
                 case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN:
                     name = WidgetAttrName.ViewGroup.LayoutParams.MARGIN;
                     value = AttributeUtil.getDimension(attributeValue, false);
@@ -809,9 +747,105 @@ public class AnkoConverter {
                     name = WidgetAttrName.ViewGroup.LayoutParams.GRAVITY;
                     value = AttributeUtil.getMultiGravity(attributeValue);
                     break;
-                case XmlAttrName.LAYOUT_WEIGHT:
-                    name = WidgetAttrName.WEIGHT;
+                /**
+                 * ViewGroup Attrs End
+                 */
+                /**
+                 * FrameLayout Attrs Start
+                 */
+                case XmlAttrName.FrameLayout.MEASURE_ALL_CHILDREN:
+                    name = WidgetAttrName.FrameLayout.MEASURE_ALL_CHILDREN;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                /**
+                 * FrameLayout Attrs End
+                 */
+                /**
+                 * LinearLayout Attrs Start
+                 */
+                case XmlAttrName.LinearLayout.ORIENTATION:
+                    name = WidgetAttrName.LinearLayout.ORIENTATION;
+                    value = AttributeUtil.getOrientation(attributeValue);
+                    break;
+                case XmlAttrName.LinearLayout.BASELINE_ALIGNED:
+                    name = WidgetAttrName.LinearLayout.BASELINE_ALIGNED;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.LinearLayout.BASELINE_ALIGNED_CHILD_INDEX:
+                    name = WidgetAttrName.LinearLayout.BASELINE_ALIGNED_CHILD_INDEX;
+                    value = AttributeUtil.getInteger(attributeValue, false);
+                    break;
+                case XmlAttrName.LinearLayout.DIVIDER:
+                    name = WidgetAttrName.LinearLayout.DIVIDER;
+                    value = AttributeUtil.getDrawable(attributeValue);
+                    break;
+                case XmlAttrName.LinearLayout.DIVIDER_PADDING:
+                    name = WidgetAttrName.LinearLayout.DIVIDER_PADDING;
+                    value = AttributeUtil.getDimension(attributeValue, false);
+                    break;
+                case XmlAttrName.LinearLayout.MEASURE_WITH_LARGEST_CHILD:
+                    name = WidgetAttrName.LinearLayout.MEASURE_WITH_LARGEST_CHILD;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.LinearLayout.SHOW_DIVIDERS:
+                    name = WidgetAttrName.LinearLayout.SHOW_DIVIDERS;
+                    value = AttributeUtil.getMultiShowDivider(attributeValue);
+                    break;
+                case XmlAttrName.LinearLayout.WEIGHT_SUM:
+                    name = WidgetAttrName.LinearLayout.WEIGHT_SUM;
+                    value = AttributeUtil.getFloat(attributeValue);
+                    break;
+                case XmlAttrName.LinearLayout.LayoutParams.LAYOUT_WEIGHT:
+                    name = WidgetAttrName.LinearLayout.LayoutParams.WEIGHT;
                     value = AttributeUtil.getWeight(attributeValue);
+                    break;
+                /**
+                 * LinearLayout Attrs End
+                 */
+                case XmlAttrName.TEXT:
+                    name = WidgetAttrName.TEXT;
+                    value = AttributeUtil.getString(attributeValue);
+                    break;
+                case XmlAttrName.TEXT_SIZE:
+                    name = WidgetAttrName.TEXT_SIZE;
+                    value = AttributeUtil.getDimension(attributeValue, true);
+                    break;
+                case XmlAttrName.TEXT_COLOR:
+                    name = WidgetAttrName.TEXT_COLOR;
+                    value = AttributeUtil.getColor(attributeValue);
+                    break;
+                case XmlAttrName.TEXT_COLOR_HINT:
+                    name = WidgetAttrName.HINT_TEXT_COLOR;
+                    value = AttributeUtil.getColor(attributeValue);
+                    break;
+                case XmlAttrName.TEXT_STYLE:
+                    name = WidgetAttrName.TEXT_STYLE;
+                    value = "typeface, " + AttributeUtil.getTextStyle(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.MAX_LINES:
+                    name = WidgetAttrName.MAX_LINES;
+                    value = AttributeUtil.getInteger(attributeValue, false);
+                    break;
+                case XmlAttrName.SRC:
+                    name = WidgetAttrName.IMAGE_RESOURCE;
+                    value = AttributeUtil.getImage(attributeValue);
+                    break;
+                case XmlAttrName.SCALE_TYPE:
+                    name = WidgetAttrName.SCALE_TYPE;
+                    value = AttributeUtil.getScaleType(attributeValue);
+                    break;
+                case XmlAttrName.SINGLE_LINE:
+                    name = WidgetAttrName.SINGLE_LINE;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.HINT:
+                    name = WidgetAttrName.HINT;
+                    value = AttributeUtil.getString(attributeValue);
+                    break;
+                case XmlAttrName.INPUT_TYPE:
+                    name = WidgetAttrName.INPUT_TYPE;
+                    value = AttributeUtil.getInputType(attributeValue);
                     break;
                 case XmlAttrName.LAYOUT_ABOVE:
                     name = WidgetAttrName.ABOVE;

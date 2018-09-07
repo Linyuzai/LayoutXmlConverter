@@ -174,9 +174,18 @@ public final class WidgetAttrValue {
         }
     }
 
-    public static final class Orientation {
-        public static final String VERTICAL = "LinearLayout.VERTICAL";
-        public static final String HORIZONTAL = "LinearLayout.HORIZONTAL";
+    public static final class LinearLayout {
+        public static final class Orientation {
+            public static final String VERTICAL = "LinearLayout.VERTICAL";
+            public static final String HORIZONTAL = "LinearLayout.HORIZONTAL";
+        }
+
+        public static final class ShowDivider {
+            public static final String NONE = "LinearLayout.SHOW_DIVIDER_NONE";
+            public static final String BEGINNING = "LinearLayout.SHOW_DIVIDER_BEGINNING";
+            public static final String MIDDLE = "LinearLayout.SHOW_DIVIDER_MIDDLE";
+            public static final String END = "LinearLayout.SHOW_DIVIDER_END";
+        }
     }
 
     public static final class Gravity {

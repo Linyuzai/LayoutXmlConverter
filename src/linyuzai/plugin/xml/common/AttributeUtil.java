@@ -22,7 +22,7 @@ public class AttributeUtil {
     public static boolean isLayoutAttr(String xmlName) {
         return xmlName.startsWith(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN) ||
                 xmlName.equals(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_GRAVITY) ||
-                xmlName.equals(XmlAttrName.LAYOUT_WEIGHT) ||
+                xmlName.equals(XmlAttrName.LinearLayout.LayoutParams.LAYOUT_WEIGHT) ||
                 xmlName.equals(XmlAttrName.LAYOUT_ALIGN_PARENT_TOP) ||
                 xmlName.equals(XmlAttrName.LAYOUT_ALIGN_PARENT_BOTTOM) ||
                 xmlName.equals(XmlAttrName.LAYOUT_ALIGN_PARENT_LEFT) ||
@@ -456,13 +456,13 @@ public class AttributeUtil {
     public static String getOrientation(String xmlOrientation) {
         ImportUtil.supportMulti(ImportUtil.WIDGET);
         switch (xmlOrientation) {
-            case XmlAttrValue.Orientation.VERTICAL:
-                return WidgetAttrValue.Orientation.VERTICAL;
-            case XmlAttrValue.Orientation.HORIZONTAL:
-                return WidgetAttrValue.Orientation.HORIZONTAL;
+            case XmlAttrValue.LinearLayout.Orientation.VERTICAL:
+                return WidgetAttrValue.LinearLayout.Orientation.VERTICAL;
+            case XmlAttrValue.LinearLayout.Orientation.HORIZONTAL:
+                return WidgetAttrValue.LinearLayout.Orientation.HORIZONTAL;
             default:
                 if (TextUtils.isEmpty(xmlOrientation))
-                    return XmlAttrValue.Orientation.VERTICAL;
+                    return XmlAttrValue.LinearLayout.Orientation.VERTICAL;
                 else
                     return xmlOrientation + StringUtil.VALUE_NOT_SUPPORT;
         }
@@ -1103,6 +1103,7 @@ public class AttributeUtil {
 
     @Contract(pure = true)
     public static String getLayoutMode(String xmlLayoutMode) {
+        ImportUtil.supportMulti(ImportUtil.VIEW);
         switch (xmlLayoutMode) {
             case XmlAttrValue.ViewGroup.LayoutMode.CLIP_BOUNDS:
                 return WidgetAttrValue.ViewGroup.LayoutMode.CLIP_BOUNDS;
@@ -1115,6 +1116,7 @@ public class AttributeUtil {
 
     @Contract(pure = true)
     public static String getPersistentDrawingCache(String xmlPersistentDrawingCache) {
+        ImportUtil.supportMulti(ImportUtil.VIEW);
         switch (xmlPersistentDrawingCache) {
             case XmlAttrValue.ViewGroup.PersistentDrawingCache.ALL_CACHES:
                 return WidgetAttrValue.ViewGroup.PersistentDrawingCache.ALL_CACHES;
@@ -1126,6 +1128,30 @@ public class AttributeUtil {
                 return WidgetAttrValue.ViewGroup.PersistentDrawingCache.SCROLLING_CACHE;
             default:
                 return xmlPersistentDrawingCache + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    public static String getMultiShowDivider(String xmlMultiShowDivider) {
+        ImportUtil.supportMulti(ImportUtil.VIEW);
+        String[] xmlShowDividerArray = xmlMultiShowDivider.replaceAll("\\s*", "").split("\\|");
+        List<String> viewShowDividerList = new ArrayList<>();
+        Arrays.stream(xmlShowDividerArray).forEach(it -> viewShowDividerList.add(getShowDivider(it)));
+        return String.join(" or ", viewShowDividerList);
+    }
+
+    @Contract(pure = true)
+    public static String getShowDivider(String xmlShowDivider) {
+        switch (xmlShowDivider) {
+            case XmlAttrValue.LinearLayout.ShowDivider.BEGINNING:
+                return WidgetAttrValue.LinearLayout.ShowDivider.BEGINNING;
+            case XmlAttrValue.LinearLayout.ShowDivider.END:
+                return WidgetAttrValue.LinearLayout.ShowDivider.END;
+            case XmlAttrValue.LinearLayout.ShowDivider.MIDDLE:
+                return WidgetAttrValue.LinearLayout.ShowDivider.MIDDLE;
+            case XmlAttrValue.LinearLayout.ShowDivider.NONE:
+                return WidgetAttrValue.LinearLayout.ShowDivider.NONE;
+            default:
+                return xmlShowDivider + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 }

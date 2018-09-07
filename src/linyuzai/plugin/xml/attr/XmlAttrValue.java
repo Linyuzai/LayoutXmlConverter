@@ -181,6 +181,20 @@ public final class XmlAttrValue {
         }
     }
 
+    public static final class LinearLayout {
+        public static final class Orientation {
+            public static final String VERTICAL = "vertical";
+            public static final String HORIZONTAL = "horizontal";
+        }
+
+        public static final class ShowDivider {
+            public static final String NONE = "none";
+            public static final String BEGINNING = "beginning";
+            public static final String MIDDLE = "middle";
+            public static final String END = "end";
+        }
+    }
+
     public static final class Orientation {
         public static final String VERTICAL = "vertical";
         public static final String HORIZONTAL = "horizontal";

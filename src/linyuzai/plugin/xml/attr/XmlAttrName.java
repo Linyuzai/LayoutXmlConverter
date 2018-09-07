@@ -5,10 +5,6 @@ public final class XmlAttrName {
     //AppBarLayout
     public static final String LAYOUT_SCROLL_FLAGS = ":layout_scrollFlags";
 
-    //linear layout
-    public static final String ORIENTATION = "android:orientation";
-    public static final String LAYOUT_WEIGHT = "android:layout_weight";
-
     //relative layout
     public static final String LAYOUT_ABOVE = "android:layout_above";
     public static final String LAYOUT_BELOW = "android:layout_below";
@@ -163,6 +159,21 @@ public final class XmlAttrName {
 
     public static final class FrameLayout {
         public static final String MEASURE_ALL_CHILDREN = "android:measureAllChildren";
+    }
+
+    public static final class LinearLayout {
+        public static final String ORIENTATION = "android:orientation";
+        public static final String BASELINE_ALIGNED = "android:baselineAligned";
+        public static final String BASELINE_ALIGNED_CHILD_INDEX = "android:baselineAlignedChildIndex";
+        public static final String DIVIDER = "android:divider";
+        public static final String DIVIDER_PADDING = "android:dividerPadding";
+        public static final String MEASURE_WITH_LARGEST_CHILD = "android:measureWithLargestChild";
+        public static final String SHOW_DIVIDERS = "android:showDividers";
+        public static final String WEIGHT_SUM = "android:weightSum";
+
+        public static final class LayoutParams {
+            public static final String LAYOUT_WEIGHT = "android:layout_weight";
+        }
     }
 
     //toolbar

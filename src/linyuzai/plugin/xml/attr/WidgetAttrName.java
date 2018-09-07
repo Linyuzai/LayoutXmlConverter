@@ -143,8 +143,20 @@ public final class WidgetAttrName {
         public static final String MEASURE_ALL_CHILDREN = "measureAllChildren";
     }
 
-    public static final String ORIENTATION = "orientation";
-    public static final String WEIGHT = "weight";
+    public static final class LinearLayout {
+        public static final String ORIENTATION = "orientation";
+        public static final String BASELINE_ALIGNED = "isBaselineAligned";
+        public static final String BASELINE_ALIGNED_CHILD_INDEX = "baselineAlignedChildIndex";
+        public static final String DIVIDER = "dividerDrawable";
+        public static final String DIVIDER_PADDING = "dividerPadding";
+        public static final String MEASURE_WITH_LARGEST_CHILD = "isMeasureWithLargestChildEnabled";
+        public static final String SHOW_DIVIDERS = "showDividers";
+        public static final String WEIGHT_SUM = "weightSum";
+
+        public static final class LayoutParams {
+            public static final String WEIGHT = "weight";
+        }
+    }
 
     public static final String ABOVE = "above";
     public static final String BELOW = "below";

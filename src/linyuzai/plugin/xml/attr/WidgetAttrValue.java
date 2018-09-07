@@ -4,14 +4,6 @@ public final class WidgetAttrValue {
     public static final String EMPTY = "";
 
     public static final class View {
-        public static final class ScrollFlag {
-            public static final String SCROLL = "AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL";
-            public static final String EXIT_UNTIL_COLLAPSED = "AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED";
-            public static final String ENTER_ALWAYS = "AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS";
-            public static final String ENTER_ALWAYS_COLLAPSED = "AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED";
-            public static final String SNAP = "AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP";
-        }
-
         public static final class AccessibilityLiveRegion {
             public static final String NONE = "View.ACCESSIBILITY_LIVE_REGION_NONE";
             public static final String ASSERTIVE = "View.ACCESSIBILITY_LIVE_REGION_ASSERTIVE";
@@ -278,4 +270,11 @@ public final class WidgetAttrValue {
         public static final String OVERLAY = "PorterDuff.Mode.OVERLAY";
     }
 
+    public static final class ScrollFlag {
+        public static final String SCROLL = "AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL";
+        public static final String EXIT_UNTIL_COLLAPSED = "AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED";
+        public static final String ENTER_ALWAYS = "AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS";
+        public static final String ENTER_ALWAYS_COLLAPSED = "AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED";
+        public static final String SNAP = "AppBarLayout.LayoutParams.SCROLL_FLAG_SNAP";
+    }
 }

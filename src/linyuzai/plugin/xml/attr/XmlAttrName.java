@@ -161,6 +161,10 @@ public final class XmlAttrName {
         }
     }
 
+    public static final class FrameLayout {
+        public static final String MEASURE_ALL_CHILDREN = "android:measureAllChildren";
+    }
+
     //toolbar
     public static final String POPUP_THEME = ":popupTheme";
 

@@ -6,13 +6,6 @@ public final class XmlAttrValue {
     public static final String FALSE = "false";
 
     public static final class View {
-        public static final class ScrollFlag {
-            public static final String SCROLL = "scroll";
-            public static final String EXIT_UNTIL_COLLAPSED = "exitUntilCollapsed";
-            public static final String ENTER_ALWAYS = "enterAlways";
-            public static final String ENTER_ALWAYS_COLLAPSED = "enterAlwaysCollapsed";
-            public static final String SNAP = "snap";
-        }
 
         public static final class AccessibilityLiveRegion {
             public static final String NONE = "none";
@@ -283,4 +276,11 @@ public final class XmlAttrValue {
         public static final String OVERLAY = "overlay";
     }
 
+    public static final class ScrollFlag {
+        public static final String SCROLL = "scroll";
+        public static final String EXIT_UNTIL_COLLAPSED = "exitUntilCollapsed";
+        public static final String ENTER_ALWAYS = "enterAlways";
+        public static final String ENTER_ALWAYS_COLLAPSED = "enterAlwaysCollapsed";
+        public static final String SNAP = "snap";
+    }
 }

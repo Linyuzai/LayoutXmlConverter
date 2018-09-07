@@ -122,10 +122,11 @@ public final class WidgetAttrName {
         public static final String SPLIT_MOTION_EVENTS = "isMotionEventSplittingEnabled";
         public static final String TOUCHSCREEN_BLOCKS_FOCUS = "touchscreenBlocksFocus";
         public static final String TRANSITION_GROUP = "isTransitionGroup";
+
         public static final class LayoutParams {
             public static final String GRAVITY = "gravity";
-            public static final String WIDTH = "width";
-            public static final String HEIGHT = "height";
+            public static final String WIDTH = "";
+            public static final String HEIGHT = "";
             public static final String MARGIN = "margin";
             public static final String MARGIN_TOP = "topMargin";
             public static final String MARGIN_RIGHT = "rightMargin";
@@ -136,6 +137,10 @@ public final class WidgetAttrName {
             public static final String MARGIN_VERTICAL = "verticalMargin";
             public static final String MARGIN_HORIZONTAL = "horizontalMargin";
         }
+    }
+
+    public static final class FrameLayout {
+        public static final String MEASURE_ALL_CHILDREN = "measureAllChildren";
     }
 
     public static final String ORIENTATION = "orientation";

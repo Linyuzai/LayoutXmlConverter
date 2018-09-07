@@ -650,19 +650,19 @@ public class AttributeUtil {
     @NotNull
     public static String getScrollFlag(String xmlScrollFlag) {
         switch (xmlScrollFlag) {
-            case XmlAttrValue.View.ScrollFlag.ENTER_ALWAYS:
-                return WidgetAttrValue.View.ScrollFlag.ENTER_ALWAYS;
-            case XmlAttrValue.View.ScrollFlag.ENTER_ALWAYS_COLLAPSED:
-                return WidgetAttrValue.View.ScrollFlag.ENTER_ALWAYS_COLLAPSED;
-            case XmlAttrValue.View.ScrollFlag.EXIT_UNTIL_COLLAPSED:
-                return WidgetAttrValue.View.ScrollFlag.EXIT_UNTIL_COLLAPSED;
-            case XmlAttrValue.View.ScrollFlag.SCROLL:
-                return WidgetAttrValue.View.ScrollFlag.SCROLL;
-            case XmlAttrValue.View.ScrollFlag.SNAP:
-                return WidgetAttrValue.View.ScrollFlag.SNAP;
+            case XmlAttrValue.ScrollFlag.ENTER_ALWAYS:
+                return WidgetAttrValue.ScrollFlag.ENTER_ALWAYS;
+            case XmlAttrValue.ScrollFlag.ENTER_ALWAYS_COLLAPSED:
+                return WidgetAttrValue.ScrollFlag.ENTER_ALWAYS_COLLAPSED;
+            case XmlAttrValue.ScrollFlag.EXIT_UNTIL_COLLAPSED:
+                return WidgetAttrValue.ScrollFlag.EXIT_UNTIL_COLLAPSED;
+            case XmlAttrValue.ScrollFlag.SCROLL:
+                return WidgetAttrValue.ScrollFlag.SCROLL;
+            case XmlAttrValue.ScrollFlag.SNAP:
+                return WidgetAttrValue.ScrollFlag.SNAP;
             default:
                 if (TextUtils.isEmpty(xmlScrollFlag))
-                    return XmlAttrValue.View.ScrollFlag.SCROLL;
+                    return XmlAttrValue.ScrollFlag.SCROLL;
                 else
                     return xmlScrollFlag + StringUtil.VALUE_NOT_SUPPORT;
         }

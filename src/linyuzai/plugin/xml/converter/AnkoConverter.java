@@ -62,7 +62,7 @@ public class AnkoConverter {
         noteBuilder.append("/**\n");
         noteBuilder.append(" * Generate with Plugin\n");
         noteBuilder.append(" * @plugin Kotlin Anko Converter For Xml\n");
-        noteBuilder.append(" * @version 1.3.2\n");
+        noteBuilder.append(" * @version 1.3.3\n");
         noteBuilder.append(" */\n");
     }
 
@@ -705,6 +705,16 @@ public class AnkoConverter {
                     break;
                 /**
                  * ViewGroup Attrs End
+                 */
+                /**
+                 * FrameLayout Attrs Start
+                 */
+                case XmlAttrName.FrameLayout.MEASURE_ALL_CHILDREN:
+                    name = WidgetAttrName.FrameLayout.MEASURE_ALL_CHILDREN;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                /**
+                 * FrameLayout Attrs End
                  */
                 case XmlAttrName.TEXT:
                     name = WidgetAttrName.TEXT;

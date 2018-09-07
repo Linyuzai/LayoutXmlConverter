@@ -14,7 +14,14 @@ public class ImportUtil {
 
     public static final String ACTIVITY = "android.app.Activity";
     public static final String BUNDLE = "android.os.Bundle";
-    public static final String VIEW = "android.view.View";
+
+    public static final String VIEW = "android.view";
+    public static final String GRAPHICS = "android.graphics";
+    public static final String TEXT = "android.text";
+    public static final String WIDGET = "android.widget";
+    public static final String ANIMATION = "android.animation";
+    public static final String VIEW_ANIMATION = "android.view.animation";
+
     public static final String COLOR = "android.graphics.Color";
     public static final String TYPEFACE = "android.graphics.Typeface";
     public static final String GRAVITY = "android.view.Gravity";

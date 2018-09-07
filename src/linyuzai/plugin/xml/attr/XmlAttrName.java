@@ -131,6 +131,19 @@ public final class XmlAttrName {
     }
 
     public static final class ViewGroup {
+        public static final String ADD_STATES_FROM_CHILDREN = "android:addStatesFromChildren";
+        public static final String ALWAYS_DRAWN_WITH_CACHE = "android:alwaysDrawnWithCache";
+        public static final String ANIMATE_LAYOUT_CHANGES = "android:animateLayoutChanges";
+        public static final String ANIMATION_CACHE = "android:animationCache";
+        public static final String CLIP_CHILDREN = "android:clipChildren";
+        public static final String CLIP_TO_PADDING = "android:clipToPadding";
+        public static final String DESCENDANT_FOCUSABILITY = "android:descendantFocusability";
+        public static final String LAYOUT_ANIMATION = "android:layoutAnimation";
+        public static final String LAYOUT_MODE = "android:layoutMode";
+        public static final String PERSISTENT_DRAWING_CACHE = "android:persistentDrawingCache";
+        public static final String SPLIT_MOTION_EVENTS = "android:splitMotionEvents";
+        public static final String TOUCHSCREEN_BLOCKS_FOCUS = "android:touchscreenBlocksFocus";
+        public static final String TRANSITION_GROUP = "android:transitionGroup";
 
         public static final class LayoutParams {
             public static final String LAYOUT_GRAVITY = "android:layout_gravity";

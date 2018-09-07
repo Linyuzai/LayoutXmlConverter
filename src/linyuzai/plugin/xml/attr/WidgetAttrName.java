@@ -109,7 +109,19 @@ public final class WidgetAttrName {
     }
 
     public static final class ViewGroup {
-
+        public static final String ADD_STATES_FROM_CHILDREN = "setAddStatesFromChildren";
+        public static final String ALWAYS_DRAWN_WITH_CACHE = "isAlwaysDrawnWithCacheEnabled";
+        public static final String ANIMATE_LAYOUT_CHANGES = "layoutTransition";
+        public static final String ANIMATION_CACHE = "isAnimationCacheEnabled";
+        public static final String CLIP_CHILDREN = "clipChildren";
+        public static final String CLIP_TO_PADDING = "clipToPadding";
+        public static final String DESCENDANT_FOCUSABILITY = "descendantFocusability";
+        public static final String LAYOUT_ANIMATION = "layoutAnimation";
+        public static final String LAYOUT_MODE = "layoutMode";
+        public static final String PERSISTENT_DRAWING_CACHE = "persistentDrawingCache";
+        public static final String SPLIT_MOTION_EVENTS = "isMotionEventSplittingEnabled";
+        public static final String TOUCHSCREEN_BLOCKS_FOCUS = "touchscreenBlocksFocus";
+        public static final String TRANSITION_GROUP = "isTransitionGroup";
         public static final class LayoutParams {
             public static final String GRAVITY = "gravity";
             public static final String WIDTH = "width";

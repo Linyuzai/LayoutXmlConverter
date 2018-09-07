@@ -79,17 +79,17 @@ public class AttributeUtil {
                 otherAttr.add(new UAttribute(attr.getQualifiedName(), attr.getValue()));
         }
         if (paramsAttr.size() == 0) {
-            UAttribute widthAttr = new UAttribute(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_WIDTH, XmlAttrValue.LayoutParams.WRAP_CONTENT);
-            UAttribute heightAttr = new UAttribute(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_HEIGHT, XmlAttrValue.LayoutParams.WRAP_CONTENT);
+            UAttribute widthAttr = new UAttribute(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_WIDTH, XmlAttrValue.ViewGroup.LayoutParams.WRAP_CONTENT);
+            UAttribute heightAttr = new UAttribute(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_HEIGHT, XmlAttrValue.ViewGroup.LayoutParams.WRAP_CONTENT);
             paramsAttr.add(widthAttr);
             paramsAttr.add(heightAttr);
         } else if (paramsAttr.size() == 1) {
             UAttribute widthOrHeightAttr = paramsAttr.get(0);
             if (widthOrHeightAttr.getName().equals(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_WIDTH)) {
-                UAttribute heightAttr = new UAttribute(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_HEIGHT, XmlAttrValue.LayoutParams.WRAP_CONTENT);
+                UAttribute heightAttr = new UAttribute(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_HEIGHT, XmlAttrValue.ViewGroup.LayoutParams.WRAP_CONTENT);
                 paramsAttr.add(heightAttr);
             } else if (widthOrHeightAttr.getName().equals(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_HEIGHT)) {
-                UAttribute widthAttr = new UAttribute(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_WIDTH, XmlAttrValue.LayoutParams.WRAP_CONTENT);
+                UAttribute widthAttr = new UAttribute(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_WIDTH, XmlAttrValue.ViewGroup.LayoutParams.WRAP_CONTENT);
                 paramsAttr.add(0, widthAttr);
             }
         } else if (paramsAttr.size() == 2) {
@@ -104,6 +104,7 @@ public class AttributeUtil {
         return splitAttrs;
     }
 
+    @Nullable
     public static UAttribute filterTheme(List<UAttribute> uAttributes) {
         Iterator<UAttribute> ui = uAttributes.iterator();
         while (ui.hasNext()) {
@@ -193,11 +194,11 @@ public class AttributeUtil {
     @NotNull
     public static String getWidthOrHeight(String value) {
         switch (value) {
-            case XmlAttrValue.LayoutParams.MATCH_PARENT:
-            case XmlAttrValue.LayoutParams.FILL_PARENT:
-                return WidgetAttrValue.LayoutParams.MATCH_PARENT;
-            case XmlAttrValue.LayoutParams.WRAP_CONTENT:
-                return WidgetAttrValue.LayoutParams.WRAP_CONTENT;
+            case XmlAttrValue.ViewGroup.LayoutParams.MATCH_PARENT:
+            case XmlAttrValue.ViewGroup.LayoutParams.FILL_PARENT:
+                return WidgetAttrValue.ViewGroup.LayoutParams.MATCH_PARENT;
+            case XmlAttrValue.ViewGroup.LayoutParams.WRAP_CONTENT:
+                return WidgetAttrValue.ViewGroup.LayoutParams.WRAP_CONTENT;
             default:
                 return getDimension(value, false);
         }
@@ -299,7 +300,7 @@ public class AttributeUtil {
         }
         String color = getColor(xmlDrawable);
         if (!color.contains(StringUtil.VALUE_NOT_SUPPORT)) {
-            ImportUtil.support(ImportUtil.COLOR_DRAWABLE);
+            ImportUtil.supportMulti(ImportUtil.GRAPHICS);
             return "ColorDrawable(" + color + ")";
         }
         return xmlDrawable + StringUtil.VALUE_NOT_SUPPORT;
@@ -338,16 +339,16 @@ public class AttributeUtil {
     public static String getSystemColor(String systemColor) {
         switch (systemColor) {
             case "transparent":
-                ImportUtil.support(ImportUtil.COLOR);
+                ImportUtil.supportMulti(ImportUtil.GRAPHICS);
                 return "Color.TRANSPARENT";
             case "white":
-                ImportUtil.support(ImportUtil.COLOR);
+                ImportUtil.supportMulti(ImportUtil.GRAPHICS);
                 return "Color.WHITE";
             case "black":
-                ImportUtil.support(ImportUtil.COLOR);
+                ImportUtil.supportMulti(ImportUtil.GRAPHICS);
                 return "Color.BLACK";
             case "red":
-                ImportUtil.support(ImportUtil.COLOR);
+                ImportUtil.supportMulti(ImportUtil.GRAPHICS);
                 return "Color.RED";
             default:
                 return "resources.getColor(android.R.color." + systemColor + ")";
@@ -357,7 +358,7 @@ public class AttributeUtil {
     @NotNull
     @Contract(pure = true)
     public static String getParseColor(String parseColor) {
-        ImportUtil.support(ImportUtil.COLOR);
+        ImportUtil.supportMulti(ImportUtil.GRAPHICS);
         if (parseColor.startsWith("#")) {
             switch (parseColor) {
                 case "#000000":
@@ -453,7 +454,7 @@ public class AttributeUtil {
 
     @NotNull
     public static String getOrientation(String xmlOrientation) {
-        ImportUtil.support(ImportUtil.LINEAR_LAYOUT);
+        ImportUtil.supportMulti(ImportUtil.WIDGET);
         switch (xmlOrientation) {
             case XmlAttrValue.Orientation.VERTICAL:
                 return WidgetAttrValue.Orientation.VERTICAL;
@@ -469,7 +470,7 @@ public class AttributeUtil {
 
     @NotNull
     public static String getMultiGravity(String xmlMultiGravity) {
-        ImportUtil.support(ImportUtil.GRAVITY);
+        ImportUtil.supportMulti(ImportUtil.VIEW);
         String[] xmlGravityArray = xmlMultiGravity.replaceAll("\\s*", "").split("\\|");
         List<String> viewGravityList = new ArrayList<>();
         Arrays.stream(xmlGravityArray).forEach(it -> viewGravityList.add(getGravity(it)));
@@ -517,7 +518,7 @@ public class AttributeUtil {
 
     @NotNull
     public static String getScaleType(String xmlScaleType) {
-        ImportUtil.support(ImportUtil.IMAGE_VIEW);
+        ImportUtil.supportMulti(ImportUtil.WIDGET);
         switch (xmlScaleType) {
             case XmlAttrValue.ScaleType.CENTER:
                 return WidgetAttrValue.ScaleType.CENTER;
@@ -545,7 +546,7 @@ public class AttributeUtil {
 
     @NotNull
     public static String getTextStyle(String xmlTextStyle) {
-        ImportUtil.support(ImportUtil.TYPEFACE);
+        ImportUtil.supportMulti(ImportUtil.GRAPHICS);
         boolean isBold = false;
         boolean isItalic = false;
         String[] textStyles = xmlTextStyle.split("\\|");
@@ -567,7 +568,7 @@ public class AttributeUtil {
 
     @Contract(pure = true)
     public static String getInputType(String xmlInputType) {
-        ImportUtil.support(ImportUtil.INPUT_TYPE);
+        ImportUtil.supportMulti(ImportUtil.TEXT);
         switch (xmlInputType) {
             case XmlAttrValue.InputType.NONE:
                 return WidgetAttrValue.InputType.NONE;
@@ -649,19 +650,19 @@ public class AttributeUtil {
     @NotNull
     public static String getScrollFlag(String xmlScrollFlag) {
         switch (xmlScrollFlag) {
-            case XmlAttrValue.ScrollFlag.ENTER_ALWAYS:
-                return WidgetAttrValue.ScrollFlag.ENTER_ALWAYS;
-            case XmlAttrValue.ScrollFlag.ENTER_ALWAYS_COLLAPSED:
-                return WidgetAttrValue.ScrollFlag.ENTER_ALWAYS_COLLAPSED;
-            case XmlAttrValue.ScrollFlag.EXIT_UNTIL_COLLAPSED:
-                return WidgetAttrValue.ScrollFlag.EXIT_UNTIL_COLLAPSED;
-            case XmlAttrValue.ScrollFlag.SCROLL:
-                return WidgetAttrValue.ScrollFlag.SCROLL;
-            case XmlAttrValue.ScrollFlag.SNAP:
-                return WidgetAttrValue.ScrollFlag.SNAP;
+            case XmlAttrValue.View.ScrollFlag.ENTER_ALWAYS:
+                return WidgetAttrValue.View.ScrollFlag.ENTER_ALWAYS;
+            case XmlAttrValue.View.ScrollFlag.ENTER_ALWAYS_COLLAPSED:
+                return WidgetAttrValue.View.ScrollFlag.ENTER_ALWAYS_COLLAPSED;
+            case XmlAttrValue.View.ScrollFlag.EXIT_UNTIL_COLLAPSED:
+                return WidgetAttrValue.View.ScrollFlag.EXIT_UNTIL_COLLAPSED;
+            case XmlAttrValue.View.ScrollFlag.SCROLL:
+                return WidgetAttrValue.View.ScrollFlag.SCROLL;
+            case XmlAttrValue.View.ScrollFlag.SNAP:
+                return WidgetAttrValue.View.ScrollFlag.SNAP;
             default:
                 if (TextUtils.isEmpty(xmlScrollFlag))
-                    return XmlAttrValue.ScrollFlag.SCROLL;
+                    return XmlAttrValue.View.ScrollFlag.SCROLL;
                 else
                     return xmlScrollFlag + StringUtil.VALUE_NOT_SUPPORT;
         }
@@ -676,17 +677,17 @@ public class AttributeUtil {
     }
 
     public static String getAccessibilityLiveRegion(String xmlAccessibilityLiveRegion) {
-        ImportUtil.support(ImportUtil.VIEW);
+        ImportUtil.supportMulti(ImportUtil.VIEW);
         switch (xmlAccessibilityLiveRegion) {
-            case XmlAttrValue.AccessibilityLiveRegion.ASSERTIVE:
-                return WidgetAttrValue.AccessibilityLiveRegion.ASSERTIVE;
-            case XmlAttrValue.AccessibilityLiveRegion.NONE:
-                return WidgetAttrValue.AccessibilityLiveRegion.NONE;
-            case XmlAttrValue.AccessibilityLiveRegion.POLITE:
-                return WidgetAttrValue.AccessibilityLiveRegion.POLITE;
+            case XmlAttrValue.View.AccessibilityLiveRegion.ASSERTIVE:
+                return WidgetAttrValue.View.AccessibilityLiveRegion.ASSERTIVE;
+            case XmlAttrValue.View.AccessibilityLiveRegion.NONE:
+                return WidgetAttrValue.View.AccessibilityLiveRegion.NONE;
+            case XmlAttrValue.View.AccessibilityLiveRegion.POLITE:
+                return WidgetAttrValue.View.AccessibilityLiveRegion.POLITE;
             default:
                 if (TextUtils.isEmpty(xmlAccessibilityLiveRegion))
-                    return XmlAttrValue.AccessibilityLiveRegion.NONE;
+                    return XmlAttrValue.View.AccessibilityLiveRegion.NONE;
                 else
                     return xmlAccessibilityLiveRegion + StringUtil.VALUE_NOT_SUPPORT;
         }
@@ -694,7 +695,7 @@ public class AttributeUtil {
 
     @NotNull
     public static String getMultiAutofillHint(String xmlMultiAutofillHint) {
-        ImportUtil.support(ImportUtil.VIEW);
+        ImportUtil.supportMulti(ImportUtil.VIEW);
         String[] xmlAutofillHintArray = xmlMultiAutofillHint.replaceAll("\\s*", "").split("\\|");
         List<String> viewAutofillHintList = new ArrayList<>();
         Arrays.stream(xmlAutofillHintArray).forEach(it -> viewAutofillHintList.add(getAutofillHint(it)));
@@ -704,39 +705,39 @@ public class AttributeUtil {
     @Contract(pure = true)
     public static String getAutofillHint(String xmlAutofillHint) {
         switch (xmlAutofillHint) {
-            case XmlAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_DATE:
-                return WidgetAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_DATE;
-            case XmlAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_DAY:
-                return WidgetAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_DAY;
-            case XmlAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_MONTH:
-                return WidgetAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_MONTH;
-            case XmlAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_YEAR:
-                return WidgetAttrValue.AutofillHint.CREDIT_CARD_EXPIRATION_YEAR;
-            case XmlAttrValue.AutofillHint.CREDIT_CARD_NUMBER:
-                return WidgetAttrValue.AutofillHint.CREDIT_CARD_NUMBER;
-            case XmlAttrValue.AutofillHint.CREDIT_CARD_SECURITY_CODE:
-                return WidgetAttrValue.AutofillHint.CREDIT_CARD_SECURITY_CODE;
-            case XmlAttrValue.AutofillHint.EMAIL_ADDRESS:
-                return WidgetAttrValue.AutofillHint.EMAIL_ADDRESS;
-            case XmlAttrValue.AutofillHint.NAME:
-                return WidgetAttrValue.AutofillHint.NAME;
-            case XmlAttrValue.AutofillHint.PASSWORD:
-                return WidgetAttrValue.AutofillHint.PASSWORD;
-            case XmlAttrValue.AutofillHint.PHONE:
-                return WidgetAttrValue.AutofillHint.PHONE;
-            case XmlAttrValue.AutofillHint.POSTAL_ADDRESS:
-                return WidgetAttrValue.AutofillHint.POSTAL_ADDRESS;
-            case XmlAttrValue.AutofillHint.POSTAL_CODE:
-                return WidgetAttrValue.AutofillHint.POSTAL_CODE;
-            case XmlAttrValue.AutofillHint.USERNAME:
-                return WidgetAttrValue.AutofillHint.USERNAME;
+            case XmlAttrValue.View.AutofillHint.CREDIT_CARD_EXPIRATION_DATE:
+                return WidgetAttrValue.View.AutofillHint.CREDIT_CARD_EXPIRATION_DATE;
+            case XmlAttrValue.View.AutofillHint.CREDIT_CARD_EXPIRATION_DAY:
+                return WidgetAttrValue.View.AutofillHint.CREDIT_CARD_EXPIRATION_DAY;
+            case XmlAttrValue.View.AutofillHint.CREDIT_CARD_EXPIRATION_MONTH:
+                return WidgetAttrValue.View.AutofillHint.CREDIT_CARD_EXPIRATION_MONTH;
+            case XmlAttrValue.View.AutofillHint.CREDIT_CARD_EXPIRATION_YEAR:
+                return WidgetAttrValue.View.AutofillHint.CREDIT_CARD_EXPIRATION_YEAR;
+            case XmlAttrValue.View.AutofillHint.CREDIT_CARD_NUMBER:
+                return WidgetAttrValue.View.AutofillHint.CREDIT_CARD_NUMBER;
+            case XmlAttrValue.View.AutofillHint.CREDIT_CARD_SECURITY_CODE:
+                return WidgetAttrValue.View.AutofillHint.CREDIT_CARD_SECURITY_CODE;
+            case XmlAttrValue.View.AutofillHint.EMAIL_ADDRESS:
+                return WidgetAttrValue.View.AutofillHint.EMAIL_ADDRESS;
+            case XmlAttrValue.View.AutofillHint.NAME:
+                return WidgetAttrValue.View.AutofillHint.NAME;
+            case XmlAttrValue.View.AutofillHint.PASSWORD:
+                return WidgetAttrValue.View.AutofillHint.PASSWORD;
+            case XmlAttrValue.View.AutofillHint.PHONE:
+                return WidgetAttrValue.View.AutofillHint.PHONE;
+            case XmlAttrValue.View.AutofillHint.POSTAL_ADDRESS:
+                return WidgetAttrValue.View.AutofillHint.POSTAL_ADDRESS;
+            case XmlAttrValue.View.AutofillHint.POSTAL_CODE:
+                return WidgetAttrValue.View.AutofillHint.POSTAL_CODE;
+            case XmlAttrValue.View.AutofillHint.USERNAME:
+                return WidgetAttrValue.View.AutofillHint.USERNAME;
             default:
                 return "\"" + xmlAutofillHint + "\"";
         }
     }
 
     public static String getPorterDuffMode(String xmlPorterDuffMode) {
-        ImportUtil.support(ImportUtil.PORTER_DUFF);
+        ImportUtil.supportMulti(ImportUtil.GRAPHICS);
         switch (xmlPorterDuffMode) {
             case XmlAttrValue.PorterDuffMode.ADD:
                 return WidgetAttrValue.PorterDuffMode.ADD;
@@ -780,37 +781,37 @@ public class AttributeUtil {
     }
 
     public static String getDrawingCacheQuality(String xmlDrawingCacheQuality) {
-        ImportUtil.support(ImportUtil.VIEW);
+        ImportUtil.supportMulti(ImportUtil.VIEW);
         switch (xmlDrawingCacheQuality) {
-            case XmlAttrValue.DrawingCacheQuality.AUTO:
-                return WidgetAttrValue.DrawingCacheQuality.AUTO;
-            case XmlAttrValue.DrawingCacheQuality.HIGH:
-                return WidgetAttrValue.DrawingCacheQuality.HIGH;
-            case XmlAttrValue.DrawingCacheQuality.LOW:
-                return WidgetAttrValue.DrawingCacheQuality.LOW;
+            case XmlAttrValue.View.DrawingCacheQuality.AUTO:
+                return WidgetAttrValue.View.DrawingCacheQuality.AUTO;
+            case XmlAttrValue.View.DrawingCacheQuality.HIGH:
+                return WidgetAttrValue.View.DrawingCacheQuality.HIGH;
+            case XmlAttrValue.View.DrawingCacheQuality.LOW:
+                return WidgetAttrValue.View.DrawingCacheQuality.LOW;
             default:
                 return xmlDrawingCacheQuality + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 
     public static String getImportantForAccessibility(String xmlImportantForAccessibility) {
-        ImportUtil.support(ImportUtil.VIEW);
+        ImportUtil.supportMulti(ImportUtil.VIEW);
         switch (xmlImportantForAccessibility) {
-            case XmlAttrValue.ImportantForAccessibility.AUTO:
-                return WidgetAttrValue.ImportantForAccessibility.AUTO;
-            case XmlAttrValue.ImportantForAccessibility.NO:
-                return WidgetAttrValue.ImportantForAccessibility.NO;
-            case XmlAttrValue.ImportantForAccessibility.NO_HIDE_DESCENDANTS:
-                return WidgetAttrValue.ImportantForAccessibility.NO_HIDE_DESCENDANTS;
-            case XmlAttrValue.ImportantForAccessibility.YES:
-                return WidgetAttrValue.ImportantForAccessibility.YES;
+            case XmlAttrValue.View.ImportantForAccessibility.AUTO:
+                return WidgetAttrValue.View.ImportantForAccessibility.AUTO;
+            case XmlAttrValue.View.ImportantForAccessibility.NO:
+                return WidgetAttrValue.View.ImportantForAccessibility.NO;
+            case XmlAttrValue.View.ImportantForAccessibility.NO_HIDE_DESCENDANTS:
+                return WidgetAttrValue.View.ImportantForAccessibility.NO_HIDE_DESCENDANTS;
+            case XmlAttrValue.View.ImportantForAccessibility.YES:
+                return WidgetAttrValue.View.ImportantForAccessibility.YES;
             default:
                 return xmlImportantForAccessibility + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 
     public static String getMultiImportantForAutofill(String xmlMultiImportantForAutofill) {
-        ImportUtil.support(ImportUtil.VIEW);
+        ImportUtil.supportMulti(ImportUtil.VIEW);
         String[] xmlImportantForAutofillArray = xmlMultiImportantForAutofill.replaceAll("\\s*", "").split("\\|");
         List<String> viewImportantForAutofillList = new ArrayList<>();
         Arrays.stream(xmlImportantForAutofillArray).forEach(it -> viewImportantForAutofillList.add(getImportantForAutofill(it)));
@@ -820,135 +821,135 @@ public class AttributeUtil {
     @Contract(pure = true)
     public static String getImportantForAutofill(String xmlImportantForAutofill) {
         switch (xmlImportantForAutofill) {
-            case XmlAttrValue.ImportantForAutofill.AUTO:
-                return WidgetAttrValue.ImportantForAutofill.AUTO;
-            case XmlAttrValue.ImportantForAutofill.NO:
-                return WidgetAttrValue.ImportantForAutofill.NO;
-            case XmlAttrValue.ImportantForAutofill.NO_EXCLUDE_DESCENDANTS:
-                return WidgetAttrValue.ImportantForAutofill.NO_EXCLUDE_DESCENDANTS;
-            case XmlAttrValue.ImportantForAutofill.YES:
-                return WidgetAttrValue.ImportantForAutofill.YES;
-            case XmlAttrValue.ImportantForAutofill.YES_EXCLUDE_DESCENDANTS:
-                return WidgetAttrValue.ImportantForAutofill.YES_EXCLUDE_DESCENDANTS;
+            case XmlAttrValue.View.ImportantForAutofill.AUTO:
+                return WidgetAttrValue.View.ImportantForAutofill.AUTO;
+            case XmlAttrValue.View.ImportantForAutofill.NO:
+                return WidgetAttrValue.View.ImportantForAutofill.NO;
+            case XmlAttrValue.View.ImportantForAutofill.NO_EXCLUDE_DESCENDANTS:
+                return WidgetAttrValue.View.ImportantForAutofill.NO_EXCLUDE_DESCENDANTS;
+            case XmlAttrValue.View.ImportantForAutofill.YES:
+                return WidgetAttrValue.View.ImportantForAutofill.YES;
+            case XmlAttrValue.View.ImportantForAutofill.YES_EXCLUDE_DESCENDANTS:
+                return WidgetAttrValue.View.ImportantForAutofill.YES_EXCLUDE_DESCENDANTS;
             default:
                 return xmlImportantForAutofill + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 
     public static String getLayerType(String xmlLayerType) {
-        ImportUtil.support(ImportUtil.VIEW);
+        ImportUtil.supportMulti(ImportUtil.VIEW);
         switch (xmlLayerType) {
-            case XmlAttrValue.LayerType.HARDWARE:
-                return WidgetAttrValue.LayerType.HARDWARE;
-            case XmlAttrValue.LayerType.NONE:
-                return WidgetAttrValue.LayerType.NONE;
-            case XmlAttrValue.LayerType.SOFTWARE:
-                return WidgetAttrValue.LayerType.SOFTWARE;
+            case XmlAttrValue.View.LayerType.HARDWARE:
+                return WidgetAttrValue.View.LayerType.HARDWARE;
+            case XmlAttrValue.View.LayerType.NONE:
+                return WidgetAttrValue.View.LayerType.NONE;
+            case XmlAttrValue.View.LayerType.SOFTWARE:
+                return WidgetAttrValue.View.LayerType.SOFTWARE;
             default:
                 return xmlLayerType + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 
     public static String getLayoutDirection(String xmlLayoutDirection) {
-        ImportUtil.support(ImportUtil.VIEW);
+        ImportUtil.supportMulti(ImportUtil.VIEW);
         switch (xmlLayoutDirection) {
-            case XmlAttrValue.LayoutDirection.INHERIT:
-                return WidgetAttrValue.LayoutDirection.INHERIT;
-            case XmlAttrValue.LayoutDirection.LOCALE:
-                return WidgetAttrValue.LayoutDirection.LOCALE;
-            case XmlAttrValue.LayoutDirection.LTR:
-                return WidgetAttrValue.LayoutDirection.LTR;
-            case XmlAttrValue.LayoutDirection.RTL:
-                return WidgetAttrValue.LayoutDirection.RTL;
+            case XmlAttrValue.View.LayoutDirection.INHERIT:
+                return WidgetAttrValue.View.LayoutDirection.INHERIT;
+            case XmlAttrValue.View.LayoutDirection.LOCALE:
+                return WidgetAttrValue.View.LayoutDirection.LOCALE;
+            case XmlAttrValue.View.LayoutDirection.LTR:
+                return WidgetAttrValue.View.LayoutDirection.LTR;
+            case XmlAttrValue.View.LayoutDirection.RTL:
+                return WidgetAttrValue.View.LayoutDirection.RTL;
             default:
                 return xmlLayoutDirection + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 
     public static String getOutlineProvider(String xmlOutlineProvider) {
-        ImportUtil.support(ImportUtil.VIEW_OUTLINE_PROVIDER);
+        ImportUtil.supportMulti(ImportUtil.VIEW);
         switch (xmlOutlineProvider) {
-            case XmlAttrValue.OutlineProvider.BACKGROUND:
-                return WidgetAttrValue.OutlineProvider.BACKGROUND;
-            case XmlAttrValue.OutlineProvider.BOUNDS:
-                return WidgetAttrValue.OutlineProvider.BOUNDS;
-            case XmlAttrValue.OutlineProvider.NONE:
-                return WidgetAttrValue.OutlineProvider.NONE;
-            case XmlAttrValue.OutlineProvider.PADDED_BOUNDS:
-                return WidgetAttrValue.OutlineProvider.PADDED_BOUNDS;
+            case XmlAttrValue.View.OutlineProvider.BACKGROUND:
+                return WidgetAttrValue.View.OutlineProvider.BACKGROUND;
+            case XmlAttrValue.View.OutlineProvider.BOUNDS:
+                return WidgetAttrValue.View.OutlineProvider.BOUNDS;
+            case XmlAttrValue.View.OutlineProvider.NONE:
+                return WidgetAttrValue.View.OutlineProvider.NONE;
+            case XmlAttrValue.View.OutlineProvider.PADDED_BOUNDS:
+                return WidgetAttrValue.View.OutlineProvider.PADDED_BOUNDS;
             default:
                 return xmlOutlineProvider + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 
     public static String getOverScrollMode(String xmlOverScrollMode) {
-        ImportUtil.support(ImportUtil.VIEW);
+        ImportUtil.supportMulti(ImportUtil.VIEW);
         switch (xmlOverScrollMode) {
-            case XmlAttrValue.OverScrollMode.ALWAYS:
-                return WidgetAttrValue.OverScrollMode.ALWAYS;
-            case XmlAttrValue.OverScrollMode.IF_CONTENT_SCROLLS:
-                return WidgetAttrValue.OverScrollMode.IF_CONTENT_SCROLLS;
-            case XmlAttrValue.OverScrollMode.NEVER:
-                return WidgetAttrValue.OverScrollMode.NEVER;
+            case XmlAttrValue.View.OverScrollMode.ALWAYS:
+                return WidgetAttrValue.View.OverScrollMode.ALWAYS;
+            case XmlAttrValue.View.OverScrollMode.IF_CONTENT_SCROLLS:
+                return WidgetAttrValue.View.OverScrollMode.IF_CONTENT_SCROLLS;
+            case XmlAttrValue.View.OverScrollMode.NEVER:
+                return WidgetAttrValue.View.OverScrollMode.NEVER;
             default:
                 return xmlOverScrollMode + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 
     public static String getPointerIconType(String xmlPointerIconType) {
-        ImportUtil.support(ImportUtil.POINTER_ICON);
+        ImportUtil.supportMulti(ImportUtil.VIEW);
         switch (xmlPointerIconType) {
-            case XmlAttrValue.PointerIconType.ALIAS:
-                return WidgetAttrValue.PointerIconType.ALIAS;
-            case XmlAttrValue.PointerIconType.ALL_SCROLL:
-                return WidgetAttrValue.PointerIconType.ALL_SCROLL;
-            case XmlAttrValue.PointerIconType.ARROW:
-                return WidgetAttrValue.PointerIconType.ARROW;
-            case XmlAttrValue.PointerIconType.CELL:
-                return WidgetAttrValue.PointerIconType.CELL;
-            case XmlAttrValue.PointerIconType.CONTEXT_MENU:
-                return WidgetAttrValue.PointerIconType.CONTEXT_MENU;
-            case XmlAttrValue.PointerIconType.COPY:
-                return WidgetAttrValue.PointerIconType.COPY;
-            case XmlAttrValue.PointerIconType.CROSSHAIR:
-                return WidgetAttrValue.PointerIconType.CROSSHAIR;
-            case XmlAttrValue.PointerIconType.GRAB:
-                return WidgetAttrValue.PointerIconType.GRAB;
-            case XmlAttrValue.PointerIconType.GRABBING:
-                return WidgetAttrValue.PointerIconType.GRABBING;
-            case XmlAttrValue.PointerIconType.HAND:
-                return WidgetAttrValue.PointerIconType.HAND;
-            case XmlAttrValue.PointerIconType.HELP:
-                return WidgetAttrValue.PointerIconType.HELP;
-            case XmlAttrValue.PointerIconType.HORIZONTAL_DOUBLE_ARROW:
-                return WidgetAttrValue.PointerIconType.HORIZONTAL_DOUBLE_ARROW;
-            case XmlAttrValue.PointerIconType.NO_DROP:
-                return WidgetAttrValue.PointerIconType.NO_DROP;
-            case XmlAttrValue.PointerIconType.NULL:
-                return WidgetAttrValue.PointerIconType.NULL;
-            case XmlAttrValue.PointerIconType.TEXT:
-                return WidgetAttrValue.PointerIconType.TEXT;
-            case XmlAttrValue.PointerIconType.TOP_LEFT_DIAGONAL_DOUBLE_ARROW:
-                return WidgetAttrValue.PointerIconType.TOP_LEFT_DIAGONAL_DOUBLE_ARROW;
-            case XmlAttrValue.PointerIconType.TOP_RIGHT_DIAGONAL_DOUBLE_ARROW:
-                return WidgetAttrValue.PointerIconType.TOP_RIGHT_DIAGONAL_DOUBLE_ARROW;
-            case XmlAttrValue.PointerIconType.VERTICAL_DOUBLE_ARROW:
-                return WidgetAttrValue.PointerIconType.VERTICAL_DOUBLE_ARROW;
-            case XmlAttrValue.PointerIconType.VERTICAL_TEXT:
-                return WidgetAttrValue.PointerIconType.VERTICAL_TEXT;
-            case XmlAttrValue.PointerIconType.WAIT:
-                return WidgetAttrValue.PointerIconType.WAIT;
-            case XmlAttrValue.PointerIconType.ZOOM_IN:
-                return WidgetAttrValue.PointerIconType.ZOOM_IN;
-            case XmlAttrValue.PointerIconType.ZOOM_OUT:
-                return WidgetAttrValue.PointerIconType.ZOOM_OUT;
+            case XmlAttrValue.View.PointerIconType.ALIAS:
+                return WidgetAttrValue.View.PointerIconType.ALIAS;
+            case XmlAttrValue.View.PointerIconType.ALL_SCROLL:
+                return WidgetAttrValue.View.PointerIconType.ALL_SCROLL;
+            case XmlAttrValue.View.PointerIconType.ARROW:
+                return WidgetAttrValue.View.PointerIconType.ARROW;
+            case XmlAttrValue.View.PointerIconType.CELL:
+                return WidgetAttrValue.View.PointerIconType.CELL;
+            case XmlAttrValue.View.PointerIconType.CONTEXT_MENU:
+                return WidgetAttrValue.View.PointerIconType.CONTEXT_MENU;
+            case XmlAttrValue.View.PointerIconType.COPY:
+                return WidgetAttrValue.View.PointerIconType.COPY;
+            case XmlAttrValue.View.PointerIconType.CROSSHAIR:
+                return WidgetAttrValue.View.PointerIconType.CROSSHAIR;
+            case XmlAttrValue.View.PointerIconType.GRAB:
+                return WidgetAttrValue.View.PointerIconType.GRAB;
+            case XmlAttrValue.View.PointerIconType.GRABBING:
+                return WidgetAttrValue.View.PointerIconType.GRABBING;
+            case XmlAttrValue.View.PointerIconType.HAND:
+                return WidgetAttrValue.View.PointerIconType.HAND;
+            case XmlAttrValue.View.PointerIconType.HELP:
+                return WidgetAttrValue.View.PointerIconType.HELP;
+            case XmlAttrValue.View.PointerIconType.HORIZONTAL_DOUBLE_ARROW:
+                return WidgetAttrValue.View.PointerIconType.HORIZONTAL_DOUBLE_ARROW;
+            case XmlAttrValue.View.PointerIconType.NO_DROP:
+                return WidgetAttrValue.View.PointerIconType.NO_DROP;
+            case XmlAttrValue.View.PointerIconType.NULL:
+                return WidgetAttrValue.View.PointerIconType.NULL;
+            case XmlAttrValue.View.PointerIconType.TEXT:
+                return WidgetAttrValue.View.PointerIconType.TEXT;
+            case XmlAttrValue.View.PointerIconType.TOP_LEFT_DIAGONAL_DOUBLE_ARROW:
+                return WidgetAttrValue.View.PointerIconType.TOP_LEFT_DIAGONAL_DOUBLE_ARROW;
+            case XmlAttrValue.View.PointerIconType.TOP_RIGHT_DIAGONAL_DOUBLE_ARROW:
+                return WidgetAttrValue.View.PointerIconType.TOP_RIGHT_DIAGONAL_DOUBLE_ARROW;
+            case XmlAttrValue.View.PointerIconType.VERTICAL_DOUBLE_ARROW:
+                return WidgetAttrValue.View.PointerIconType.VERTICAL_DOUBLE_ARROW;
+            case XmlAttrValue.View.PointerIconType.VERTICAL_TEXT:
+                return WidgetAttrValue.View.PointerIconType.VERTICAL_TEXT;
+            case XmlAttrValue.View.PointerIconType.WAIT:
+                return WidgetAttrValue.View.PointerIconType.WAIT;
+            case XmlAttrValue.View.PointerIconType.ZOOM_IN:
+                return WidgetAttrValue.View.PointerIconType.ZOOM_IN;
+            case XmlAttrValue.View.PointerIconType.ZOOM_OUT:
+                return WidgetAttrValue.View.PointerIconType.ZOOM_OUT;
             default:
                 return xmlPointerIconType + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 
     public static String getMultiScrollIndicator(String xmlMultiScrollIndicator) {
-        ImportUtil.support(ImportUtil.VIEW);
+        ImportUtil.supportMulti(ImportUtil.VIEW);
         String[] xmlScrollIndicatorArray = xmlMultiScrollIndicator.replaceAll("\\s*", "").split("\\|");
         List<String> viewScrollIndicatorList = new ArrayList<>();
         Arrays.stream(xmlScrollIndicatorArray).forEach(it -> viewScrollIndicatorList.add(getScrollIndicator(it)));
@@ -958,34 +959,34 @@ public class AttributeUtil {
     @Contract(pure = true)
     public static String getScrollIndicator(String xmlScrollIndicator) {
         switch (xmlScrollIndicator) {
-            case XmlAttrValue.ScrollIndicator.BOTTOM:
-                return WidgetAttrValue.ScrollIndicator.BOTTOM;
-            case XmlAttrValue.ScrollIndicator.END:
-                return WidgetAttrValue.ScrollIndicator.END;
-            case XmlAttrValue.ScrollIndicator.LEFT:
-                return WidgetAttrValue.ScrollIndicator.LEFT;
-            case XmlAttrValue.ScrollIndicator.RIGHT:
-                return WidgetAttrValue.ScrollIndicator.RIGHT;
-            case XmlAttrValue.ScrollIndicator.START:
-                return WidgetAttrValue.ScrollIndicator.START;
-            case XmlAttrValue.ScrollIndicator.TOP:
-                return WidgetAttrValue.ScrollIndicator.TOP;
+            case XmlAttrValue.View.ScrollIndicator.BOTTOM:
+                return WidgetAttrValue.View.ScrollIndicator.BOTTOM;
+            case XmlAttrValue.View.ScrollIndicator.END:
+                return WidgetAttrValue.View.ScrollIndicator.END;
+            case XmlAttrValue.View.ScrollIndicator.LEFT:
+                return WidgetAttrValue.View.ScrollIndicator.LEFT;
+            case XmlAttrValue.View.ScrollIndicator.RIGHT:
+                return WidgetAttrValue.View.ScrollIndicator.RIGHT;
+            case XmlAttrValue.View.ScrollIndicator.START:
+                return WidgetAttrValue.View.ScrollIndicator.START;
+            case XmlAttrValue.View.ScrollIndicator.TOP:
+                return WidgetAttrValue.View.ScrollIndicator.TOP;
             default:
                 return xmlScrollIndicator + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 
     public static String getScrollBarStyle(String xmlScrollBarStyle) {
-        ImportUtil.support(ImportUtil.VIEW);
+        ImportUtil.supportMulti(ImportUtil.VIEW);
         switch (xmlScrollBarStyle) {
-            case XmlAttrValue.ScrollBarStyle.SCROLLBARS_INSIDE_INSET:
-                return WidgetAttrValue.ScrollBarStyle.SCROLLBARS_INSIDE_INSET;
-            case XmlAttrValue.ScrollBarStyle.SCROLLBARS_INSIDE_OVERLAY:
-                return WidgetAttrValue.ScrollBarStyle.SCROLLBARS_INSIDE_OVERLAY;
-            case XmlAttrValue.ScrollBarStyle.SCROLLBARS_OUTSIDE_INSET:
-                return WidgetAttrValue.ScrollBarStyle.SCROLLBARS_OUTSIDE_INSET;
-            case XmlAttrValue.ScrollBarStyle.SCROLLBARS_OUTSIDE_OVERLAY:
-                return WidgetAttrValue.ScrollBarStyle.SCROLLBARS_OUTSIDE_OVERLAY;
+            case XmlAttrValue.View.ScrollBarStyle.SCROLLBARS_INSIDE_INSET:
+                return WidgetAttrValue.View.ScrollBarStyle.SCROLLBARS_INSIDE_INSET;
+            case XmlAttrValue.View.ScrollBarStyle.SCROLLBARS_INSIDE_OVERLAY:
+                return WidgetAttrValue.View.ScrollBarStyle.SCROLLBARS_INSIDE_OVERLAY;
+            case XmlAttrValue.View.ScrollBarStyle.SCROLLBARS_OUTSIDE_INSET:
+                return WidgetAttrValue.View.ScrollBarStyle.SCROLLBARS_OUTSIDE_INSET;
+            case XmlAttrValue.View.ScrollBarStyle.SCROLLBARS_OUTSIDE_OVERLAY:
+                return WidgetAttrValue.View.ScrollBarStyle.SCROLLBARS_OUTSIDE_OVERLAY;
             default:
                 return xmlScrollBarStyle + StringUtil.VALUE_NOT_SUPPORT;
         }
@@ -993,7 +994,7 @@ public class AttributeUtil {
 
     @NotNull
     public static String getStateListAnimator(String xmlStateListAnimator) {
-        ImportUtil.support(ImportUtil.ANIMATOR_INFLATER);
+        ImportUtil.supportMulti(ImportUtil.ANIMATION);
         if (StringUtil.isDrawableRes(xmlStateListAnimator)) {
             return "AnimatorInflater.loadStateListAnimator(context, " + getImage(xmlStateListAnimator) + ")";
         } else
@@ -1001,76 +1002,130 @@ public class AttributeUtil {
     }
 
     public static String getTextAlignment(String xmlTextAlignment) {
-        ImportUtil.support(ImportUtil.VIEW);
+        ImportUtil.supportMulti(ImportUtil.VIEW);
         switch (xmlTextAlignment) {
-            case XmlAttrValue.TextAlignment.CENTER:
-                return WidgetAttrValue.TextAlignment.CENTER;
-            case XmlAttrValue.TextAlignment.GRAVITY:
-                return WidgetAttrValue.TextAlignment.GRAVITY;
-            case XmlAttrValue.TextAlignment.INHERIT:
-                return WidgetAttrValue.TextAlignment.INHERIT;
-            case XmlAttrValue.TextAlignment.TEXT_END:
-                return WidgetAttrValue.TextAlignment.TEXT_END;
-            case XmlAttrValue.TextAlignment.TEXT_START:
-                return WidgetAttrValue.TextAlignment.TEXT_START;
-            case XmlAttrValue.TextAlignment.VIEW_END:
-                return WidgetAttrValue.TextAlignment.VIEW_END;
-            case XmlAttrValue.TextAlignment.VIEW_START:
-                return WidgetAttrValue.TextAlignment.VIEW_START;
+            case XmlAttrValue.View.TextAlignment.CENTER:
+                return WidgetAttrValue.View.TextAlignment.CENTER;
+            case XmlAttrValue.View.TextAlignment.GRAVITY:
+                return WidgetAttrValue.View.TextAlignment.GRAVITY;
+            case XmlAttrValue.View.TextAlignment.INHERIT:
+                return WidgetAttrValue.View.TextAlignment.INHERIT;
+            case XmlAttrValue.View.TextAlignment.TEXT_END:
+                return WidgetAttrValue.View.TextAlignment.TEXT_END;
+            case XmlAttrValue.View.TextAlignment.TEXT_START:
+                return WidgetAttrValue.View.TextAlignment.TEXT_START;
+            case XmlAttrValue.View.TextAlignment.VIEW_END:
+                return WidgetAttrValue.View.TextAlignment.VIEW_END;
+            case XmlAttrValue.View.TextAlignment.VIEW_START:
+                return WidgetAttrValue.View.TextAlignment.VIEW_START;
             default:
                 return xmlTextAlignment + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 
     public static String getTextDirection(String xmlTextDirection) {
-        ImportUtil.support(ImportUtil.VIEW);
+        ImportUtil.supportMulti(ImportUtil.VIEW);
         switch (xmlTextDirection) {
-            case XmlAttrValue.TextDirection.ANY_RTL:
-                return WidgetAttrValue.TextDirection.ANY_RTL;
-            case XmlAttrValue.TextDirection.FIRST_STRONG:
-                return WidgetAttrValue.TextDirection.FIRST_STRONG;
-            case XmlAttrValue.TextDirection.FIRST_STRONG_LTR:
-                return WidgetAttrValue.TextDirection.FIRST_STRONG_LTR;
-            case XmlAttrValue.TextDirection.FIRST_STRONG_RTL:
-                return WidgetAttrValue.TextDirection.FIRST_STRONG_RTL;
-            case XmlAttrValue.TextDirection.INHERIT:
-                return WidgetAttrValue.TextDirection.INHERIT;
-            case XmlAttrValue.TextDirection.LOCALE:
-                return WidgetAttrValue.TextDirection.LOCALE;
-            case XmlAttrValue.TextDirection.LTR:
-                return WidgetAttrValue.TextDirection.LTR;
-            case XmlAttrValue.TextDirection.RTL:
-                return WidgetAttrValue.TextDirection.RTL;
+            case XmlAttrValue.View.TextDirection.ANY_RTL:
+                return WidgetAttrValue.View.TextDirection.ANY_RTL;
+            case XmlAttrValue.View.TextDirection.FIRST_STRONG:
+                return WidgetAttrValue.View.TextDirection.FIRST_STRONG;
+            case XmlAttrValue.View.TextDirection.FIRST_STRONG_LTR:
+                return WidgetAttrValue.View.TextDirection.FIRST_STRONG_LTR;
+            case XmlAttrValue.View.TextDirection.FIRST_STRONG_RTL:
+                return WidgetAttrValue.View.TextDirection.FIRST_STRONG_RTL;
+            case XmlAttrValue.View.TextDirection.INHERIT:
+                return WidgetAttrValue.View.TextDirection.INHERIT;
+            case XmlAttrValue.View.TextDirection.LOCALE:
+                return WidgetAttrValue.View.TextDirection.LOCALE;
+            case XmlAttrValue.View.TextDirection.LTR:
+                return WidgetAttrValue.View.TextDirection.LTR;
+            case XmlAttrValue.View.TextDirection.RTL:
+                return WidgetAttrValue.View.TextDirection.RTL;
             default:
                 return xmlTextDirection + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 
     public static String getVerticalScrollbarPosition(String xmlVerticalScrollbarPosition) {
-        ImportUtil.support(ImportUtil.VIEW);
+        ImportUtil.supportMulti(ImportUtil.VIEW);
         switch (xmlVerticalScrollbarPosition) {
-            case XmlAttrValue.VerticalScrollbarPosition.SCROLLBAR_POSITION_DEFAULT:
-                return WidgetAttrValue.VerticalScrollbarPosition.SCROLLBAR_POSITION_DEFAULT;
-            case XmlAttrValue.VerticalScrollbarPosition.SCROLLBAR_POSITION_LEFT:
-                return WidgetAttrValue.VerticalScrollbarPosition.SCROLLBAR_POSITION_LEFT;
-            case XmlAttrValue.VerticalScrollbarPosition.SCROLLBAR_POSITION_RIGHT:
-                return WidgetAttrValue.VerticalScrollbarPosition.SCROLLBAR_POSITION_RIGHT;
+            case XmlAttrValue.View.VerticalScrollbarPosition.SCROLLBAR_POSITION_DEFAULT:
+                return WidgetAttrValue.View.VerticalScrollbarPosition.SCROLLBAR_POSITION_DEFAULT;
+            case XmlAttrValue.View.VerticalScrollbarPosition.SCROLLBAR_POSITION_LEFT:
+                return WidgetAttrValue.View.VerticalScrollbarPosition.SCROLLBAR_POSITION_LEFT;
+            case XmlAttrValue.View.VerticalScrollbarPosition.SCROLLBAR_POSITION_RIGHT:
+                return WidgetAttrValue.View.VerticalScrollbarPosition.SCROLLBAR_POSITION_RIGHT;
             default:
                 return xmlVerticalScrollbarPosition + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 
     public static String getVisibility(String xmlVisibility) {
-        ImportUtil.support(ImportUtil.VIEW);
+        ImportUtil.supportMulti(ImportUtil.VIEW);
         switch (xmlVisibility) {
-            case XmlAttrValue.Visibility.GONE:
-                return WidgetAttrValue.Visibility.GONE;
-            case XmlAttrValue.Visibility.INVISIBLE:
-                return WidgetAttrValue.Visibility.INVISIBLE;
-            case XmlAttrValue.Visibility.VISIBLE:
-                return WidgetAttrValue.Visibility.VISIBLE;
+            case XmlAttrValue.View.Visibility.GONE:
+                return WidgetAttrValue.View.Visibility.GONE;
+            case XmlAttrValue.View.Visibility.INVISIBLE:
+                return WidgetAttrValue.View.Visibility.INVISIBLE;
+            case XmlAttrValue.View.Visibility.VISIBLE:
+                return WidgetAttrValue.View.Visibility.VISIBLE;
             default:
                 return xmlVisibility + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    public static String getDescendantFocusability(String xmlDescendantFocusability) {
+        ImportUtil.supportMulti(ImportUtil.VIEW);
+        switch (xmlDescendantFocusability) {
+            case XmlAttrValue.ViewGroup.DescendantFocusability.FOCUS_AFTER_DESCENDANTS:
+                return WidgetAttrValue.ViewGroup.DescendantFocusability.FOCUS_AFTER_DESCENDANTS;
+            case XmlAttrValue.ViewGroup.DescendantFocusability.FOCUS_BEFORE_DESCENDANTS:
+                return WidgetAttrValue.ViewGroup.DescendantFocusability.FOCUS_BEFORE_DESCENDANTS;
+            case XmlAttrValue.ViewGroup.DescendantFocusability.FOCUS_BLOCK_DESCENDANTS:
+                return WidgetAttrValue.ViewGroup.DescendantFocusability.FOCUS_BLOCK_DESCENDANTS;
+            default:
+                return xmlDescendantFocusability + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    @NotNull
+    public static String getAnimation(String xmlAnimation) {
+        if (xmlAnimation.startsWith("@anim/"))
+            return "R.anim." + xmlAnimation.substring(6);
+        else if (xmlAnimation.startsWith("@android:anim/"))
+            return "android.R.anim." + xmlAnimation.substring(14);
+        else if (TextUtils.isEmpty(xmlAnimation))
+            return "0";
+        else
+            return xmlAnimation + StringUtil.VALUE_NOT_SUPPORT;
+    }
+
+    @Contract(pure = true)
+    public static String getLayoutMode(String xmlLayoutMode) {
+        switch (xmlLayoutMode) {
+            case XmlAttrValue.ViewGroup.LayoutMode.CLIP_BOUNDS:
+                return WidgetAttrValue.ViewGroup.LayoutMode.CLIP_BOUNDS;
+            case XmlAttrValue.ViewGroup.LayoutMode.OPTICAL_BOUNDS:
+                return WidgetAttrValue.ViewGroup.LayoutMode.OPTICAL_BOUNDS;
+            default:
+                return xmlLayoutMode + StringUtil.VALUE_NOT_SUPPORT;
+        }
+    }
+
+    @Contract(pure = true)
+    public static String getPersistentDrawingCache(String xmlPersistentDrawingCache) {
+        switch (xmlPersistentDrawingCache) {
+            case XmlAttrValue.ViewGroup.PersistentDrawingCache.ALL_CACHES:
+                return WidgetAttrValue.ViewGroup.PersistentDrawingCache.ALL_CACHES;
+            case XmlAttrValue.ViewGroup.PersistentDrawingCache.ANIMATION_CACHE:
+                return WidgetAttrValue.ViewGroup.PersistentDrawingCache.ANIMATION_CACHE;
+            case XmlAttrValue.ViewGroup.PersistentDrawingCache.NO_CACHE:
+                return WidgetAttrValue.ViewGroup.PersistentDrawingCache.NO_CACHE;
+            case XmlAttrValue.ViewGroup.PersistentDrawingCache.SCROLLING_CACHE:
+                return WidgetAttrValue.ViewGroup.PersistentDrawingCache.SCROLLING_CACHE;
+            default:
+                return xmlPersistentDrawingCache + StringUtil.VALUE_NOT_SUPPORT;
         }
     }
 }

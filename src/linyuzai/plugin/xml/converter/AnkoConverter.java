@@ -62,7 +62,7 @@ public class AnkoConverter {
         noteBuilder.append("/**\n");
         noteBuilder.append(" * Generate with Plugin\n");
         noteBuilder.append(" * @plugin Kotlin Anko Converter For Xml\n");
-        noteBuilder.append(" * @version 1.3.0\n");
+        noteBuilder.append(" * @version 1.3.2\n");
         noteBuilder.append(" */\n");
     }
 
@@ -129,12 +129,12 @@ public class AnkoConverter {
         }
         String widthValue = params.get(0).getValue();
         String heightValue = params.get(1).getValue();
-        if (widthValue.equals(XmlAttrValue.LayoutParams.WRAP_CONTENT) && heightValue.equals(XmlAttrValue.LayoutParams.WRAP_CONTENT)) {
+        if (widthValue.equals(XmlAttrValue.ViewGroup.LayoutParams.WRAP_CONTENT) && heightValue.equals(XmlAttrValue.ViewGroup.LayoutParams.WRAP_CONTENT)) {
             if (layout.size() > 0)
                 codeBuilder.append(".lparams");
-        } else if (widthValue.equals(XmlAttrValue.LayoutParams.WRAP_CONTENT)) {
+        } else if (widthValue.equals(XmlAttrValue.ViewGroup.LayoutParams.WRAP_CONTENT)) {
             codeBuilder.append(".lparams(height = ").append(AttributeUtil.getWidthOrHeight(heightValue)).append(")");
-        } else if (heightValue.equals(XmlAttrValue.LayoutParams.WRAP_CONTENT)) {
+        } else if (heightValue.equals(XmlAttrValue.ViewGroup.LayoutParams.WRAP_CONTENT)) {
             codeBuilder.append(".lparams(width = ").append(AttributeUtil.getWidthOrHeight(widthValue)).append(")");
         } else {
             codeBuilder.append(".lparams(width = ").append(AttributeUtil.getWidthOrHeight(widthValue))
@@ -283,7 +283,7 @@ public class AnkoConverter {
                     value = AttributeUtil.getBoolean(attributeValue);
                     break;
                 case XmlAttrName.View.FOCUSABLE:
-                    if (attributeValue.equals(XmlAttrValue.Focusable.AUTO)) {
+                    if (attributeValue.equals(XmlAttrValue.View.Focusable.AUTO)) {
                         isNote = true;
                         extra = " //Auto is default";
                     } else {
@@ -645,6 +645,66 @@ public class AnkoConverter {
                     break;
                 /**
                  * View Attrs End
+                 */
+                /**
+                 * ViewGroup Attrs Start
+                 */
+                case XmlAttrName.ViewGroup.ADD_STATES_FROM_CHILDREN:
+                    name = WidgetAttrName.ViewGroup.ADD_STATES_FROM_CHILDREN;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.ViewGroup.ALWAYS_DRAWN_WITH_CACHE:
+                    name = WidgetAttrName.ViewGroup.ALWAYS_DRAWN_WITH_CACHE;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.ViewGroup.ANIMATE_LAYOUT_CHANGES:
+                    name = WidgetAttrName.ViewGroup.ANIMATE_LAYOUT_CHANGES;
+                    value = "LayoutTransition()";
+                    break;
+                case XmlAttrName.ViewGroup.ANIMATION_CACHE:
+                    name = WidgetAttrName.ViewGroup.ANIMATION_CACHE;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.ViewGroup.CLIP_CHILDREN:
+                    name = WidgetAttrName.ViewGroup.CLIP_CHILDREN;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.ViewGroup.CLIP_TO_PADDING:
+                    name = WidgetAttrName.ViewGroup.CLIP_TO_PADDING;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.ViewGroup.DESCENDANT_FOCUSABILITY:
+                    name = WidgetAttrName.ViewGroup.DESCENDANT_FOCUSABILITY;
+                    value = AttributeUtil.getDescendantFocusability(attributeValue);
+                    break;
+                case XmlAttrName.ViewGroup.LAYOUT_ANIMATION:
+                    ImportUtil.supportMulti(ImportUtil.VIEW_ANIMATION);
+                    name = WidgetAttrName.ViewGroup.LAYOUT_ANIMATION;
+                    value = "AnimationUtils.loadLayoutAnimation(context, " + AttributeUtil.getAnimation(attributeValue) + ")";
+                    break;
+                case XmlAttrName.ViewGroup.LAYOUT_MODE:
+                    name = WidgetAttrName.ViewGroup.LAYOUT_MODE;
+                    value = AttributeUtil.getLayoutMode(attributeValue);
+                    break;
+                case XmlAttrName.ViewGroup.PERSISTENT_DRAWING_CACHE:
+                    name = WidgetAttrName.ViewGroup.PERSISTENT_DRAWING_CACHE;
+                    value = AttributeUtil.getPersistentDrawingCache(attributeValue);
+                    break;
+                case XmlAttrName.ViewGroup.SPLIT_MOTION_EVENTS:
+                    name = WidgetAttrName.ViewGroup.SPLIT_MOTION_EVENTS;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.ViewGroup.TOUCHSCREEN_BLOCKS_FOCUS:
+                    name = WidgetAttrName.ViewGroup.TOUCHSCREEN_BLOCKS_FOCUS;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.ViewGroup.TRANSITION_GROUP:
+                    name = WidgetAttrName.ViewGroup.TRANSITION_GROUP;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                /**
+                 * ViewGroup Attrs End
                  */
                 case XmlAttrName.TEXT:
                     name = WidgetAttrName.TEXT;

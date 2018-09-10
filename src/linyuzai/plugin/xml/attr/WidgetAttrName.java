@@ -124,18 +124,18 @@ public final class WidgetAttrName {
         public static final String TRANSITION_GROUP = "isTransitionGroup";
 
         public static final class LayoutParams {
-            public static final String GRAVITY = "gravity";
-            public static final String WIDTH = "";
-            public static final String HEIGHT = "";
-            public static final String MARGIN = "margin";
-            public static final String MARGIN_TOP = "topMargin";
-            public static final String MARGIN_RIGHT = "rightMargin";
-            public static final String MARGIN_BOTTOM = "bottomMargin";
-            public static final String MARGIN_LEFT = "leftMargin";
-            public static final String MARGIN_START = "marginStart";
-            public static final String MARGIN_END = "marginEnd";
-            public static final String MARGIN_VERTICAL = "verticalMargin";
-            public static final String MARGIN_HORIZONTAL = "horizontalMargin";
+            public static final String LAYOUT_GRAVITY = "gravity";
+            public static final String LAYOUT_WIDTH = "";
+            public static final String LAYOUT_HEIGHT = "";
+            public static final String LAYOUT_MARGIN = "margin";
+            public static final String LAYOUT_MARGIN_TOP = "topMargin";
+            public static final String LAYOUT_MARGIN_RIGHT = "rightMargin";
+            public static final String LAYOUT_MARGIN_BOTTOM = "bottomMargin";
+            public static final String LAYOUT_MARGIN_LEFT = "leftMargin";
+            public static final String LAYOUT_MARGIN_START = "marginStart";
+            public static final String LAYOUT_MARGIN_END = "marginEnd";
+            public static final String LAYOUT_MARGIN_VERTICAL = "verticalMargin";
+            public static final String LAYOUT_MARGIN_HORIZONTAL = "horizontalMargin";
         }
     }
 
@@ -154,26 +154,39 @@ public final class WidgetAttrName {
         public static final String WEIGHT_SUM = "weightSum";
 
         public static final class LayoutParams {
-            public static final String WEIGHT = "weight";
+            public static final String LAYOUT_WEIGHT = "weight";
         }
     }
 
-    public static final String ABOVE = "above";
-    public static final String BELOW = "below";
-    public static final String CENTER_IN_PARENT = "centerInParent";
-    public static final String CENTER_VERTICAL = "centerVertically";
-    public static final String CENTER_HORIZONTAL = "centerHorizontally";
-    public static final String LEFT_OF = "leftOf";
-    public static final String RIGHT_OF = "rightOf";
-    public static final String ALIGN_PARENT_TOP = "alignParentTop";
-    public static final String ALIGN_PARENT_BOTTOM = "alignParentBottom";
-    public static final String ALIGN_PARENT_LEFT = "alignParentLeft";
-    public static final String ALIGN_PARENT_RIGHT = "alignParentRight";
-    public static final String ALIGN_TOP = "sameTop";
-    public static final String ALIGN_BOTTOM = "sameBottom";
-    public static final String ALIGN_LEFT = "sameLeft";
-    public static final String ALIGN_RIGHT = "sameRight";
-    public static final String ALIGN_BASELINE = "baselineOf";
+    public static final class RelativeLayout {
+        public static final String IGNORE_GRAVITY = "setIgnoreGravity";
+
+        public static final class LayoutParams {
+            public static final String LAYOUT_ABOVE = "above";
+            public static final String LAYOUT_BELOW = "below";
+            public static final String LAYOUT_ALIGN_START = "sameStart";
+            public static final String LAYOUT_ALIGN_END = "sameEnd";
+            public static final String LAYOUT_ALIGN_TOP = "sameTop";
+            public static final String LAYOUT_ALIGN_BOTTOM = "sameBottom";
+            public static final String LAYOUT_ALIGN_LEFT = "sameLeft";
+            public static final String LAYOUT_ALIGN_RIGHT = "sameRight";
+            public static final String LAYOUT_ALIGN_PARENT_START = "alignParentStart";
+            public static final String LAYOUT_ALIGN_PARENT_END = "alignParentEnd";
+            public static final String LAYOUT_ALIGN_PARENT_TOP = "alignParentTop";
+            public static final String LAYOUT_ALIGN_PARENT_BOTTOM = "alignParentBottom";
+            public static final String LAYOUT_ALIGN_PARENT_LEFT = "alignParentLeft";
+            public static final String LAYOUT_ALIGN_PARENT_RIGHT = "alignParentRight";
+            public static final String LAYOUT_ALIGN_BASELINE = "baselineOf";
+            public static final String LAYOUT_ALIGN_WITH_PARENT_IF_MISSING = "alignWithParent";
+            public static final String LAYOUT_CENTER_HORIZONTAL = "centerHorizontally";
+            public static final String LAYOUT_CENTER_VERTICAL = "centerVertically";
+            public static final String LAYOUT_CENTER_IN_PARENT = "centerInParent";
+            public static final String LAYOUT_TO_START_OF = "startOf";
+            public static final String LAYOUT_TO_END_OF = "endOf";
+            public static final String LAYOUT_TO_LEFT_OF = "leftOf";
+            public static final String LAYOUT_TO_RIGHT_OF = "rightOf";
+        }
+    }
 
     public static final String TEXT = "text";
     public static final String TEXT_SIZE = "textSize";

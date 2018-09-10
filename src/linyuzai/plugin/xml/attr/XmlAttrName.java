@@ -5,23 +5,6 @@ public final class XmlAttrName {
     //AppBarLayout
     public static final String LAYOUT_SCROLL_FLAGS = ":layout_scrollFlags";
 
-    //relative layout
-    public static final String LAYOUT_ABOVE = "android:layout_above";
-    public static final String LAYOUT_BELOW = "android:layout_below";
-    public static final String LAYOUT_CENTER_IN_PARENT = "android:layout_centerInParent";
-    public static final String LAYOUT_CENTER_VERTICAL = "android:layout_centerVertical";
-    public static final String LAYOUT_CENTER_HORIZONTAL = "android:layout_centerHorizontal";
-    public static final String LAYOUT_TO_LEFT_OF = "android:layout_toLeftOf";
-    public static final String LAYOUT_TO_RIGHT_OF = "android:layout_toRightOf";
-    public static final String LAYOUT_ALIGN_PARENT_TOP = "android:layout_alignParentTop";
-    public static final String LAYOUT_ALIGN_PARENT_BOTTOM = "android:layout_alignParentBottom";
-    public static final String LAYOUT_ALIGN_PARENT_LEFT = "android:layout_alignParentLeft";
-    public static final String LAYOUT_ALIGN_PARENT_RIGHT = "android:layout_alignParentRight";
-    public static final String LAYOUT_ALIGN_TOP = "android:layout_alignTop";
-    public static final String LAYOUT_ALIGN_BOTTOM = "android:layout_alignBottom";
-    public static final String LAYOUT_ALIGN_LEFT = "android:layout_alignLeft";
-    public static final String LAYOUT_ALIGN_RIGHT = "android:layout_alignRight";
-    public static final String LAYOUT_ALIGN_BASELINE = "android:layout_alignBaseline";
     //CoordinatorLayout
     public static final String LAYOUT_BEHAVIOR = ":layout_behavior";
 
@@ -173,6 +156,37 @@ public final class XmlAttrName {
 
         public static final class LayoutParams {
             public static final String LAYOUT_WEIGHT = "android:layout_weight";
+        }
+    }
+
+    public static final class RelativeLayout {
+        public static final String IGNORE_GRAVITY = "android:ignoreGravity";
+
+        public static final class LayoutParams {
+            public static final String LAYOUT_ABOVE = "android:layout_above";
+            public static final String LAYOUT_BELOW = "android:layout_below";
+            public static final String LAYOUT_ALIGN_START = "android:layout_alignStart";
+            public static final String LAYOUT_ALIGN_END = "android:layout_alignEnd";
+            public static final String LAYOUT_ALIGN_TOP = "android:layout_alignTop";
+            public static final String LAYOUT_ALIGN_BOTTOM = "android:layout_alignBottom";
+            public static final String LAYOUT_ALIGN_LEFT = "android:layout_alignLeft";
+            public static final String LAYOUT_ALIGN_RIGHT = "android:layout_alignRight";
+            public static final String LAYOUT_ALIGN_PARENT_START = "android:layout_alignParentStart";
+            public static final String LAYOUT_ALIGN_PARENT_END = "android:layout_alignParentEnd";
+            public static final String LAYOUT_ALIGN_PARENT_TOP = "android:layout_alignParentTop";
+            public static final String LAYOUT_ALIGN_PARENT_BOTTOM = "android:layout_alignParentBottom";
+            public static final String LAYOUT_ALIGN_PARENT_LEFT = "android:layout_alignParentLeft";
+            public static final String LAYOUT_ALIGN_PARENT_RIGHT = "android:layout_alignParentRight";
+            public static final String LAYOUT_ALIGN_BASELINE = "android:layout_alignBaseline";
+            public static final String LAYOUT_ALIGN_WITH_PARENT_IF_MISSING = "android:layout_alignWithParentIfMissing";
+            public static final String LAYOUT_CENTER_HORIZONTAL = "android:layout_centerHorizontal";
+            public static final String LAYOUT_CENTER_VERTICAL = "android:layout_centerVertical";
+            public static final String LAYOUT_CENTER_IN_PARENT = "android:layout_centerInParent";
+            public static final String LAYOUT_TO_START_OF = "android:layout_toStartOf";
+            public static final String LAYOUT_TO_END_OF = "android:layout_toEndOf";
+            public static final String LAYOUT_TO_LEFT_OF = "android:layout_toLeftOf";
+            public static final String LAYOUT_TO_RIGHT_OF = "android:layout_toRightOf";
+
         }
     }
 

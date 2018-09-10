@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>linyuzai.plugin.xml</id>
     <name>Kotlin Anko Converter For Xml</name>
-    <version>1.3.4</version>
+    <version>1.3.5</version>
     <vendor email="120718461@qq.com" url="https://github.com/Linyuzai/LayoutXmlConverter">Personal</vendor>
 
     <description><![CDATA[
@@ -14,15 +14,15 @@
 
     <change-notes><![CDATA[
       Current Version:<br>
-      Support all Attributes of class LinearLayout.<br>
+      Support all Attributes of class RelativeLayout.<br>
 
       Previous Version:<br>
       Support all Attributes of class View.<br>
       Support all Attributes of class ViewGroup.<br>
       Support all Attributes of class FrameLayout.<br>
+      Support all Attributes of class LinearLayout.<br>
 
       To Do List:<br>
-      RelativeLayout.<br>
       TextView.<br>
       EditText.<br>
       ImageView.<br>

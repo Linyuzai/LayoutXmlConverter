@@ -23,22 +23,29 @@ public class AttributeUtil {
         return xmlName.startsWith(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN) ||
                 xmlName.equals(XmlAttrName.ViewGroup.LayoutParams.LAYOUT_GRAVITY) ||
                 xmlName.equals(XmlAttrName.LinearLayout.LayoutParams.LAYOUT_WEIGHT) ||
-                xmlName.equals(XmlAttrName.LAYOUT_ALIGN_PARENT_TOP) ||
-                xmlName.equals(XmlAttrName.LAYOUT_ALIGN_PARENT_BOTTOM) ||
-                xmlName.equals(XmlAttrName.LAYOUT_ALIGN_PARENT_LEFT) ||
-                xmlName.equals(XmlAttrName.LAYOUT_ALIGN_PARENT_RIGHT) ||
-                xmlName.equals(XmlAttrName.LAYOUT_ALIGN_TOP) ||
-                xmlName.equals(XmlAttrName.LAYOUT_ALIGN_BOTTOM) ||
-                xmlName.equals(XmlAttrName.LAYOUT_ALIGN_LEFT) ||
-                xmlName.equals(XmlAttrName.LAYOUT_ALIGN_RIGHT) ||
-                xmlName.equals(XmlAttrName.LAYOUT_CENTER_IN_PARENT) ||
-                xmlName.equals(XmlAttrName.LAYOUT_CENTER_VERTICAL) ||
-                xmlName.equals(XmlAttrName.LAYOUT_CENTER_HORIZONTAL) ||
-                xmlName.equals(XmlAttrName.LAYOUT_TO_LEFT_OF) ||
-                xmlName.equals(XmlAttrName.LAYOUT_TO_RIGHT_OF) ||
-                xmlName.equals(XmlAttrName.LAYOUT_ABOVE) ||
-                xmlName.equals(XmlAttrName.LAYOUT_BELOW) ||
-                xmlName.equals(XmlAttrName.LAYOUT_ALIGN_BASELINE) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ABOVE) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_BELOW) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_START) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_END) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_TOP) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_BOTTOM) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_LEFT) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_RIGHT) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_START) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_END) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_TOP) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_BOTTOM) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_LEFT) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_RIGHT) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_BASELINE) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_WITH_PARENT_IF_MISSING) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_CENTER_HORIZONTAL) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_CENTER_VERTICAL) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_CENTER_IN_PARENT) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_TO_START_OF) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_TO_END_OF) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_TO_LEFT_OF) ||
+                xmlName.equals(XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_TO_RIGHT_OF) ||
                 xmlName.contains(XmlAttrName.LAYOUT_SCROLL_FLAGS) ||
                 xmlName.contains(XmlAttrName.LAYOUT_BEHAVIOR);
     }

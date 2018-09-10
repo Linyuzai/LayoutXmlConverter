@@ -62,7 +62,7 @@ public class AnkoConverter {
         noteBuilder.append("/**\n");
         noteBuilder.append(" * Generate with Plugin\n");
         noteBuilder.append(" * @plugin Kotlin Anko Converter For Xml\n");
-        noteBuilder.append(" * @version 1.3.4\n");
+        noteBuilder.append(" * @version 1.3.5\n");
         noteBuilder.append(" */\n");
     }
 
@@ -708,43 +708,43 @@ public class AnkoConverter {
                     value = AttributeUtil.getBoolean(attributeValue);
                     break;
                 case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN:
-                    name = WidgetAttrName.ViewGroup.LayoutParams.MARGIN;
+                    name = WidgetAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN;
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_TOP:
-                    name = WidgetAttrName.ViewGroup.LayoutParams.MARGIN_TOP;
+                    name = WidgetAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_TOP;
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_RIGHT:
-                    name = WidgetAttrName.ViewGroup.LayoutParams.MARGIN_RIGHT;
+                    name = WidgetAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_RIGHT;
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_BOTTOM:
-                    name = WidgetAttrName.ViewGroup.LayoutParams.MARGIN_BOTTOM;
+                    name = WidgetAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_BOTTOM;
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_LEFT:
-                    name = WidgetAttrName.ViewGroup.LayoutParams.MARGIN_LEFT;
+                    name = WidgetAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_LEFT;
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_START:
-                    name = WidgetAttrName.ViewGroup.LayoutParams.MARGIN_START;
+                    name = WidgetAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_START;
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_END:
-                    name = WidgetAttrName.ViewGroup.LayoutParams.MARGIN_END;
+                    name = WidgetAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_END;
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_VERTICAL:
-                    name = WidgetAttrName.ViewGroup.LayoutParams.MARGIN_VERTICAL;
+                    name = WidgetAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_VERTICAL;
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_HORIZONTAL:
-                    name = WidgetAttrName.ViewGroup.LayoutParams.MARGIN_HORIZONTAL;
+                    name = WidgetAttrName.ViewGroup.LayoutParams.LAYOUT_MARGIN_HORIZONTAL;
                     value = AttributeUtil.getDimension(attributeValue, false);
                     break;
                 case XmlAttrName.ViewGroup.LayoutParams.LAYOUT_GRAVITY:
-                    name = WidgetAttrName.ViewGroup.LayoutParams.GRAVITY;
+                    name = WidgetAttrName.ViewGroup.LayoutParams.LAYOUT_GRAVITY;
                     value = AttributeUtil.getMultiGravity(attributeValue);
                     break;
                 /**
@@ -796,11 +796,235 @@ public class AnkoConverter {
                     value = AttributeUtil.getFloat(attributeValue);
                     break;
                 case XmlAttrName.LinearLayout.LayoutParams.LAYOUT_WEIGHT:
-                    name = WidgetAttrName.LinearLayout.LayoutParams.WEIGHT;
+                    name = WidgetAttrName.LinearLayout.LayoutParams.LAYOUT_WEIGHT;
                     value = AttributeUtil.getWeight(attributeValue);
                     break;
                 /**
                  * LinearLayout Attrs End
+                 */
+                /**
+                 * RelativeLayout Attrs Start
+                 */
+                case XmlAttrName.RelativeLayout.IGNORE_GRAVITY:
+                    name = WidgetAttrName.RelativeLayout.IGNORE_GRAVITY;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ABOVE:
+                    name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ABOVE;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_BELOW:
+                    name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_BELOW;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_START:
+                    name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_START;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_END:
+                    name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_END;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_TOP:
+                    name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_TOP;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_BOTTOM:
+                    name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_BOTTOM;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_LEFT:
+                    name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_LEFT;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_RIGHT:
+                    name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_RIGHT;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_START:
+                    switch (attributeValue) {
+                        case XmlAttrValue.TRUE:
+                            name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_START;
+                            value = WidgetAttrValue.EMPTY;
+                            break;
+                        case XmlAttrValue.FALSE:
+                            name = "//" + WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_START;
+                            break;
+                        default:
+                            name = "//" + WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_START;
+                            extra = StringUtil.VALUE_NOT_SUPPORT;
+                            break;
+                    }
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_END:
+                    switch (attributeValue) {
+                        case XmlAttrValue.TRUE:
+                            name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_END;
+                            value = WidgetAttrValue.EMPTY;
+                            break;
+                        case XmlAttrValue.FALSE:
+                            name = "//" + WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_END;
+                            break;
+                        default:
+                            name = "//" + WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_END;
+                            extra = StringUtil.VALUE_NOT_SUPPORT;
+                            break;
+                    }
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_TOP:
+                    switch (attributeValue) {
+                        case XmlAttrValue.TRUE:
+                            name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_TOP;
+                            value = WidgetAttrValue.EMPTY;
+                            break;
+                        case XmlAttrValue.FALSE:
+                            name = "//" + WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_TOP;
+                            break;
+                        default:
+                            name = "//" + WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_TOP;
+                            extra = StringUtil.VALUE_NOT_SUPPORT;
+                            break;
+                    }
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_BOTTOM:
+                    switch (attributeValue) {
+                        case XmlAttrValue.TRUE:
+                            name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_BOTTOM;
+                            value = WidgetAttrValue.EMPTY;
+                            break;
+                        case XmlAttrValue.FALSE:
+                            name = "//" + WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_BOTTOM;
+                            break;
+                        default:
+                            name = "//" + WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_BOTTOM;
+                            extra = StringUtil.VALUE_NOT_SUPPORT;
+                            break;
+                    }
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_LEFT:
+                    switch (attributeValue) {
+                        case XmlAttrValue.TRUE:
+                            name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_LEFT;
+                            value = WidgetAttrValue.EMPTY;
+                            break;
+                        case XmlAttrValue.FALSE:
+                            name = "//" + WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_LEFT;
+                            break;
+                        default:
+                            name = "//" + WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_LEFT;
+                            extra = StringUtil.VALUE_NOT_SUPPORT;
+                            break;
+                    }
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_RIGHT:
+                    switch (attributeValue) {
+                        case XmlAttrValue.TRUE:
+                            name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_RIGHT;
+                            value = WidgetAttrValue.EMPTY;
+                            break;
+                        case XmlAttrValue.FALSE:
+                            name = "//" + WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_RIGHT;
+                            break;
+                        default:
+                            name = "//" + WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_PARENT_RIGHT;
+                            extra = StringUtil.VALUE_NOT_SUPPORT;
+                            break;
+                    }
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_BASELINE:
+                    name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_BASELINE;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_WITH_PARENT_IF_MISSING:
+                    name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_ALIGN_WITH_PARENT_IF_MISSING;
+                    value = AttributeUtil.getBoolean(attributeValue);
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_CENTER_HORIZONTAL:
+                    switch (attributeValue) {
+                        case XmlAttrValue.TRUE:
+                            name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_CENTER_HORIZONTAL;
+                            value = WidgetAttrValue.EMPTY;
+                            break;
+                        case XmlAttrValue.FALSE:
+                            name = "//" + WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_CENTER_HORIZONTAL;
+                            break;
+                        default:
+                            name = "//" + WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_CENTER_HORIZONTAL;
+                            extra = StringUtil.VALUE_NOT_SUPPORT;
+                            break;
+                    }
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_CENTER_VERTICAL:
+                    switch (attributeValue) {
+                        case XmlAttrValue.TRUE:
+                            name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_CENTER_VERTICAL;
+                            value = WidgetAttrValue.EMPTY;
+                            break;
+                        case XmlAttrValue.FALSE:
+                            name = "//" + WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_CENTER_VERTICAL;
+                            break;
+                        default:
+                            name = "//" + WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_CENTER_VERTICAL;
+                            extra = StringUtil.VALUE_NOT_SUPPORT;
+                            break;
+                    }
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_CENTER_IN_PARENT:
+                    switch (attributeValue) {
+                        case XmlAttrValue.TRUE:
+                            name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_CENTER_IN_PARENT;
+                            value = WidgetAttrValue.EMPTY;
+                            break;
+                        case XmlAttrValue.FALSE:
+                            name = "//" + WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_CENTER_IN_PARENT;
+                            break;
+                        default:
+                            name = "//" + WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_CENTER_IN_PARENT;
+                            extra = StringUtil.VALUE_NOT_SUPPORT;
+                            break;
+                    }
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_TO_START_OF:
+                    name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_TO_START_OF;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_TO_END_OF:
+                    name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_TO_END_OF;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_TO_LEFT_OF:
+                    name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_TO_LEFT_OF;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                case XmlAttrName.RelativeLayout.LayoutParams.LAYOUT_TO_RIGHT_OF:
+                    name = WidgetAttrName.RelativeLayout.LayoutParams.LAYOUT_TO_RIGHT_OF;
+                    value = AttributeUtil.getId(attributeValue);
+                    isEqualsOperator = false;
+                    break;
+                /**
+                 * RelativeLayout Attrs End
                  */
                 case XmlAttrName.TEXT:
                     name = WidgetAttrName.TEXT;
@@ -846,163 +1070,6 @@ public class AnkoConverter {
                 case XmlAttrName.INPUT_TYPE:
                     name = WidgetAttrName.INPUT_TYPE;
                     value = AttributeUtil.getInputType(attributeValue);
-                    break;
-                case XmlAttrName.LAYOUT_ABOVE:
-                    name = WidgetAttrName.ABOVE;
-                    value = AttributeUtil.getId(attributeValue);
-                    isEqualsOperator = false;
-                    break;
-                case XmlAttrName.LAYOUT_BELOW:
-                    name = WidgetAttrName.BELOW;
-                    value = AttributeUtil.getId(attributeValue);
-                    isEqualsOperator = false;
-                    break;
-                case XmlAttrName.LAYOUT_TO_LEFT_OF:
-                    name = WidgetAttrName.LEFT_OF;
-                    value = AttributeUtil.getId(attributeValue);
-                    isEqualsOperator = false;
-                    break;
-                case XmlAttrName.LAYOUT_TO_RIGHT_OF:
-                    name = WidgetAttrName.RIGHT_OF;
-                    value = AttributeUtil.getId(attributeValue);
-                    isEqualsOperator = false;
-                    break;
-                case XmlAttrName.LAYOUT_ALIGN_TOP:
-                    name = WidgetAttrName.ALIGN_TOP;
-                    value = AttributeUtil.getId(attributeValue);
-                    isEqualsOperator = false;
-                    break;
-                case XmlAttrName.LAYOUT_ALIGN_BOTTOM:
-                    name = WidgetAttrName.ALIGN_BOTTOM;
-                    value = AttributeUtil.getId(attributeValue);
-                    isEqualsOperator = false;
-                    break;
-                case XmlAttrName.LAYOUT_ALIGN_LEFT:
-                    name = WidgetAttrName.ALIGN_LEFT;
-                    value = AttributeUtil.getId(attributeValue);
-                    isEqualsOperator = false;
-                    break;
-                case XmlAttrName.LAYOUT_ALIGN_RIGHT:
-                    name = WidgetAttrName.ALIGN_RIGHT;
-                    value = AttributeUtil.getId(attributeValue);
-                    isEqualsOperator = false;
-                    break;
-                case XmlAttrName.LAYOUT_CENTER_VERTICAL:
-                    switch (attributeValue) {
-                        case XmlAttrValue.TRUE:
-                            name = WidgetAttrName.CENTER_VERTICAL;
-                            value = WidgetAttrValue.EMPTY;
-                            break;
-                        case XmlAttrValue.FALSE:
-                            name = "//" + WidgetAttrName.CENTER_VERTICAL;
-                            break;
-                        default:
-                            name = "//" + WidgetAttrName.CENTER_VERTICAL;
-                            extra = StringUtil.VALUE_NOT_SUPPORT;
-                            break;
-                    }
-                    isEqualsOperator = false;
-                    break;
-                case XmlAttrName.LAYOUT_CENTER_HORIZONTAL:
-                    switch (attributeValue) {
-                        case XmlAttrValue.TRUE:
-                            name = WidgetAttrName.CENTER_HORIZONTAL;
-                            value = WidgetAttrValue.EMPTY;
-                            break;
-                        case XmlAttrValue.FALSE:
-                            name = "//" + WidgetAttrName.CENTER_HORIZONTAL;
-                            break;
-                        default:
-                            name = "//" + WidgetAttrName.CENTER_HORIZONTAL;
-                            extra = StringUtil.VALUE_NOT_SUPPORT;
-                            break;
-                    }
-                    isEqualsOperator = false;
-                    break;
-                case XmlAttrName.LAYOUT_CENTER_IN_PARENT:
-                    switch (attributeValue) {
-                        case XmlAttrValue.TRUE:
-                            name = WidgetAttrName.CENTER_IN_PARENT;
-                            value = WidgetAttrValue.EMPTY;
-                            break;
-                        case XmlAttrValue.FALSE:
-                            name = "//" + WidgetAttrName.CENTER_IN_PARENT;
-                            break;
-                        default:
-                            name = "//" + WidgetAttrName.CENTER_IN_PARENT;
-                            extra = StringUtil.VALUE_NOT_SUPPORT;
-                            break;
-                    }
-                    isEqualsOperator = false;
-                    break;
-                case XmlAttrName.LAYOUT_ALIGN_PARENT_TOP:
-                    switch (attributeValue) {
-                        case XmlAttrValue.TRUE:
-                            name = WidgetAttrName.ALIGN_PARENT_TOP;
-                            value = WidgetAttrValue.EMPTY;
-                            break;
-                        case XmlAttrValue.FALSE:
-                            name = "//" + WidgetAttrName.ALIGN_PARENT_TOP;
-                            break;
-                        default:
-                            name = "//" + WidgetAttrName.ALIGN_PARENT_TOP;
-                            extra = StringUtil.VALUE_NOT_SUPPORT;
-                            break;
-                    }
-                    isEqualsOperator = false;
-                    break;
-                case XmlAttrName.LAYOUT_ALIGN_PARENT_BOTTOM:
-                    switch (attributeValue) {
-                        case XmlAttrValue.TRUE:
-                            name = WidgetAttrName.ALIGN_PARENT_BOTTOM;
-                            value = WidgetAttrValue.EMPTY;
-                            break;
-                        case XmlAttrValue.FALSE:
-                            name = "//" + WidgetAttrName.ALIGN_PARENT_BOTTOM;
-                            break;
-                        default:
-                            name = "//" + WidgetAttrName.ALIGN_PARENT_BOTTOM;
-                            extra = StringUtil.VALUE_NOT_SUPPORT;
-                            break;
-                    }
-                    isEqualsOperator = false;
-                    break;
-                case XmlAttrName.LAYOUT_ALIGN_PARENT_LEFT:
-                    switch (attributeValue) {
-                        case XmlAttrValue.TRUE:
-                            name = WidgetAttrName.ALIGN_PARENT_LEFT;
-                            value = WidgetAttrValue.EMPTY;
-                            break;
-                        case XmlAttrValue.FALSE:
-                            name = "//" + WidgetAttrName.ALIGN_PARENT_LEFT;
-                            break;
-                        default:
-                            name = "//" + WidgetAttrName.ALIGN_PARENT_LEFT;
-                            extra = StringUtil.VALUE_NOT_SUPPORT;
-                            break;
-                    }
-                    isEqualsOperator = false;
-                    break;
-                case XmlAttrName.LAYOUT_ALIGN_PARENT_RIGHT:
-                    switch (attributeValue) {
-                        case XmlAttrValue.TRUE:
-                            name = WidgetAttrName.ALIGN_PARENT_RIGHT;
-                            value = WidgetAttrValue.EMPTY;
-                            break;
-                        case XmlAttrValue.FALSE:
-                            name = "//" + WidgetAttrName.ALIGN_PARENT_RIGHT;
-                            break;
-                        default:
-                            name = "//" + WidgetAttrName.ALIGN_PARENT_RIGHT;
-                            extra = StringUtil.VALUE_NOT_SUPPORT;
-                            break;
-                    }
-                    isEqualsOperator = false;
-                    break;
-                case XmlAttrName.LAYOUT_ALIGN_BASELINE:
-                    name = WidgetAttrName.ALIGN_BASELINE;
-                    value = AttributeUtil.getId(attributeValue);
-                    isEqualsOperator = false;
                     break;
                 default:
                     isNotSupportAttribute = true;

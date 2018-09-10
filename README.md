@@ -1,6 +1,6 @@
 # LayoutXmlConverter
 Convert Android layout xml to kotlin anko code<br>
-Version 1.3.4<br>
+Version 1.3.5<br>
 
 ![plugin1.png](http://upload-images.jianshu.io/upload_images/2113387-fa20d3459e03f08f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
@@ -17,13 +17,13 @@ Version 1.3.4<br>
 >会在java目录下生成anko文件夹，anko文件夹下会生成一个Activity。可以把里面的布局代码直接复制到你自己的Activity里面使用。
 
 - **Current Version:**<br>
-Support all Attributes of class LinearLayout.<br>
+Support all Attributes of class RelativeLayout.<br>
 - **Previous Version:**<br>
 Support all Attributes of class View.<br>
 Support all Attributes of class ViewGroup.<br>
-Support all Attributes of class FrameLayout.<br>   
+Support all Attributes of class FrameLayout.<br> 
+Support all Attributes of class LinearLayout.<br>
 - **To Do List:**<br>
-RelativeLayout.<br>
 TextView.<br>
 EditText.<br>
 ImageView.<br>
